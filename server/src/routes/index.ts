@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import authRoutes from '../modules/auth/auth.routes'
 import adminRoutes from '../modules/admin/admin.routes'
-
+import blogRoutes from '../modules/blog/blog.routes'
+import courseRoutes from '../modules/courses/courses.routes'
 const router = Router();
 
 router.get('/health', (_req, res) => {
@@ -12,7 +13,7 @@ router.use('/auth', authRoutes);
 router.use('/admin', adminRoutes);
 
 // Modules not built yet — mount these as you build them:
-// router.use('/courses', courseRoutes);
+router.use('/courses', courseRoutes);
 // router.use('/chapters', chapterRoutes);
 // router.use('/lessons', lessonRoutes);
 // router.use('/quizzes', quizRoutes);
@@ -21,9 +22,6 @@ router.use('/admin', adminRoutes);
 // router.use('/reviews', reviewRoutes);
 // router.use('/notifications', notificationRoutes);
 // router.use('/comments', commentRoutes);
-// router.use('/blog', blogRoutes);
+router.use('/blog', blogRoutes);
 
 export default router;
-
-
-// '../modules/auth/auth.routes';

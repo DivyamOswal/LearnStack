@@ -39,7 +39,7 @@ export const register = async (input: RegisterInput) => {
   const verifyUrl = `${env.CLIENT_URL}/verify-email?token=${verifyToken}`;
 
   await resend.emails.send({
-    from: 'LearnStack <onboarding@resend.dev>',
+    from: 'LearnStack<onboarding@resend.dev>',
     to: user.email,
     subject: 'Verify your LearnStack account',
     html: `<p>Hi ${user.name},</p><p>Click below to verify your email. This link expires in 24 hours.</p><p><a href="${verifyUrl}">Verify Email</a></p>`,
@@ -164,7 +164,7 @@ export const forgotPassword = async (email: string) => {
   const resetUrl = `${env.CLIENT_URL}/reset-password?token=${resetToken}`;
 
   await resend.emails.send({
-    from: 'LearnStack <onboarding@resend.dev>',
+    from: 'LearnStack<onboarding@resend.dev>',
     to: user.email,
     subject: 'Reset your LearnStack password',
     html: `<p>Hi ${user.name},</p><p>Click below to reset your password. This link expires in 15 minutes.</p><p><a href="${resetUrl}">Reset Password</a></p>`,
