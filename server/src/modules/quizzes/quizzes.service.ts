@@ -5,7 +5,7 @@ import {
   UpdateQuizInput,
   CreateQuestionInput,
   SubmitQuizAttemptInput,
-} from './quiz.types';
+} from './quizzes.types';
 
 export const addQuiz = async (input: CreateQuizInput) => {
   const course = await quizRepo.findCourseById(input.courseId);
