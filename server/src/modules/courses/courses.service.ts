@@ -1,6 +1,6 @@
 import { ApiError } from '../../utils/ApiError';
 import * as courseRepo from './courses.repository';
-import { CourseListQuery, CreateCourseInput, UpdateCourseInput } from './course.types';
+import { CourseListQuery, CreateCourseInput, UpdateCourseInput } from './courses.types';
 
 export const addCourse = async (
   createdById: string,

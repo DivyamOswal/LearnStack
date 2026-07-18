@@ -1,6 +1,6 @@
 import { ApiError } from '../../utils/ApiError';
 import * as lessonRepo from './lessons.repository';
-import { CreateLessonInput, UpdateLessonInput } from './lesson.types';
+import { CreateLessonInput, UpdateLessonInput } from './lessons.types';
 
 export const addLesson = async (
   input: CreateLessonInput,
