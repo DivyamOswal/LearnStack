@@ -3,6 +3,7 @@ import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
 import { verifyAccessToken } from '../utils/jwt';
 
+// It is used for checking the user credentials are valid or not 
 export const authenticate = asyncHandler(
   async (req: Request, _res: Response, next: NextFunction) => {
     const tokenFromCookie = req.cookies?.accessToken as string | undefined;

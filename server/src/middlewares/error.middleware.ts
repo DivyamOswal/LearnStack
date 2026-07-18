@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { ApiError } from '../utils/ApiError';
 import { env } from '../config/env';
 
+
+// Handling the errors based on the status codes
 export const errorHandler = (
   err: unknown,
   _req: Request,

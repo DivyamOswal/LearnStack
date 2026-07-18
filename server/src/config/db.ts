@@ -6,6 +6,7 @@ declare global {
   var prismaGlobal: PrismaClient | undefined;
 }
 
+// connect the db with the prisma client
 const prisma =
   global.prismaGlobal ||
   new PrismaClient({

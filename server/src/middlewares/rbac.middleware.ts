@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Role } from '@prisma/client';
 import { ApiError } from '../utils/ApiError';
 
+// Used for role based access (Admin / User)
 export const authorize = (...allowedRoles: Role[]) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {

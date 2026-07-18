@@ -9,6 +9,7 @@ import {
 } from '../../utils/cookieOptions';
 import * as authService from './auth.service';
 
+// User Registration
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const user = await authService.register(req.body);
   res

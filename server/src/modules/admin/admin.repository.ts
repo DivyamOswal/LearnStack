@@ -2,8 +2,7 @@ import { Prisma, Role } from '@prisma/client';
 import prisma from '../../config/db';
 import { UserListQuery } from './admin.types';
 
-// ---------- USERS ----------
-
+// Find Users
 export const findUsers = async ({ page = 1, limit = 20, search, role }: UserListQuery) => {
   const skip = (page - 1) * limit;
 
@@ -41,6 +40,7 @@ export const findUsers = async ({ page = 1, limit = 20, search, role }: UserList
   return { users, total, page, limit, totalPages: Math.ceil(total / limit) };
 };
 
+// Find user by id
 export const findUserById = async (id: string) => {
   return prisma.user.findUnique({
     where: { id },
@@ -60,6 +60,7 @@ export const findUserById = async (id: string) => {
   });
 };
 
+// Update the user role
 export const updateUserRole = async (id: string, role: Role) => {
   return prisma.user.update({
     where: { id },
@@ -77,17 +78,19 @@ export const toggleUserActiveStatus = async (id: string, isActive: boolean) => {
   });
 };
 
+// Delete User
 export const deleteUser = async (id: string) => {
   return prisma.user.delete({ where: { id } });
 };
 
 // ---------- CATEGORIES ----------
-
+// Create category
 export const createCategory = async (name: string) => {
   const slug = name.toLowerCase().trim().replace(/[.\s]+/g, '-');
   return prisma.category.create({ data: { name, slug } });
 };
 
+// List of category
 export const listCategories = async () => {
   return prisma.category.findMany({
     orderBy: { name: 'asc' },
@@ -95,17 +98,20 @@ export const listCategories = async () => {
   });
 };
 
+// Update Category
 export const updateCategory = async (id: string, name: string) => {
   const slug = name.toLowerCase().trim().replace(/[.\s]+/g, '-');
   return prisma.category.update({ where: { id }, data: { name, slug } });
 };
 
+// Delete Category
 export const deleteCategory = async (id: string) => {
   return prisma.category.delete({ where: { id } });
 };
 
 // ---------- ANALYTICS ----------
 
+// Get dashboard Stats
 export const getDashboardStats = async () => {
   const [totalStudents, totalAdmins, totalCourses, publishedCourses, totalEnrollments, revenueAgg] =
     await Promise.all([
@@ -130,6 +136,7 @@ export const getDashboardStats = async () => {
   };
 };
 
+// Get popular courses
 export const getPopularCourses = async (limitCount = 5) => {
   const results = await prisma.course.findMany({
     select: {
@@ -150,6 +157,7 @@ export const getPopularCourses = async (limitCount = 5) => {
   }));
 };
 
+// Get monthly revenue
 export const getMonthlyRevenue = async () => {
   // raw query: group completed orders by month for the last 12 months
   const rows = await prisma.$queryRaw<{ month: string; revenue: string }[]>`
