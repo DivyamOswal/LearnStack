@@ -7,11 +7,11 @@ async function main() {
   const adminPassword = await bcrypt.hash('ChangeMe123!', 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@codeacademy.dev' },
+    where: { email: 'admin@LearnStack.dev' },
     update: {},
     create: {
       name: 'Platform Admin',
-      email: 'admin@codeacademy.dev',
+      email: 'admin@LearnStack.dev',
       password: adminPassword,
       role: Role.ADMIN,
       isVerified: true,

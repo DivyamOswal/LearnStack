@@ -6,7 +6,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: async () => {
     return {
-      folder: 'codeacademy',
+      folder: 'LearnStack',
       resource_type: 'auto', // handles images, video, pdf, raw files
       allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf', 'mp4', 'mov'],
     };

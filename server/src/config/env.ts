@@ -18,6 +18,8 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().min(1, 'STRIPE_WEBHOOK_SECRET is required'),
   RESEND_API_KEY: z.string().min(1, 'RESEND_API_KEY is required'),
   CLIENT_URL: z.string().default('http://localhost:5173'),
+  EMAIL_TOKEN_SECRET: z.string().min(1, 'EMAIL_TOKEN_SECRET is required'),
+  GOOGLE_CLIENT_ID: z.string().min(1, 'GOOGLE_CLIENT_ID is required'),
 });
 
 const parsed = envSchema.safeParse(process.env);
