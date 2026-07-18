@@ -6,9 +6,9 @@ import compression from 'compression';
 import morgan from 'morgan';
 
 import { env } from "./src/config/env"
-import routes from './routes/index';
-import { generalLimiter } from './middlewares/rateLimiter.middleware';
-import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import routes from './src/routes/index';
+import { generalLimiter } from './src/middlewares/rateLimiter.middleware';
+import { errorHandler, notFoundHandler } from './src/middlewares/error.middleware';
 
 const app: Application = express();
 

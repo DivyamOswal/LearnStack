@@ -11,7 +11,7 @@ import {
   generatePurposeToken,
   verifyPurposeToken,
 } from '../../utils/jwt';
-import * as authRepo from './auth.repository';
+import * as authRepo from './auth.respository';
 import { RegisterInput, LoginInput, GoogleLoginInput } from './auth.types';
 
 const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);

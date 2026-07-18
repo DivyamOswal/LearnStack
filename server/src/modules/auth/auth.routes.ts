@@ -25,3 +25,4 @@ router.post('/reset-password', validate(resetPasswordSchema), authController.res
 router.get('/me', authenticate, authController.getCurrentUser);
 
 export default router;
+
