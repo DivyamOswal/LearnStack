@@ -6,6 +6,15 @@ import courseRoutes from '../modules/courses/courses.routes'
 import lessonRoutes from '../modules/lessons/lessons.routes'
 import chapterRoutes from '../modules/chapters/chapters.routes'
 import certificateRoutes from '../modules/certifications/certifications.routes'
+import commentRoutes from '../modules/comments/comments.routes'
+import paymentRoutes from '../modules/payments/payments.routes'
+import quizRoutes from '../modules/quizzes/quizzes.routes';
+import notificationRoutes from '../modules/notifications/notifications.routes';
+import reviewRoutes from '../modules/reviews/reviews.routes';
+import userRoutes from '../modules/users/users.routes';
+import progressRoutes from '../modules/progress/progress.routes';
+
+
 const router = Router();
 
 router.get('/health', (_req, res) => {
@@ -19,12 +28,14 @@ router.use('/admin', adminRoutes);
 router.use('/courses', courseRoutes);
 router.use('/chapters', chapterRoutes);
 router.use('/lessons', lessonRoutes);
-// router.use('/quizzes', quizRoutes);
+router.use('/quizzes', quizRoutes);
 router.use('/certificates', certificateRoutes);
-// router.use('/payments', paymentRoutes);
-// router.use('/reviews', reviewRoutes);
-// router.use('/notifications', notificationRoutes);
-// router.use('/comments', commentRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/reviews', reviewRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/comments', commentRoutes);
 router.use('/blog', blogRoutes);
+router.use('/users', userRoutes);
+router.use('/progress', progressRoutes);
 
 export default router;
