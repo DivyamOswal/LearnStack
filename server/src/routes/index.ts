@@ -13,7 +13,7 @@ import notificationRoutes from '../modules/notifications/notifications.routes';
 import reviewRoutes from '../modules/reviews/reviews.routes';
 import userRoutes from '../modules/users/users.routes';
 import progressRoutes from '../modules/progress/progress.routes';
-
+import topicRoutes from '../modules/topics/topic.routes';
 
 const router = Router();
 
@@ -37,5 +37,6 @@ router.use('/comments', commentRoutes);
 router.use('/blog', blogRoutes);
 router.use('/users', userRoutes);
 router.use('/progress', progressRoutes);
+router.use('/topics', topicRoutes);
 
 export default router;
