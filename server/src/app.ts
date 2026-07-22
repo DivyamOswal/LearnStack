@@ -15,7 +15,7 @@ const app: Application = express();
 // Security headers
 app.use(helmet());
 
-// CORS — only allow the actual frontend origin, with credentials for cookies
+// CORS LearnStack only allow the actual frontend origin, with credentials for cookies
 app.use(
   cors({
     origin: env.CLIENT_URL,
@@ -40,10 +40,10 @@ app.use(generalLimiter);
 // API routes
 app.use('/api/v1', routes);
 
-// 404 handler — after all routes
+// 404 handler LearnStack after all routes
 app.use(notFoundHandler);
 
-// Global error handler — must be last
+// Global error handler LearnStack must be last
 app.use(errorHandler);
 
 export default app;

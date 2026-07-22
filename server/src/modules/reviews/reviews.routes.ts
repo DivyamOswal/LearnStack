@@ -12,7 +12,7 @@ import * as reviewController from './reviews.controller';
 
 const router = Router();
 
-// ---------- Public reads — reviews are part of a course's public sales page ----------
+// ---------- Public reads LearnStack reviews are part of a course's public sales page ----------
 router.get(
   '/course/:courseId',
   validate(listReviewsSchema),

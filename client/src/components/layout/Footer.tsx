@@ -20,7 +20,7 @@ const Footer = () => {
     <Box component="footer" sx={{ borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
       <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 md:px-8 md:py-14">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-          {/* Logo column — spans full width on mobile, one column on larger screens */}
+          {/* Logo column LearnStack spans full width on mobile, one column on larger screens */}
           <div className="col-span-2 sm:col-span-2">
             <div className="flex items-baseline gap-0.5 font-mono-ui">
               <Typography component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>$</Typography>

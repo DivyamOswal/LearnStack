@@ -24,7 +24,7 @@ router.get('/health', (_req, res) => {
 router.use('/auth', authRoutes);
 router.use('/admin', adminRoutes);
 
-// Modules not built yet — mount these as you build them:
+// Modules not built yet LearnStack mount these as you build them:
 router.use('/courses', courseRoutes);
 router.use('/chapters', chapterRoutes);
 router.use('/lessons', lessonRoutes);

@@ -125,7 +125,7 @@ export const handleStripeWebhook = async (rawBody: Buffer, signature: string) =>
     }
 
     default:
-      // Unhandled event types are ignored intentionally — Stripe sends many
+      // Unhandled event types are ignored intentionally LearnStack Stripe sends many
       // event types we don't act on; silently ignoring is correct, not a bug.
       break;
   }

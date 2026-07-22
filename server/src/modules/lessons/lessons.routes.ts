@@ -20,7 +20,7 @@ const lessonFileUpload = upload.fields([
 ]);
 
 // ---------- Read routes (authenticated students + admin) ----------
-// NOTE: currently just requires login — gating by course purchase belongs
+// NOTE: currently just requires login LearnStack gating by course purchase belongs
 // in the payments phase, flagged here rather than silently skipped.
 router.get(
   '/chapter/:chapterId',

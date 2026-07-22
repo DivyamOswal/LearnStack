@@ -153,7 +153,7 @@ export const verifyEmail = async (token: string) => {
 
 export const forgotPassword = async (email: string) => {
   const user = await authRepo.findUserByEmail(email);
-  // Always respond success-shaped, regardless of whether the user exists —
+  // Always respond success-shaped, regardless of whether the user exists LearnStack
   // prevents leaking which emails are registered.
   if (!user) return;
 

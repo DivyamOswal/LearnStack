@@ -13,7 +13,7 @@ export const getMyCertificates = asyncHandler(async (req: Request, res: Response
   res.status(200).json(new ApiResponse(200, certificates, 'Your certificates fetched.'));
 });
 
-// Public — no auth required. This is what a QR scan or shared link hits.
+// Public LearnStack no auth required. This is what a QR scan or shared link hits.
 export const verifyCertificate = asyncHandler(async (req: Request, res: Response) => {
   const certificate = await certificateService.verifyCertificateByCode(req.params.code);
   res.status(200).json(new ApiResponse(200, certificate, 'Certificate verified.'));

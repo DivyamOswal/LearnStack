@@ -9,7 +9,7 @@ export const accessTokenCookieOptions: CookieOptions = {
   httpOnly: true,
   secure: isProd,
   sameSite: isProd ? 'none' : 'lax',
-  maxAge: 15 * 60 * 1000, // 15 min — matches JWT_ACCESS_EXPIRY default
+  maxAge: 15 * 60 * 1000, // 15 min LearnStack matches JWT_ACCESS_EXPIRY default
   path: '/',
 };
 

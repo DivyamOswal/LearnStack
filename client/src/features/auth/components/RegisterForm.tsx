@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { TextField, Button, Typography, Alert, Stack, Link } from '@mui/material';
 // import { useRegister } from '../authApi';
 import { ROUTES } from '@/routes/routePaths';
+import { useRegister } from '../authApi';
 
 const RegisterForm = () => {
   const [name, setName] = useState('');

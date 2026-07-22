@@ -4,7 +4,7 @@ import { User } from './auth.types';
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  isInitializing: boolean;
+  isInitializing: boolean; // true until the initial "am I logged in" check completes
 }
 
 const initialState: AuthState = {
@@ -27,8 +27,11 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isInitializing = false;
     },
+    finishInitializing: (state) => {
+      state.isInitializing = false;
+    },
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, finishInitializing } = authSlice.actions;
 export default authSlice.reducer;

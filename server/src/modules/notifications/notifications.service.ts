@@ -2,7 +2,7 @@ import { ApiError } from '../../utils/ApiError';
 import * as notificationRepo from './notifications.repository';
 import { BroadcastNotificationInput } from './notifications.types';
 
-// ---------- Internal API — called by OTHER modules, not exposed as a route ----------
+// ---------- Internal API LearnStack called by OTHER modules, not exposed as a route ----------
 // e.g. certificate.service.ts calling this after issuing a certificate,
 // comment.service.ts calling this after a reply is posted, etc.
 export const notifyUser = async (userId: string, title: string, message: string) => {

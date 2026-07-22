@@ -39,6 +39,6 @@ export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB — covers video uploads
+    fileSize: 100 * 1024 * 1024, // 100MB LearnStack covers video uploads
   },
 });

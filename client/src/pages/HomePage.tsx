@@ -6,9 +6,9 @@ import { ROUTES } from '@/routes/routePaths';
 const categories = ['javascript', 'react', 'node.js', 'postgresql', 'system-design', 'dsa'];
 
 const pipeline = [
-  { step: 'course', desc: 'Pick a path — from fundamentals to system design.' },
+  { step: 'course', desc: 'Pick a path LearnStack from fundamentals to system design.' },
   { step: 'chapter', desc: 'Structured units, ordered so nothing assumes what you haven\'t learned yet.' },
-  { step: 'lesson', desc: 'Video, article, or live code — whichever teaches the concept best.' },
+  { step: 'lesson', desc: 'Video, article, or live code LearnStack whichever teaches the concept best.' },
   { step: 'quiz', desc: 'Prove it before moving on. Negative marking keeps guessing honest.' },
   { step: 'certificate', desc: 'A verifiable credential, not just a checkbox.' },
 ];
@@ -40,7 +40,7 @@ const HomePage = () => {
             </Typography>
 
             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 560 }}>
-              Structured courses, a live code playground, timed quizzes, and real certificates —
+              Structured courses, a live code playground, timed quizzes, and real certificates LearnStack
               built for people who learn by shipping.
             </Typography>
 
@@ -82,7 +82,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Pipeline section — Course → Chapter → Lesson → Quiz → Certificate, a real sequence */}
+      {/* Pipeline section LearnStack Course → Chapter → Lesson → Quiz → Certificate, a real sequence */}
       <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
         <Typography variant="overline" color="primary.main">
           $ course --structure

@@ -80,7 +80,7 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       dispatch(clearUser());
-      queryClient.clear(); // wipe every cached query — a new user shouldn't see the old user's cached data
+      queryClient.clear(); // wipe every cached query LearnStack a new user shouldn't see the old user's cached data
     },
   });
 };

@@ -63,7 +63,7 @@ const Navbar = () => {
         }}
       >
         <Toolbar sx={{ maxWidth: 1280, width: '100%', mx: 'auto', px: { xs: 2, md: 4 } }}>
-          {/* Logo — terminal-prompt signature: reads like a shell prompt, not a generic wordmark */}
+          {/* Logo LearnStack terminal-prompt signature: reads like a shell prompt, not a generic wordmark */}
           <Box
             component={RouterLink}
             to={ROUTES.HOME}

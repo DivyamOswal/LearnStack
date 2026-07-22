@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { Role } from '@prisma/client';
-import { env as envConfig } from '../config/env';
+import { env } from '../config/env';
 
 export type TokenPurpose = 'EMAIL_VERIFY' | 'PASSWORD_RESET';
 

@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
     // prevents an infinite loop if the refresh itself also comes back 401).
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // A refresh is already in flight — queue this request instead of firing
+        // A refresh is already in flight LearnStack queue this request instead of firing
         // a second parallel refresh call, which would race against the first.
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -54,7 +54,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        // Refresh itself failed — the session is genuinely over.
+        // Refresh itself failed LearnStack the session is genuinely over.
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {

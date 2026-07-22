@@ -66,7 +66,7 @@ export const findQuizForAdmin = (id: string) => {
   });
 };
 
-// Internal use only (scoring) — includes correct answers.
+// Internal use only (scoring) LearnStack includes correct answers.
 export const findQuizWithCorrectAnswers = (id: string) => {
   return prisma.quiz.findUnique({
     where: { id },

@@ -14,7 +14,7 @@ import * as chapterController from './chapters.controller';
 const router = Router();
 
 // ---------- Read routes ----------
-// Public — chapter titles/structure are useful as a course "syllabus" preview
+// Public LearnStack chapter titles/structure are useful as a course "syllabus" preview
 // even before purchase. Actual lesson content access is still gated separately.
 router.get(
   '/course/:courseId',

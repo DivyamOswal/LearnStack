@@ -60,7 +60,7 @@ export const getContinueLearning = async (userId: string, courseId: string) => {
 
   const mostRecent = await progressRepo.findMostRecentProgress(userId, courseId);
   if (!mostRecent) {
-    return null; // student hasn't started this course yet — frontend shows "Start Course"
+    return null; // student hasn't started this course yet LearnStack frontend shows "Start Course"
   }
 
   return {

@@ -30,7 +30,7 @@ export const changePassword = async (userId: string, input: ChangePasswordInput)
 
   const hashedPassword = await bcrypt.hash(input.newPassword, 10);
   await userRepo.updatePassword(userId, hashedPassword);
-  // Refresh token cleared inside the repository update — forces re-login
+  // Refresh token cleared inside the repository update LearnStack forces re-login
   // on every other device once the password changes, which is the
   // expected security behavior after a password change.
 };

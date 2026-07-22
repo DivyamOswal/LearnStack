@@ -3,7 +3,7 @@ import { PaletteMode } from '@mui/material';
 export const getPalette = (mode: PaletteMode) => ({
   mode,
   primary: {
-    main: '#2DD4BF', // signature teal accent — single color, no gradient
+    main: '#2DD4BF', // signature teal accent LearnStack single color, no gradient
     contrastText: '#0D1117',
   },
   ...(mode === 'light'

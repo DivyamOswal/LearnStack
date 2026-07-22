@@ -9,7 +9,7 @@ export const createCheckoutSession = asyncHandler(async (req: Request, res: Resp
   res.status(201).json(new ApiResponse(201, result, 'Checkout session created.'));
 });
 
-// NOTE: this handler receives a raw Buffer body (see app.ts), not parsed JSON —
+// NOTE: this handler receives a raw Buffer body (see app.ts), not parsed JSON LearnStack
 // do not use req.body as an object here.
 export const stripeWebhookHandler = async (req: Request, res: Response) => {
   const signature = req.headers['stripe-signature'] as string;

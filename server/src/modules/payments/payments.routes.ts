@@ -11,7 +11,7 @@ import * as paymentController from './payments.controller';
 
 const router = Router();
 
-// NOTE: /webhook is intentionally NOT here — it's registered directly
+// NOTE: /webhook is intentionally NOT here LearnStack it's registered directly
 // in app.ts (before express.json()) so it can receive the raw body
 // Stripe needs for signature verification. See app.ts.
 

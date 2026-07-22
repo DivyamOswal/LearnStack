@@ -31,7 +31,7 @@ const formatMessage = (level: LogLevel, message: string, meta?: unknown): string
 const write = (level: LogLevel, message: string, meta?: unknown) => {
   const formatted = formatMessage(level, message, meta);
 
-  // In production, skip ANSI color codes — most log viewers (Render's included)
+  // In production, skip ANSI color codes LearnStack most log viewers (Render's included)
   // either strip them or render raw escape characters, which is noisier than plain text.
   const output = env.NODE_ENV === 'production' ? formatted : `${colors[level]}${formatted}${reset}`;
 
@@ -49,7 +49,7 @@ export const logger = {
   warn: (message: string, meta?: unknown) => write('warn', message, meta),
   error: (message: string, meta?: unknown) => write('error', message, meta),
   debug: (message: string, meta?: unknown) => {
-    // Debug logs only fire outside production — keeps noisy diagnostic
+    // Debug logs only fire outside production LearnStack keeps noisy diagnostic
     // logging out of your Render logs once deployed.
     if (env.NODE_ENV !== 'production') {
       write('debug', message, meta);

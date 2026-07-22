@@ -23,7 +23,7 @@ const reorderTopicsSchema = z.object({
   query: z.object({}).optional(),
 });
 
-// ---------- Read (same access rule as lessons — logged in required) ----------
+// ---------- Read (same access rule as lessons LearnStack logged in required) ----------
 router.get(
   '/lesson/:lessonId',
   authenticate,

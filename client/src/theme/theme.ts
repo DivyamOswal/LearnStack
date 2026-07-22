@@ -5,7 +5,7 @@ export const buildTheme = (mode: PaletteMode) =>
   createTheme({
     palette: getPalette(mode),
     shape: {
-      borderRadius: 8, // slightly tighter than default MUI 12px — reads more "editor panel" than "app icon"
+      borderRadius: 8, // slightly tighter than default MUI 12px LearnStack reads more "editor panel" than "app icon"
     },
     typography: {
       fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
