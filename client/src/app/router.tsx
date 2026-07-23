@@ -21,6 +21,7 @@ import AdminCourseEditorPage from '@/pages/admin/AdminCourseEditorPage';
 import AdminCoursesPage from '@/pages/admin/AdminCoursesPage';
 import AdminUsersPage from '@/pages/admin/AdminUsersPage'
 import QuizPage from '@/pages/QuizPage';
+import AdminCategoriesPage from '@/pages/admin/AdminCategoriesPage';
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
           { path: '/admin/courses/:id', element: <AdminCourseEditorPage /> },
           { path: '/admin/courses', element: <AdminCoursesPage /> },
           { path: '/admin/users', element: <AdminUsersPage /> },
+          { path: '/admin/categories', element: <AdminCategoriesPage /> },
         ],
       },
     ],

@@ -35,4 +35,8 @@ router.get('/dashboard/stats', adminController.getDashboardStats);
 router.get('/reports/popular-courses', adminController.getPopularCourses);
 router.get('/reports/revenue', adminController.getRevenueReport);
 
+router.post('/coupons', validate(createCouponSchema), adminController.createCoupon);
+router.get('/coupons', adminController.getCoupons);
+router.patch('/coupons/:id', validate(couponIdParamSchema), adminController.updateCouponStatus);
+
 export default router;
