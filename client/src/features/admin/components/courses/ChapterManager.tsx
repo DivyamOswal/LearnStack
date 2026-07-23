@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { TextField, Button, Typography, IconButton } from '@mui/material';
+import { TextField, IconButton, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useChaptersForCourse, useCreateChapter } from '../../courses/adminCourseApi';
+import LessonManager from './LessonManager';
 
 const ChapterManager = ({ courseId }: { courseId: string }) => {
   const [newChapterTitle, setNewChapterTitle] = useState('');
@@ -23,20 +24,20 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
 
       {isLoading && <Typography color="text.secondary">Loading chapters...</Typography>}
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {chapters?.map((chapter, index) => (
-          <div
-            key={chapter.id}
-            className="flex items-center gap-3 p-3 rounded-md border"
-            style={{ borderColor: 'inherit' }}
-          >
-            <Typography className="font-mono-ui" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-              {String(index + 1).padStart(2, '0')}
-            </Typography>
-            <Typography sx={{ fontWeight: 600, flexGrow: 1 }}>{chapter.title}</Typography>
-            <Typography variant="body2" color="text.secondary" className="font-mono-ui">
-              {chapter.lessons.length} lessons
-            </Typography>
+          <div key={chapter.id} className="p-3 rounded-md border" style={{ borderColor: 'inherit' }}>
+            <div className="flex items-center gap-3">
+              <Typography className="font-mono-ui" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                {String(index + 1).padStart(2, '0')}
+              </Typography>
+              <Typography sx={{ fontWeight: 600, flexGrow: 1 }}>{chapter.title}</Typography>
+              <Typography variant="body2" color="text.secondary" className="font-mono-ui">
+                {chapter.lessons.length} lessons
+              </Typography>
+            </div>
+
+            <LessonManager chapter={chapter} />
           </div>
         ))}
       </div>

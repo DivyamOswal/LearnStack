@@ -19,6 +19,8 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import PlaygroundPage from '@/pages/PlaygroundPage';
 import AdminCourseEditorPage from '@/pages/admin/AdminCourseEditorPage';
 import AdminCoursesPage from '@/pages/admin/AdminCoursesPage';
+import AdminUsersPage from '@/pages/admin/AdminUsersPage'
+import QuizPage from '@/pages/QuizPage';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +46,11 @@ const router = createBrowserRouter([
     children: [
       {
         element: <StudentDashboardLayout />,
-        children: [{ path: '/dashboard', element: <StudentDashboardPage /> }],
+        children: [
+          { path: '/dashboard', element: <StudentDashboardPage /> },
+          { path: '/quiz/:quizId', element: <QuizPage /> },
+        ],
+        
       },
     ],
   },
@@ -57,6 +63,7 @@ const router = createBrowserRouter([
           { path: '/admin', element: <AdminOverviewPage /> },
           { path: '/admin/courses/:id', element: <AdminCourseEditorPage /> },
           { path: '/admin/courses', element: <AdminCoursesPage /> },
+          { path: '/admin/users', element: <AdminUsersPage /> },
         ],
       },
     ],

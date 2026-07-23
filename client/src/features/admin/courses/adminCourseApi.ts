@@ -105,3 +105,48 @@ export const useDeleteCourse = () => {
     },
   });
 };
+
+export const useCreateLesson = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      input,
+      videoFile,
+      pdfFile,
+    }: {
+      input: CreateLessonInput;
+      videoFile?: File;
+      pdfFile?: File;
+    }) => {
+      const formData = new FormData();
+      Object.entries(input).forEach(([key, value]) => {
+        if (value !== undefined) formData.append(key, String(value));
+      });
+      if (videoFile) formData.append('video', videoFile);
+      if (pdfFile) formData.append('pdf', pdfFile);
+
+      const { data } = await axiosInstance.post<ApiResponse<AdminLesson>>('/lessons', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return data.data;
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate the chapter list for the course this lesson's chapter belongs to —
+      // we don't have courseId here directly, so the caller passes chapterId's parent
+      // course invalidation explicitly (handled by the component below).
+      queryClient.invalidateQueries({ queryKey: ['admin', 'chapters'] });
+    },
+  });
+};
+
+export const useDeleteLesson = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await axiosInstance.delete(`/lessons/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'chapters'] });
+    },
+  });
+};

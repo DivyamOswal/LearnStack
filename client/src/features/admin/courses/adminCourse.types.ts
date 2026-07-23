@@ -40,3 +40,23 @@ export interface AdminCourseDetail {
   isPublished: boolean;
   thumbnailUrl: string | null;
 }
+
+export type LessonType = 'VIDEO' | 'ARTICLE' | 'MARKDOWN' | 'CODE_SNIPPET';
+
+export interface CreateLessonInput {
+  title: string;
+  type: LessonType;
+  order: number;
+  chapterId: string;
+  content?: string;
+}
+
+export interface AdminLesson {
+  id: string;
+  title: string;
+  type: LessonType;
+  order: number;
+  videoUrl: string | null;
+  pdfUrl: string | null;
+  content: string | null;
+}
