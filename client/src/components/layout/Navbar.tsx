@@ -22,7 +22,7 @@ import DarkModeIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeIcon from '@mui/icons-material/LightModeOutlined';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { toggleThemeMode } from '@/app/uiSlice';
-// import { useLogout } from '@/features/auth/authApi';
+import { useLogout } from '@/features/auth/authApi';
 import { ROUTES } from '@/routes/routePaths';
 
 const navLinks = [
@@ -36,7 +36,7 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const logoutMutation = useLogout();
+  const logoutMutation = useLogout();
 
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const themeMode = useAppSelector((state) => state.ui.themeMode);
