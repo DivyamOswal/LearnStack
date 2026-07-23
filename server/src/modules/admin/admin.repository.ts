@@ -173,8 +173,17 @@ export const getMonthlyRevenue = async () => {
   return rows.map((r) => ({ month: r.month, revenue: Number(r.revenue) }));
 };
 
-export const createCoupon = (data: { code: string; discountPercent: number; maxUses?: number; expiresAt?: Date }) => {
+export const createCoupon = (data: {
+  code: string;
+  discountPercent: number;
+  maxUses?: number;
+  expiresAt?: Date;
+}) => {
   return prisma.coupon.create({ data });
+};
+
+export const findCouponByCode = (code: string) => {
+  return prisma.coupon.findUnique({ where: { code } });
 };
 
 export const listCoupons = () => {

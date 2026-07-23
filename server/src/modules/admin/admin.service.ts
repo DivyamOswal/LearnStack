@@ -79,3 +79,30 @@ export const getPopularCoursesReport = async () => {
 export const getRevenueReport = async () => {
   return adminRepo.getMonthlyRevenue();
 };
+
+export const addCoupon = async (input: {
+  code: string;
+  discountPercent: number;
+  maxUses?: number;
+  expiresAt?: string;
+}) => {
+  const existing = await adminRepo.findCouponByCode(input.code);
+  if (existing) {
+    throw new ApiError(409, 'A coupon with this code already exists.');
+  }
+
+  return adminRepo.createCoupon({
+    code: input.code,
+    discountPercent: input.discountPercent,
+    maxUses: input.maxUses,
+    expiresAt: input.expiresAt ? new Date(input.expiresAt) : undefined,
+  });
+};
+
+export const getCoupons = async () => {
+  return adminRepo.listCoupons();
+};
+
+export const setCouponStatus = async (id: string, isActive: boolean) => {
+  return adminRepo.updateCouponStatus(id, isActive);
+};

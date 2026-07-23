@@ -22,6 +22,8 @@ import AdminCoursesPage from '@/pages/admin/AdminCoursesPage';
 import AdminUsersPage from '@/pages/admin/AdminUsersPage'
 import QuizPage from '@/pages/QuizPage';
 import AdminCategoriesPage from '@/pages/admin/AdminCategoriesPage';
+import AdminCouponsPage from '@/pages/admin/AdminCouponsPage';
+import LessonPage from '@/pages/LessonPage';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,7 @@ const router = createBrowserRouter([
         children: [
           { path: '/dashboard', element: <StudentDashboardPage /> },
           { path: '/quiz/:quizId', element: <QuizPage /> },
+          { path: '/learn/:lessonId', element: <LessonPage /> },
         ],
         
       },
@@ -66,6 +69,7 @@ const router = createBrowserRouter([
           { path: '/admin/courses', element: <AdminCoursesPage /> },
           { path: '/admin/users', element: <AdminUsersPage /> },
           { path: '/admin/categories', element: <AdminCategoriesPage /> },
+          { path: '/admin/coupons', element: <AdminCouponsPage /> },
         ],
       },
     ],

@@ -9,6 +9,8 @@ import {
   createCategorySchema,
   updateCategorySchema,
   categoryIdParamSchema,
+  createCouponSchema,
+  couponIdParamSchema,
 } from './admin.validator';
 import * as adminController from './admin.controller';
 
