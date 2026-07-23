@@ -10,6 +10,11 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { useAppSelector } from '@/app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/routePaths';
+import { useState } from 'react';
+import { useReviewsForCourse, useRatingDistribution } from '@/features/reviews/reviewsApi';
+import RatingDistributionChart from '@/features/reviews/components/RatingDistributionChart';
+import ReviewForm from '@/features/reviews/components/ReviewForm';
+import ReviewList from '@/features/reviews/components/ReviewList';
 
 const CourseDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,6 +22,9 @@ const CourseDetailPage = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: course, isLoading, isError } = useCourseBySlug(slug ?? '');
   const checkoutMutation = useCreateCheckoutSession();
+  const [reviewPage, setReviewPage] = useState(1);
+  const { data: reviewData } = useReviewsForCourse(course?.id ?? '', reviewPage);
+  const { data: distribution } = useRatingDistribution(course?.id ?? '');
 
   if (isLoading) {
     return (
@@ -80,6 +88,30 @@ const CourseDetailPage = () => {
           <Divider sx={{ mb: 6 }} />
 
           <CourseCurriculum chapters={course.chapters} />
+          <Divider sx={{ my: 6 }} />
+
+          <div className="flex flex-col gap-8">
+            <Typography variant="h5">Reviews</Typography>
+
+            {distribution && reviewData && (
+              <RatingDistributionChart
+                distribution={distribution}
+                averageRating={reviewData.averageRating}
+                ratingCount={reviewData.ratingCount}
+              />
+            )}
+
+            {isAuthenticated && <ReviewForm courseId={course.id} />}
+
+            {reviewData && (
+              <ReviewList
+                reviews={reviewData.reviews}
+                page={reviewPage}
+                totalPages={reviewData.totalPages}
+                onPageChange={setReviewPage}
+              />
+            )}
+          </div>
         </div>
 
         {/* Sticky purchase card */}
