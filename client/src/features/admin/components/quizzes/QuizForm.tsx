@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TextField, Button, FormControlLabel, Switch, Alert } from '@mui/material';
-import { useCreateQuiz } from '../../features/admin/quizzes/adminQuizApi'
+import { useCreateQuiz } from '../../quizzes/adminQuizApi'
 
 interface QuizFormProps {
   courseId: string;
