@@ -72,3 +72,10 @@ export const removeCourse = async (id: string) => {
   if (!existing) throw new ApiError(404, 'Course not found.');
   return courseRepo.deleteCourse(id);
 };
+
+export const search = async (query: string) => {
+  if (!query || query.trim().length < 2) {
+    return { courses: [], lessons: [], instructors: [] };
+  }
+  return courseRepo.globalSearch(query.trim());
+};

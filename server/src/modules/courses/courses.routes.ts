@@ -56,6 +56,8 @@ router.delete(
   courseController.deleteCourse
 );
 
+router.get('/search', courseController.searchAll);
+
 // ---------- Public slug route (must come last) ----------
 router.get('/:slug', validate(courseSlugParamSchema), courseController.getCourseBySlug);
 

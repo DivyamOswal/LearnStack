@@ -156,3 +156,41 @@ export const checkCategoryExists = async (categoryId: string) => {
   const category = await prisma.category.findUnique({ where: { id: categoryId } });
   return !!category;
 };
+
+export const globalSearch = async (query: string) => {
+  const [courses, lessons, instructors] = await Promise.all([
+    prisma.course.findMany({
+      where: {
+        isPublished: true,
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      select: { id: true, title: true, slug: true, thumbnailUrl: true },
+      take: 5,
+    }),
+    prisma.lesson.findMany({
+      where: {
+        title: { contains: query, mode: 'insensitive' },
+        chapter: { course: { isPublished: true } },
+      },
+      select: {
+        id: true,
+        title: true,
+        chapter: { select: { course: { select: { slug: true, title: true } } } },
+      },
+      take: 5,
+    }),
+    prisma.user.findMany({
+      where: {
+        role: 'ADMIN',
+        name: { contains: query, mode: 'insensitive' },
+      },
+      select: { id: true, name: true, avatarUrl: true },
+      take: 5,
+    }),
+  ]);
+
+  return { courses, lessons, instructors };
+};

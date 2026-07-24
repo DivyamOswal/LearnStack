@@ -32,6 +32,9 @@ import AdminNotificationsPage from '@/pages/admin/AdminNotificationsPage';
 import BlogListPage from '@/pages/BlogListPage';
 import BlogPostPage from '@/pages/BlogPostPage';
 import AdminBlogPage from '@/pages/admin/AdminBlogPage';
+import VerifyEmailPage from '@/pages/VerifyEmailPage';
+import AdminQuizzesPage from '@/pages/admin/AdminQuizzesPage';
+import AdminQuizEditorPage from '@/pages/admin/AdminQuizEditorPage';
 
 const router = createBrowserRouter([
   {
@@ -53,6 +56,7 @@ const router = createBrowserRouter([
       { path: '/register', element: <RegisterPage /> },
       { path: '/forgot-password', element: <ForgotPasswordPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
+      { path: '/verify-email', element: <VerifyEmailPage /> },
     ],
   },
   {
@@ -83,6 +87,8 @@ const router = createBrowserRouter([
           { path: '/admin/users', element: <AdminUsersPage /> },
           { path: '/admin/categories', element: <AdminCategoriesPage /> },
           { path: '/admin/coupons', element: <AdminCouponsPage /> },
+          { path: '/admin/quizzes', element: <AdminQuizzesPage /> },
+          { path: '/admin/quizzes/manage', element: <AdminQuizEditorPage /> },
           { path: '/admin/moderation', element: <AdminModerationPage /> },
           { path: '/admin/notifications', element: <AdminNotificationsPage /> },
           { path: '/admin/blog', element: <AdminBlogPage /> },

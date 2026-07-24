@@ -47,3 +47,9 @@ export const getPublicCourses = asyncHandler(async (req: Request, res: Response)
   const result = await courseService.listPublicCourses(req.query as any, req.user?.id);
   res.status(200).json(new ApiResponse(200, result, 'Courses fetched.'));
 });
+
+export const searchAll = asyncHandler(async (req: Request, res: Response) => {
+  const query = (req.query.q as string) ?? '';
+  const results = await courseService.search(query);
+  res.status(200).json(new ApiResponse(200, results, 'Search results fetched.'));
+});

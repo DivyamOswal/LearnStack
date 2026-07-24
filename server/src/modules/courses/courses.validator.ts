@@ -58,3 +58,11 @@ export const listCoursesSchema = z.object({
   params: emptyParams,
   body: emptyBody,
 });
+
+export const searchQuerySchema = z.object({
+  query: z.object({
+    q: z.string().optional(),
+  }),
+  params: z.object({}).optional(),
+  body: z.object({}).optional(),
+});

@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { toggleThemeMode } from '@/app/uiSlice';
 import { useLogout } from '@/features/auth/authApi';
 import { ROUTES } from '@/routes/routePaths';
+import SearchBar from '@/features/search/components/SearchBar';
 
 const navLinks = [
   { label: 'courses', path: ROUTES.COURSES },
@@ -119,6 +120,7 @@ const Navbar = () => {
 
           {/* Right side: notifications, theme toggle, auth state */}
           <Stack direction="row" spacing={0.5} alignItems="center">
+            <SearchBar/>
             {isAuthenticated && <NotificationBell />}
 
             <IconButton
