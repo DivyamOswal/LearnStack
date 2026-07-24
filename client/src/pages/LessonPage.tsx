@@ -40,7 +40,7 @@ const LessonPage = () => {
   }
 
   // NOTE: real purchase-gating isn't enforced by the backend yet (flagged back
-  // in the lessons module) — this page will render for any authenticated user.
+  // in the lessons module) this page will render for any authenticated user.
   const completedLessonIds = new Set<string>(
     (detailedProgress ?? []).filter((p) => p.completed).map((p) => p.lessonId)
   );

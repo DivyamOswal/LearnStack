@@ -24,6 +24,14 @@ import QuizPage from '@/pages/QuizPage';
 import AdminCategoriesPage from '@/pages/admin/AdminCategoriesPage';
 import AdminCouponsPage from '@/pages/admin/AdminCouponsPage';
 import LessonPage from '@/pages/LessonPage';
+import CertificatesPage from '@/pages/CertificatesPage';
+import CertificateVerifyPage from '@/pages/CertificateVerifyPage';
+import AdminModerationPage from '@/pages/admin/AdminModerationPage';
+import BookmarksPage from '@/pages/BookmarksPage';
+import AdminNotificationsPage from '@/pages/admin/AdminNotificationsPage';
+import BlogListPage from '@/pages/BlogListPage';
+import BlogPostPage from '@/pages/BlogPostPage';
+import AdminBlogPage from '@/pages/admin/AdminBlogPage';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +41,9 @@ const router = createBrowserRouter([
       { path: '/courses', element: <CourseListPage /> },
       { path: '/courses/:slug', element: <CourseDetailPage /> },
       { path: '/playground', element: <PlaygroundPage /> },
+      { path: '/verify-certificate/:code', element: <CertificateVerifyPage /> },
+      { path: '/blog', element: <BlogListPage /> },
+      { path: '/blog/:slug', element: <BlogPostPage /> },
     ],
   },
   {
@@ -53,6 +64,8 @@ const router = createBrowserRouter([
           { path: '/dashboard', element: <StudentDashboardPage /> },
           { path: '/quiz/:quizId', element: <QuizPage /> },
           { path: '/learn/:lessonId', element: <LessonPage /> },
+          { path: '/dashboard/certificates', element: <CertificatesPage /> },
+          { path: '/dashboard/bookmarks', element: <BookmarksPage /> },
         ],
         
       },
@@ -70,6 +83,9 @@ const router = createBrowserRouter([
           { path: '/admin/users', element: <AdminUsersPage /> },
           { path: '/admin/categories', element: <AdminCategoriesPage /> },
           { path: '/admin/coupons', element: <AdminCouponsPage /> },
+          { path: '/admin/moderation', element: <AdminModerationPage /> },
+          { path: '/admin/notifications', element: <AdminNotificationsPage /> },
+          { path: '/admin/blog', element: <AdminBlogPage /> },
         ],
       },
     ],

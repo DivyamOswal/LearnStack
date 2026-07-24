@@ -85,7 +85,7 @@ const AdminCategoriesPage = () => {
 
       {createCategory.isError && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          Failed to create category — it may already exist.
+          Failed to create category it may already exist.
         </Alert>
       )}
 
@@ -153,7 +153,7 @@ const AdminCategoriesPage = () => {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         title="Delete category?"
-        description={`Deleting "${deleteTarget?.name}" may fail if courses are still assigned to it — you'll need to reassign them first.`}
+        description={`Deleting "${deleteTarget?.name}" may fail if courses are still assigned to it you'll need to reassign them first.`}
         confirmLabel="Delete"
         onConfirm={handleConfirmDelete}
         onCancel={() => setDeleteTarget(null)}

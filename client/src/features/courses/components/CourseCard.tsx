@@ -5,8 +5,9 @@ import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import { Course } from '../course.types';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { ROUTES } from '@/routes/routePaths';
+import BookmarkButton from '@/features/student-dashboard/components/BookmarkButton';
 
-const CourseCard = ({ course }: { course: Course }) => {
+const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } }) => {
   const hasDiscount = course.discountPrice && parseFloat(course.discountPrice) < parseFloat(course.price);
 
   return (
@@ -15,7 +16,6 @@ const CourseCard = ({ course }: { course: Course }) => {
       className="group flex flex-col overflow-hidden rounded-lg border no-underline text-inherit transition-transform hover:-translate-y-1"
       style={{ borderColor: 'var(--mui-palette-divider, #30363D)' }}
     >
-      {/* Thumbnail */}
       <div className="aspect-video w-full overflow-hidden" style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
         {course.thumbnailUrl ? (
           <img
@@ -31,12 +31,15 @@ const CourseCard = ({ course }: { course: Course }) => {
       </div>
 
       <div className="flex flex-col gap-2 p-4">
-        <Chip
-          label={course.category.name}
-          size="small"
-          className="font-mono-ui self-start"
-          sx={{ bgcolor: 'action.hover', color: 'text.secondary', fontSize: '0.7rem' }}
-        />
+        <div className="flex items-start justify-between gap-2">
+          <Chip
+            label={course.category.name}
+            size="small"
+            className="font-mono-ui"
+            sx={{ bgcolor: 'action.hover', color: 'text.secondary', fontSize: '0.7rem' }}
+          />
+          <BookmarkButton courseId={course.id} isBookmarked={course.isBookmarked ?? false} size="small" />
+        </div>
 
         <Typography variant="h6" sx={{ fontSize: '1.05rem', fontWeight: 600, lineHeight: 1.3 }}>
           {course.title}

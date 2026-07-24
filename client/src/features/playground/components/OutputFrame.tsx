@@ -22,7 +22,7 @@ const OutputFrame = ({ code }: { code: PlaygroundCode }) => {
       if (iframeRef.current) {
         iframeRef.current.srcdoc = buildSrcDoc(code);
       }
-    }, 400); // debounced — avoids re-rendering the iframe on every keystroke
+    }, 400); // debounced avoids re-rendering the iframe on every keystroke
 
     return () => clearTimeout(timeout);
   }, [code]);

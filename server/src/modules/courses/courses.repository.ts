@@ -47,15 +47,14 @@ export const createCourse = async (
 
 export const findCourses = async (
   { page = 1, limit = 12, search, categoryId, isPublished }: CourseListQuery,
-  restrictToPublished: boolean
+  restrictToPublished: boolean,
+  userId?: string
 ) => {
   const skip = (page - 1) * limit;
 
   const where: Prisma.CourseWhereInput = {
     ...(restrictToPublished ? { isPublished: true } : {}),
-    ...(!restrictToPublished && isPublished !== undefined
-      ? { isPublished: isPublished === 'true' }
-      : {}),
+    ...(!restrictToPublished && isPublished !== undefined ? { isPublished: isPublished === 'true' } : {}),
     ...(categoryId ? { categoryId } : {}),
     ...(search
       ? {
@@ -82,6 +81,7 @@ export const findCourses = async (
         createdAt: true,
         category: { select: { id: true, name: true, slug: true } },
         _count: { select: { reviews: true, orders: true } },
+        ...(userId ? { bookmarks: { where: { userId }, select: { id: true } } } : {}),
       },
       skip,
       take: limit,
@@ -90,7 +90,13 @@ export const findCourses = async (
     prisma.course.count({ where }),
   ]);
 
-  return { courses, total, page, limit, totalPages: Math.ceil(total / limit) };
+  const coursesWithBookmarkFlag = courses.map((c) => ({
+    ...c,
+    isBookmarked: userId ? (c as any).bookmarks?.length > 0 : false,
+    bookmarks: undefined,
+  }));
+
+  return { courses: coursesWithBookmarkFlag, total, page, limit, totalPages: Math.ceil(total / limit) };
 };
 
 export const findCourseBySlug = (slug: string) => {

@@ -42,3 +42,8 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
   await courseService.removeCourse(req.params.id);
   res.status(200).json(new ApiResponse(200, null, 'Course deleted.'));
 });
+
+export const getPublicCourses = asyncHandler(async (req: Request, res: Response) => {
+  const result = await courseService.listPublicCourses(req.query as any, req.user?.id);
+  res.status(200).json(new ApiResponse(200, result, 'Courses fetched.'));
+});

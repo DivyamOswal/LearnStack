@@ -19,10 +19,10 @@ export const addCourse = async (
   return courseRepo.createCourse(createdById, input, thumbnailUrl);
 };
 
-export const listPublicCourses = async (query: CourseListQuery) => {
+export const listPublicCourses = async (query: CourseListQuery, userId?: string) => {
   const page = query.page ? Number(query.page) : 1;
   const limit = query.limit ? Number(query.limit) : 12;
-  return courseRepo.findCourses({ ...query, page, limit }, true);
+  return courseRepo.findCourses({ ...query, page, limit }, true, userId);
 };
 
 export const listAllCoursesForAdmin = async (query: CourseListQuery) => {

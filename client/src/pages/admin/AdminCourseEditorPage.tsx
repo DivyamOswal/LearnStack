@@ -8,7 +8,7 @@ const AdminCourseEditorPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // "new" is a placeholder route param meaning "create mode" — no real course yet
+  // "new" is a placeholder route param meaning "create mode" no real course yet
   const [createdCourseId, setCreatedCourseId] = useState<string | null>(id !== 'new' ? id ?? null : null);
 
   return (

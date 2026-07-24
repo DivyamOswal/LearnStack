@@ -20,6 +20,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import DarkModeIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeIcon from '@mui/icons-material/LightModeOutlined';
+import NotificationBell from '@/features/notifications/components/NotificationBell';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { toggleThemeMode } from '@/app/uiSlice';
 import { useLogout } from '@/features/auth/authApi';
@@ -63,7 +64,7 @@ const Navbar = () => {
         }}
       >
         <Toolbar sx={{ maxWidth: 1280, width: '100%', mx: 'auto', px: { xs: 2, md: 4 } }}>
-          {/* Logo LearnStack terminal-prompt signature: reads like a shell prompt, not a generic wordmark */}
+          {/* Logo — terminal-prompt signature: reads like a shell prompt, not a generic wordmark */}
           <Box
             component={RouterLink}
             to={ROUTES.HOME}
@@ -116,15 +117,22 @@ const Navbar = () => {
             </Stack>
           )}
 
-          {/* Right side: theme toggle + auth state */}
-          <Stack direction="row" spacing={1} alignItems="center">
-            <IconButton onClick={() => dispatch(toggleThemeMode())} size="small" aria-label="Toggle dark mode">
+          {/* Right side: notifications, theme toggle, auth state */}
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            {isAuthenticated && <NotificationBell />}
+
+            <IconButton
+              onClick={() => dispatch(toggleThemeMode())}
+              size="small"
+              aria-label="Toggle dark mode"
+              sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
+            >
               {themeMode === 'dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
 
             {!isMobile && isAuthenticated && user && (
               <>
-                <IconButton onClick={(e) => setUserMenuAnchor(e.currentTarget)} size="small">
+                <IconButton onClick={(e) => setUserMenuAnchor(e.currentTarget)} size="small" sx={{ ml: 0.5 }}>
                   <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.9rem' }}>
                     {user.name.charAt(0).toUpperCase()}
                   </Avatar>
@@ -147,7 +155,7 @@ const Navbar = () => {
             )}
 
             {!isMobile && !isAuthenticated && (
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} sx={{ ml: 0.5 }}>
                 <Button component={RouterLink} to={ROUTES.LOGIN} sx={{ color: 'text.primary' }}>
                   Log in
                 </Button>
@@ -158,7 +166,7 @@ const Navbar = () => {
             )}
 
             {isMobile && (
-              <IconButton onClick={() => setMobileOpen(true)} aria-label="Open menu">
+              <IconButton onClick={() => setMobileOpen(true)} aria-label="Open menu" sx={{ ml: 0.5 }}>
                 <MenuIcon />
               </IconButton>
             )}

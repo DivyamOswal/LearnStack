@@ -29,3 +29,16 @@ export interface DashboardSummary {
   recentLessons: RecentLesson[];
   recentQuizResults: RecentQuizResult[];
 }
+
+export interface BookmarkedCourse {
+  id: string;
+  createdAt: string;
+  course: {
+    id: string;
+    title: string;
+    slug: string;
+    thumbnailUrl: string | null;
+    price: string;
+    discountPrice: string | null;
+  };
+}

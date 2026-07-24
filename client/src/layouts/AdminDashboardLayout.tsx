@@ -9,6 +9,7 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import Sidebar, { SidebarNavItem } from '@/components/layout/Sidebar';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import { ROUTES } from '@/routes/routePaths';
 
 const navItems: SidebarNavItem[] = [
@@ -20,6 +21,7 @@ const navItems: SidebarNavItem[] = [
   { label: 'Coupons', path: ROUTES.ADMIN.COUPONS, icon: LocalOfferOutlinedIcon },
   { label: 'Moderation', path: ROUTES.ADMIN.MODERATION, icon: FlagOutlinedIcon },
   { label: 'Blog', path: ROUTES.ADMIN.BLOG, icon: ArticleOutlinedIcon },
+  { label: 'Broadcast', path: '/admin/notifications', icon: CampaignOutlinedIcon },
 ];
 
 const AdminDashboardLayout = () => {
