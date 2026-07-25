@@ -62,7 +62,7 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
 
       <div className="flex flex-col gap-4 sm:flex-row">
         <TextField
-          label="Price (USD)"
+          label="Price (INR)"
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}

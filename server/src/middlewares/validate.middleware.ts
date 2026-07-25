@@ -5,11 +5,21 @@ import { ApiError } from '../utils/ApiError';
 export const validate = (schema: z.AnyZodObject) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      schema.parse({
+      const parsed = schema.parse({
         body: req.body,
         query: req.query,
         params: req.params,
       });
+
+      req.body = parsed.body;
+
+      // Express 5 made req.query a getter-only property -it can't be
+      // reassigned directly. Clear its existing keys and copy the parsed
+      // (coerced/transformed) values onto the same object instead.
+      Object.keys(req.query).forEach((key) => delete (req.query as any)[key]);
+      Object.assign(req.query, parsed.query);
+
+      req.params = parsed.params;
 
       next();
     } catch (err) {

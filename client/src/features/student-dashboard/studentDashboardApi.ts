@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { ApiResponse } from '@/types/api.types';
 import { DashboardSummary } from './studentDashboard.types';
 import { BookmarkedCourse } from './studentDashboard.types';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDashboardSummary = () => {
   return useQuery({

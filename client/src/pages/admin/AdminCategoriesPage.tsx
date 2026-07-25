@@ -76,7 +76,7 @@ const AdminCategoriesPage = () => {
           disableElevation
           startIcon={<AddIcon />}
           onClick={handleCreate}
-          disabled={createCategory.isPending}
+          disabled={createCategory.isPending || !newName.trim()}
           sx={{ whiteSpace: 'nowrap' }}
         >
           Add

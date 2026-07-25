@@ -1,5 +1,6 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+import { motion } from 'framer-motion';
 import { SvgIconComponent } from '@mui/icons-material';
 
 export interface SidebarNavItem {
@@ -17,24 +18,72 @@ const Sidebar = ({ items }: { items: SidebarNavItem[] }) => {
       style={{ borderColor: 'inherit' }}
     >
       <div className="flex flex-col gap-1 p-4">
-        {items.map((item) => {
+        {items.map((item, i) => {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
           return (
-            <RouterLink
+            <motion.div
               key={item.path}
-              to={item.path}
-              className="flex items-center gap-3 px-3 py-2 rounded-md no-underline transition-colors"
-              style={{
-                color: isActive ? 'var(--mui-palette-primary-main, #2DD4BF)' : 'inherit',
-                backgroundColor: isActive ? 'var(--mui-palette-action-hover, #1c2128)' : 'transparent',
-              }}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.25, delay: i * 0.04 }}
+              whileHover={{ x: isActive ? 0 : 3 }}
+              style={{ position: 'relative' }}
             >
-              <Icon sx={{ fontSize: 20 }} />
-              <Typography variant="body2" sx={{ fontWeight: isActive ? 600 : 400 }}>
-                {item.label}
-              </Typography>
-            </RouterLink>
+              {isActive && (
+                <motion.div
+                  layoutId="sidebar-active-bg"
+                  transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: 8,
+                    backgroundColor: 'var(--mui-palette-action-hover, #1c2128)',
+                  }}
+                />
+              )}
+
+              <Box
+                component={RouterLink}
+                to={item.path}
+                sx={{
+                  position: 'relative',
+                  zIndex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  px: 1.5,
+                  py: 1,
+                  borderRadius: 1,
+                  textDecoration: 'none',
+                  color: isActive ? 'primary.main' : 'text.secondary',
+                  transition: 'color 0.15s ease',
+                  '&:hover': { color: 'primary.main' },
+                }}
+              >
+                {/* Left accent bar -appears only on the active item, slides between items */}
+                {isActive && (
+                  <motion.div
+                    layoutId="sidebar-active-bar"
+                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    style={{
+                      position: 'absolute',
+                      left: -16,
+                      top: 4,
+                      bottom: 4,
+                      width: 3,
+                      borderRadius: 3,
+                      backgroundColor: 'var(--mui-palette-primary-main, #2DD4BF)',
+                    }}
+                  />
+                )}
+
+                <Icon sx={{ fontSize: 20 }} />
+                <Typography variant="body2" sx={{ fontWeight: isActive ? 600 : 400 }}>
+                  {item.label}
+                </Typography>
+              </Box>
+            </motion.div>
           );
         })}
       </div>

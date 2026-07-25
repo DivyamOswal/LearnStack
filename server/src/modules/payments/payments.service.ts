@@ -54,7 +54,7 @@ export const createCheckoutSession = async (
     line_items: [
       {
         price_data: {
-          currency: 'usd',
+          currency: 'inr',
           product_data: { name: course.title },
           unit_amount: Math.round(finalAmount * 100), // Stripe expects cents
         },
