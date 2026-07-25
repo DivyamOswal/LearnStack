@@ -35,6 +35,7 @@ import AdminBlogPage from '@/pages/admin/AdminBlogPage';
 import VerifyEmailPage from '@/pages/VerifyEmailPage';
 import AdminQuizzesPage from '@/pages/admin/AdminQuizzesPage';
 import AdminQuizEditorPage from '@/pages/admin/AdminQuizEditorPage';
+import ProfileSettingsPage from '@/pages/ProfileSettingsPage';
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
           { path: '/learn/:lessonId', element: <LessonPage /> },
           { path: '/dashboard/certificates', element: <CertificatesPage /> },
           { path: '/dashboard/bookmarks', element: <BookmarksPage /> },
+          { path: '/profile', element: <ProfileSettingsPage /> },
         ],
         
       },

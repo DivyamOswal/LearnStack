@@ -23,7 +23,7 @@ const AdminQuizzesPage = () => {
       )}
 
       {!isLoading && data && data.courses.length === 0 && (
-        <EmptyState title="No courses yet" description="Create a course first — quizzes belong to a course." />
+        <EmptyState title="No courses yet" description="Create a course first -quizzes belong to a course." />
       )}
 
       {!isLoading && data && data.courses.length > 0 && (

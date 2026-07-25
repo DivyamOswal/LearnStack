@@ -77,7 +77,7 @@ const BroadcastForm = () => {
       </Button>
 
       <Typography variant="caption" color="text.secondary">
-        This creates an in-app notification for every matching user — there's no email sent alongside it.
+        This creates an in-app notification for every matching user -there's no email sent alongside it.
       </Typography>
     </form>
   );
