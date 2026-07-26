@@ -4,7 +4,6 @@ import {
   TextField,
   Button,
   Checkbox,
-  FormControlLabel,
   Typography,
   Alert,
   Stack,
@@ -12,6 +11,7 @@ import {
   CircularProgress,
   Divider,
 } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLogin } from "../authApi";
 import { ROUTES } from "@/routes/routePaths";
 import PasswordField from "./PasswordField";
@@ -41,21 +41,33 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <motion.form
+      onSubmit={handleSubmit}
+      noValidate
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
       <Stack spacing={2.75}>
         <Stack spacing={0.75}>
-          <Typography
-            component="span"
-            sx={{
-              color: "primary.main",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              letterSpacing: 2,
-              textTransform: "uppercase",
-            }}
+          <motion.div
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
           >
-            Welcome Back
-          </Typography>
+            <Typography
+              component="span"
+              sx={{
+                color: "primary.main",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                letterSpacing: 2,
+                textTransform: "uppercase",
+              }}
+            >
+              Welcome Back
+            </Typography>
+          </motion.div>
 
           <Typography
             component="h1"
@@ -74,12 +86,21 @@ const LoginForm = () => {
           </Typography>
         </Stack>
 
-        {loginMutation.isError && (
-          <Alert severity="error">
-            {(loginMutation.error as any)?.response?.data?.message ??
-              "Login failed. Please try again."}
-          </Alert>
-        )}
+        <AnimatePresence>
+          {loginMutation.isError && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Alert severity="error">
+                {(loginMutation.error as any)?.response?.data?.message ??
+                  "Login failed. Please try again."}
+              </Alert>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <Stack spacing={2.5}>
           <TextField
@@ -130,32 +151,41 @@ const LoginForm = () => {
             sx={{
               fontSize: "0.875rem",
               fontWeight: 500,
+              transition: "opacity 0.15s ease",
+              "&:hover": { opacity: 0.75 },
             }}
           >
             Forgot password?
           </Link>
         </Stack>
 
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
-          fullWidth
-          disableElevation
-          sx={{
-            height: 52,
-            borderRadius: 2,
-            fontWeight: 600,
-          }}
-          disabled={loginMutation.isPending}
-          startIcon={
-            loginMutation.isPending ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : undefined
-          }
-        >
-          {loginMutation.isPending ? "Logging in..." : "Log In"}
-        </Button>
+        <motion.div whileTap={{ scale: loginMutation.isPending ? 1 : 0.98 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            fullWidth
+            disableElevation
+            sx={{
+              height: 52,
+              borderRadius: 2,
+              fontWeight: 600,
+              transition: "transform 0.15s ease, box-shadow 0.15s ease",
+              "&:hover": {
+                transform: "translateY(-1px)",
+                boxShadow: "0 8px 20px -8px var(--mui-palette-primary-main, #2DD4BF)",
+              },
+            }}
+            disabled={loginMutation.isPending}
+            startIcon={
+              loginMutation.isPending ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : undefined
+            }
+          >
+            {loginMutation.isPending ? "Logging in..." : "Log In"}
+          </Button>
+        </motion.div>
 
         <Divider />
 
@@ -171,7 +201,7 @@ const LoginForm = () => {
           </Link>
         </Typography>
       </Stack>
-    </form>
+    </motion.form>
   );
 };
 

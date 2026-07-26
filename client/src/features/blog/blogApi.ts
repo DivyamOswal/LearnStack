@@ -44,9 +44,9 @@ export const useCreateBlog = () => {
       if (input.isPublished !== undefined) formData.append('isPublished', String(input.isPublished));
       if (coverImage) formData.append('coverImage', coverImage);
 
-      const { data } = await axiosInstance.post<ApiResponse<BlogPost>>('/blog', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // No headers object — axios detects the FormData instance and sets
+      // Content-Type: multipart/form-data with the correct boundary itself.
+      const { data } = await axiosInstance.post<ApiResponse<BlogPost>>('/blog', formData);
       return data.data;
     },
     onSuccess: () => {
@@ -74,9 +74,7 @@ export const useTogglePublishBlog = () => {
     mutationFn: async ({ id, isPublished }: { id: string; isPublished: boolean }) => {
       const formData = new FormData();
       formData.append('isPublished', String(isPublished));
-      const { data } = await axiosInstance.patch<ApiResponse<BlogPost>>(`/blog/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const { data } = await axiosInstance.patch<ApiResponse<BlogPost>>(`/blog/${id}`, formData);
       return data.data;
     },
     onSuccess: () => {
