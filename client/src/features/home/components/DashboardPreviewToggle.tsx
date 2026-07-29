@@ -3,7 +3,7 @@ import { Typography, Tabs, Tab, Box } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 
 const content = {
   student: [
