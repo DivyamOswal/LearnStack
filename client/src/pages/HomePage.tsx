@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Typography, Button, Chip } from '@mui/material';
+import { Typography, Button, Chip, CircularProgress, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { motion } from 'framer-motion';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
@@ -9,7 +10,10 @@ import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOu
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ROUTES } from '@/routes/routePaths';
+import { useCourseList } from '@/features/courses/coursesApi';
+import CourseCard from '@/features/courses/components/CourseCard';
 import TerminalHero from '@/features/home/components/TerminalHero';
 import RevealSection from '@/features/home/components/RevealSection';
 import DashboardPreviewToggle from '@/features/home/components/DashboardPreviewToggle';
@@ -20,15 +24,15 @@ const categories = [
 ];
 
 const pipeline = [
-  { step: 'course', desc: 'Pick a path from fundamentals to system design.' },
+  { step: 'course', desc: 'Pick a path — from fundamentals to system design.' },
   { step: 'chapter', desc: "Structured units, ordered so nothing assumes what you haven't learned yet." },
-  { step: 'lesson', desc: 'Video, article, markdown, or live code whichever teaches the concept best.' },
+  { step: 'lesson', desc: 'Video, article, markdown, or live code — whichever teaches the concept best.' },
   { step: 'quiz', desc: 'Prove it before moving on. Negative marking keeps guessing honest.' },
   { step: 'certificate', desc: 'A QR-verifiable credential, not just a checkbox.' },
 ];
 
 const features = [
-  { icon: SchoolOutlinedIcon, title: 'Structured curriculum', desc: 'Every course is broken into chapters, lessons, and topics a real syllabus, not a random playlist.' },
+  { icon: SchoolOutlinedIcon, title: 'Structured curriculum', desc: 'Every course is broken into chapters, lessons, and topics — a real syllabus, not a random playlist.' },
   { icon: CodeOutlinedIcon, title: 'Live code playground', desc: 'Write HTML, CSS, and JavaScript in an in-browser editor and see the output update instantly, sandboxed and safe.' },
   { icon: QuizOutlinedIcon, title: 'Timed quizzes', desc: 'MCQ, multiple-answer, and true/false questions with optional negative marking and a live leaderboard per quiz.' },
   { icon: WorkspacePremiumOutlinedIcon, title: 'Verified certificates', desc: 'Finish every lesson in a course and get a certificate with a unique code and QR verification page anyone can check.' },
@@ -36,7 +40,39 @@ const features = [
   { icon: ForumOutlinedIcon, title: 'Reviews & discussion', desc: 'Rate and review courses you have completed, and ask questions directly on any lesson with nested replies.' },
 ];
 
+const faqs = [
+  {
+    q: 'Do I need any programming experience to start?',
+    a: 'No. Courses are structured to start from fundamentals — pick a beginner-level course in any category and the chapters are ordered so nothing assumes knowledge you haven\'t covered yet.',
+  },
+  {
+    q: 'How does the certificate actually get issued?',
+    a: 'Once you\'ve marked every lesson in a course complete, you can generate a certificate from your dashboard. It comes with a unique code and a QR code linking to a public verification page — anyone can check it\'s real without needing an account.',
+  },
+  {
+    q: 'Is the code playground actually safe to use?',
+    a: 'Yes — it runs entirely in a sandboxed iframe in your browser with scripts isolated from the rest of the site. Nothing you write there can access your account, cookies, or any other part of the platform.',
+  },
+  {
+    q: 'What happens if I\'m not happy with a course I bought?',
+    a: 'Refunds are handled by our team on a case-by-case basis through Stripe — reach out to support with your order details and we\'ll take a look.',
+  },
+  {
+    q: 'Does quiz negative marking apply if I skip a question?',
+    a: 'No — negative marking only applies when you select a wrong answer. Leaving a question blank never costs you points, only an incorrect attempt does.',
+  },
+];
+
 const HomePage = () => {
+  const [expandedFaq, setExpandedFaq] = useState<string | false>(false);
+
+  // Real, live count — not a fabricated marketing number. limit:1 keeps the
+  // request cheap since we only need the `total` field from the response.
+  const { data: courseListData, isLoading: statsLoading } = useCourseList({ page: 1, limit: 1 });
+  const { data: featuredData, isLoading: featuredLoading } = useCourseList({ page: 1, limit: 3 });
+
+  const totalCourses = courseListData?.total ?? 0;
+
   return (
     <div>
       {/* Hero */}
@@ -132,6 +168,28 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Live stats strip — real numbers, not marketing copy */}
+      <section className="border-b" style={{ borderColor: 'inherit', backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 md:px-8">
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-2 font-mono-ui text-sm">
+            {statsLoading ? (
+              <CircularProgress size={16} />
+            ) : (
+              <span style={{ color: 'inherit' }}>
+                <Typography component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
+                  {totalCourses}
+                </Typography>{' '}
+                {totalCourses === 1 ? 'course' : 'courses'} live right now
+              </span>
+            )}
+            <span style={{ color: 'inherit', opacity: 0.7 }}>·</span>
+            <span style={{ opacity: 0.85 }}>free to browse, no card required</span>
+            <span style={{ opacity: 0.7 }}>·</span>
+            <span style={{ opacity: 0.85 }}>certificates verifiable by anyone</span>
+          </div>
+        </div>
+      </section>
+
       {/* Feature grid */}
       <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
         <RevealSection>
@@ -161,6 +219,56 @@ const HomePage = () => {
               </motion.div>
             </RevealSection>
           ))}
+        </div>
+      </section>
+
+      {/* Featured courses — real, live data from the actual course catalog */}
+      <section className="border-t" style={{ borderColor: 'inherit' }}>
+        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
+          <RevealSection>
+            <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+              <div>
+                <Typography variant="overline" color="primary.main">$ ls courses/ --featured</Typography>
+                <Typography variant="h3" sx={{ mt: 1, fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+                  Start with these.
+                </Typography>
+              </div>
+              <Button
+                component={RouterLink}
+                to={ROUTES.COURSES}
+                endIcon={<ArrowForwardIcon />}
+                className="font-mono-ui"
+              >
+                view all
+              </Button>
+            </div>
+          </RevealSection>
+
+          {featuredLoading && (
+            <div className="flex justify-center py-12">
+              <CircularProgress />
+            </div>
+          )}
+
+          {!featuredLoading && featuredData && featuredData.courses.length === 0 && (
+            <RevealSection>
+              <div className="text-center py-12 border rounded-lg" style={{ borderColor: 'inherit' }}>
+                <Typography color="text.secondary">
+                  No courses published yet — check back soon, or be one of the first to enroll once they go live.
+                </Typography>
+              </div>
+            </RevealSection>
+          )}
+
+          {!featuredLoading && featuredData && featuredData.courses.length > 0 && (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredData.courses.map((course, i) => (
+                <RevealSection key={course.id} delay={i * 0.08}>
+                  <CourseCard course={course} />
+                </RevealSection>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -209,6 +317,45 @@ const HomePage = () => {
           <RevealSection delay={0.1}>
             <DashboardPreviewToggle />
           </RevealSection>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t" style={{ borderColor: 'inherit' }}>
+        <div className="max-w-3xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
+          <RevealSection>
+            <Typography variant="overline" color="primary.main">$ faq --list</Typography>
+            <Typography variant="h3" sx={{ mt: 1, mb: { xs: 4, md: 6 }, fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+              Questions, answered.
+            </Typography>
+          </RevealSection>
+
+          <div className="flex flex-col gap-2">
+            {faqs.map((faq, i) => (
+              <RevealSection key={faq.q} delay={i * 0.05}>
+                <Accordion
+                  disableGutters
+                  elevation={0}
+                  expanded={expandedFaq === faq.q}
+                  onChange={() => setExpandedFaq(expandedFaq === faq.q ? false : faq.q)}
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    '&:before': { display: 'none' },
+                    borderRadius: '8px !important',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography sx={{ fontWeight: 600 }}>{faq.q}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography color="text.secondary">{faq.a}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </RevealSection>
+            ))}
+          </div>
         </div>
       </section>
 

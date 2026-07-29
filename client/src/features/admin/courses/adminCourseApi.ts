@@ -29,15 +29,23 @@ export const useCategories = () => {
 export const useCreateCourse = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: CreateCourseInput) => {
+    mutationFn: async ({
+      input,
+      thumbnailFile,
+    }: {
+      input: CreateCourseInput;
+      thumbnailFile?: File;
+    }) => {
       const formData = new FormData();
       Object.entries(input).forEach(([key, value]) => {
         if (value !== undefined) formData.append(key, String(value));
       });
+      if (thumbnailFile) formData.append('thumbnail', thumbnailFile);
 
-      const { data } = await axiosInstance.post<ApiResponse<AdminCourseDetail>>('/courses', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // No manual headers object — axios detects FormData and sets
+      // Content-Type: multipart/form-data with the correct boundary itself.
+      // Setting it manually (as before) breaks Multer's parsing entirely.
+      const { data } = await axiosInstance.post<ApiResponse<AdminCourseDetail>>('/courses', formData);
       return data.data;
     },
     onSuccess: () => {
