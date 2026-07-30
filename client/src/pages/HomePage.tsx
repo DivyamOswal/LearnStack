@@ -24,15 +24,15 @@ const categories = [
 ];
 
 const pipeline = [
-  { step: 'course', desc: 'Pick a path — from fundamentals to system design.' },
+  { step: 'course', desc: 'Pick a path from fundamentals to system design.' },
   { step: 'chapter', desc: "Structured units, ordered so nothing assumes what you haven't learned yet." },
-  { step: 'lesson', desc: 'Video, article, markdown, or live code — whichever teaches the concept best.' },
+  { step: 'lesson', desc: 'Video, article, markdown, or live code whichever teaches the concept best.' },
   { step: 'quiz', desc: 'Prove it before moving on. Negative marking keeps guessing honest.' },
   { step: 'certificate', desc: 'A QR-verifiable credential, not just a checkbox.' },
 ];
 
 const features = [
-  { icon: SchoolOutlinedIcon, title: 'Structured curriculum', desc: 'Every course is broken into chapters, lessons, and topics — a real syllabus, not a random playlist.' },
+  { icon: SchoolOutlinedIcon, title: 'Structured curriculum', desc: 'Every course is broken into chapters, lessons, and topics a real syllabus, not a random playlist.' },
   { icon: CodeOutlinedIcon, title: 'Live code playground', desc: 'Write HTML, CSS, and JavaScript in an in-browser editor and see the output update instantly, sandboxed and safe.' },
   { icon: QuizOutlinedIcon, title: 'Timed quizzes', desc: 'MCQ, multiple-answer, and true/false questions with optional negative marking and a live leaderboard per quiz.' },
   { icon: WorkspacePremiumOutlinedIcon, title: 'Verified certificates', desc: 'Finish every lesson in a course and get a certificate with a unique code and QR verification page anyone can check.' },
@@ -43,30 +43,30 @@ const features = [
 const faqs = [
   {
     q: 'Do I need any programming experience to start?',
-    a: 'No. Courses are structured to start from fundamentals — pick a beginner-level course in any category and the chapters are ordered so nothing assumes knowledge you haven\'t covered yet.',
+    a: 'No. Courses are structured to start from fundamentals pick a beginner-level course in any category and the chapters are ordered so nothing assumes knowledge you haven\'t covered yet.',
   },
   {
     q: 'How does the certificate actually get issued?',
-    a: 'Once you\'ve marked every lesson in a course complete, you can generate a certificate from your dashboard. It comes with a unique code and a QR code linking to a public verification page — anyone can check it\'s real without needing an account.',
+    a: 'Once you\'ve marked every lesson in a course complete, you can generate a certificate from your dashboard. It comes with a unique code and a QR code linking to a public verification page anyone can check it\'s real without needing an account.',
   },
   {
     q: 'Is the code playground actually safe to use?',
-    a: 'Yes — it runs entirely in a sandboxed iframe in your browser with scripts isolated from the rest of the site. Nothing you write there can access your account, cookies, or any other part of the platform.',
+    a: 'Yes it runs entirely in a sandboxed iframe in your browser with scripts isolated from the rest of the site. Nothing you write there can access your account, cookies, or any other part of the platform.',
   },
   {
     q: 'What happens if I\'m not happy with a course I bought?',
-    a: 'Refunds are handled by our team on a case-by-case basis through Stripe — reach out to support with your order details and we\'ll take a look.',
+    a: 'Refunds are handled by our team on a case-by-case basis through Stripe reach out to support with your order details and we\'ll take a look.',
   },
   {
     q: 'Does quiz negative marking apply if I skip a question?',
-    a: 'No — negative marking only applies when you select a wrong answer. Leaving a question blank never costs you points, only an incorrect attempt does.',
+    a: 'No negative marking only applies when you select a wrong answer. Leaving a question blank never costs you points, only an incorrect attempt does.',
   },
 ];
 
 const HomePage = () => {
   const [expandedFaq, setExpandedFaq] = useState<string | false>(false);
 
-  // Real, live count — not a fabricated marketing number. limit:1 keeps the
+  // Real, live count not a fabricated marketing number. limit:1 keeps the
   // request cheap since we only need the `total` field from the response.
   const { data: courseListData, isLoading: statsLoading } = useCourseList({ page: 1, limit: 1 });
   const { data: featuredData, isLoading: featuredLoading } = useCourseList({ page: 1, limit: 3 });
@@ -99,7 +99,7 @@ const HomePage = () => {
               </Typography>
 
               <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 520 }}>
-                Structured courses, a live code playground, timed quizzes, and real certificates —
+                Structured courses, a live code playground, timed quizzes, and real certificates 
                 built for people who learn by shipping.
               </Typography>
 
@@ -168,7 +168,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Live stats strip — real numbers, not marketing copy */}
+      {/* Live stats strip real numbers, not marketing copy */}
       <section className="border-b" style={{ borderColor: 'inherit', backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 md:px-8">
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-2 font-mono-ui text-sm">
@@ -222,7 +222,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured courses — real, live data from the actual course catalog */}
+      {/* Featured courses real, live data from the actual course catalog */}
       <section className="border-t" style={{ borderColor: 'inherit' }}>
         <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
           <RevealSection>
@@ -254,7 +254,7 @@ const HomePage = () => {
             <RevealSection>
               <div className="text-center py-12 border rounded-lg" style={{ borderColor: 'inherit' }}>
                 <Typography color="text.secondary">
-                  No courses published yet — check back soon, or be one of the first to enroll once they go live.
+                  No courses published yet check back soon, or be one of the first to enroll once they go live.
                 </Typography>
               </div>
             </RevealSection>

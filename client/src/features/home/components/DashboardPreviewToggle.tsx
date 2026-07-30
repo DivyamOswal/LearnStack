@@ -1,142 +1,228 @@
-import { useState } from 'react';
-import { Typography, Tabs, Tab, Box } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
+import React, { useMemo, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import AutoGraphOutlinedIcon from "@mui/icons-material/AutoGraphOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
+import { AnimatePresence, motion } from "framer-motion";
 
-const content = {
-  student: [
-    'Purchased courses and continue-learning shortcuts',
-    'Certificates earned, with download and QR verification',
-    'Bookmarked courses for later',
-    'Quiz history and leaderboard standing',
-    'Profile, avatar, and social links',
-  ],
-  admin: [
-    'Full course, chapter, and lesson builder',
-    'Quiz and question builder with per-type validation',
-    'Revenue and enrollment analytics, with charts',
-    'User management, categories, and coupons',
-    'Comment moderation and reported-content review',
-  ],
+type Role = "student" | "admin";
+
+const MotionPaper = motion(Paper);
+
+const dashboard = {
+  student: {
+    title: "Student Dashboard",
+    subtitle: "Everything learners need in one place.",
+    stats: [
+      { label: "Courses", value: "12", icon: SchoolOutlinedIcon },
+      { label: "Certificates", value: "8", icon: WorkspacePremiumOutlinedIcon },
+      { label: "Quizzes", value: "42", icon: QuizOutlinedIcon },
+      { label: "Progress", value: "95%", icon: AutoGraphOutlinedIcon },
+    ],
+    features: [
+      { title: "Continue Learning", desc: "Resume your last lesson instantly.", icon: SchoolOutlinedIcon },
+      { title: "Certificates", desc: "Download & verify achievements.", icon: WorkspacePremiumOutlinedIcon },
+      { title: "Bookmarks", desc: "Save courses for later.", icon: BookmarkBorderOutlinedIcon },
+      { title: "Quiz History", desc: "Track scores and rankings.", icon: QuizOutlinedIcon },
+      { title: "Profile", desc: "Manage avatar and social links.", icon: CheckCircleOutlineIcon },
+    ],
+  },
+  admin: {
+    title: "Admin Dashboard",
+    subtitle: "Manage your  with confidence.",
+    stats: [
+      { label: "Courses", value: "42", icon: MenuBookOutlinedIcon },
+      { label: "Students", value: "8.2K", icon: PeopleAltOutlinedIcon },
+      { label: "Revenue", value: "₹2.1L", icon: AutoGraphOutlinedIcon },
+      { label: "Reviews", value: "4.9★", icon: CampaignOutlinedIcon },
+    ],
+    features: [
+      { title: "Course Builder", desc: "Create courses, chapters and lessons.", icon: MenuBookOutlinedIcon },
+      { title: "Quiz Builder", desc: "Build MCQs with validation.", icon: QuizOutlinedIcon },
+      { title: "Analytics", desc: "Monitor revenue and engagement.", icon: AutoGraphOutlinedIcon },
+      { title: "User Management", desc: "Control users and permissions.", icon: PeopleAltOutlinedIcon },
+      { title: "Moderation", desc: "Review reports and comments.", icon: CheckCircleOutlineIcon },
+    ],
+  },
 };
 
-const roleIcons = {
-  student: DashboardOutlinedIcon,
-  admin: AdminPanelSettingsOutlinedIcon,
-};
+export default function DashboardPreviewToggle() {
+  const theme = useTheme();
+  const [role, setRole] = useState<Role>("student");
+  const current = useMemo(() => dashboard[role], [role]);
 
-const DashboardPreviewToggle = () => {
-  const [role, setRole] = useState<'student' | 'admin'>('student');
-  const RoleIcon = roleIcons[role];
+  const RoleIcon = role === "student"
+    ? DashboardOutlinedIcon
+    : AdminPanelSettingsOutlinedIcon;
 
   return (
-    <div className="border rounded-lg overflow-hidden" style={{ borderColor: 'inherit' }}>
-      {/* Custom tab bar — replaces MUI's default underline with a sliding
-          filled indicator, so it reads as a real toggle rather than a link tab */}
-      <Box sx={{ display: 'flex', borderBottom: '1px solid', borderColor: 'divider', p: 0.75, gap: 0.5 }}>
-        {(['student', 'admin'] as const).map((r) => {
-          const Icon = roleIcons[r];
-          const isActive = role === r;
-          return (
-            <Box key={r} sx={{ position: 'relative', flex: 1 }}>
-              {isActive && (
+    <MotionPaper
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      elevation={0}
+      sx={{
+        p: 3,
+        borderRadius: 4,
+        border: "1px solid",
+        borderColor: "divider",
+        bgcolor: "background.paper",
+      }}
+    >
+      <Stack spacing={3}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Avatar sx={{ bgcolor: "primary.main" }}>
+              <RoleIcon />
+            </Avatar>
+            <Box>
+              <Typography variant="h6" fontWeight={700}>
+                {current.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {current.subtitle}
+              </Typography>
+            </Box>
+          </Stack>
+
+          <Chip
+            color={role === "student" ? "primary" : "secondary"}
+            label={role.toUpperCase()}
+          />
+        </Stack>
+
+        <Paper
+          variant="outlined"
+          sx={{
+            p: .75,
+            borderRadius: 3,
+            display: "flex",
+            gap: 1,
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {(["student", "admin"] as Role[]).map((r) => (
+            <Box key={r} sx={{ flex: 1, position: "relative" }}>
+              {role === r && (
                 <motion.div
-                  layoutId="role-toggle-bg"
-                  transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+                  layoutId="toggle"
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     inset: 0,
-                    borderRadius: 6,
-                    backgroundColor: 'var(--mui-palette-action-hover, #1c2128)',
+                    borderRadius: 12,
+                    background: theme.palette.action.hover,
                   }}
                 />
               )}
               <Box
                 component="button"
                 onClick={() => setRole(r)}
-                className="font-mono-ui"
                 sx={{
-                  position: 'relative',
-                  zIndex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 1,
-                  width: '100%',
-                  py: 1,
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  color: isActive ? 'primary.main' : 'text.secondary',
-                  fontSize: '0.85rem',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'color 0.15s ease',
-                  '&:hover': { color: 'primary.main' },
+                  width: "100%",
+                  position: "relative",
+                  zIndex: 2,
+                  py: 1.2,
+                  border: 0,
+                  background: "transparent",
+                  cursor: "pointer",
+                  color: role === r ? "primary.main" : "text.secondary",
+                  fontWeight: 700,
                 }}
               >
-                <Icon fontSize="small" />
-                {r}
+                {r.toUpperCase()}
               </Box>
             </Box>
-          );
-        })}
-      </Box>
+          ))}
+        </Paper>
 
-      <div className="p-6 min-h-[280px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={role}
-            initial={{ opacity: 0, x: 14 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -14 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: 0, x: -20 }}
           >
-            {/* Header row — icon crossfades with the role switch */}
-            <div className="flex items-center gap-2 mb-5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={role}
-                  initial={{ opacity: 0, rotate: -30, scale: 0.7 }}
-                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotate: 30, scale: 0.7 }}
-                  transition={{ duration: 0.25 }}
-                  style={{ display: 'flex' }}
-                >
-                  <RoleIcon sx={{ fontSize: 20, color: 'primary.main' }} />
-                </motion.div>
-              </AnimatePresence>
-              <Typography className="font-mono-ui" variant="body2" color="text.secondary">
-                {role === 'student' ? 'what learners get' : 'what admins get'}
-              </Typography>
-            </div>
+            <Grid container spacing={2}>
+              {current.stats.map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <Grid size={{xs:6, md:3}} key={s.label}>
+                    <MotionPaper
+                      whileHover={{ y: -4 }}
+                      sx={{ p: 2, borderRadius: 3 }}
+                    >
+                      <Stack direction="row" justifyContent="space-between">
+                        <Icon color="primary" />
+                        <Typography variant="h5" fontWeight={700}>
+                          {s.value}
+                        </Typography>
+                      </Stack>
+                      <Typography color="text.secondary" variant="body2" mt={2}>
+                        {s.label}
+                      </Typography>
+                    </MotionPaper>
+                  </Grid>
+                );
+              })}
+            </Grid>
 
-            <ul className="flex flex-col gap-1" style={{ listStyle: 'none' }}>
-              {content[role].map((item, i) => (
-                <motion.li
-                  key={item}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2, delay: i * 0.06 }}
-                  whileHover={{ x: 3 }}
-                  className="flex items-start gap-2.5 p-2 rounded-md"
-                  style={{ transition: 'background-color 0.15s ease' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--mui-palette-action-hover, #1c2128)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                >
-                  <CheckCircleOutlineIcon sx={{ fontSize: 16, color: 'primary.main', mt: 0.2, flexShrink: 0 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {item}
-                  </Typography>
-                </motion.li>
-              ))}
-            </ul>
+            <Grid container spacing={2} mt={1}>
+              {current.features.map((f, i) => {
+                const Icon = f.icon;
+                return (
+                  <Grid size={{xs:12, md:6}} key={f.title}>
+                    <MotionPaper
+                      whileHover={{ y: -5, scale: 1.01 }}
+                      transition={{ duration: .2 }}
+                      sx={{
+                        p: 2.5,
+                        borderRadius: 3,
+                        border: "1px solid",
+                        borderColor: "divider",
+                      }}
+                    >
+                      <Stack direction="row" spacing={2}>
+                        <Avatar sx={{ bgcolor: "primary.main" }}>
+                          <Icon fontSize="small" />
+                        </Avatar>
+
+                        <Box flex={1}>
+                          <Typography fontWeight={700}>
+                            {f.title}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary" mt={.5}>
+                            {f.desc}
+                          </Typography>
+                        </Box>
+
+                        <ChevronRightRoundedIcon color="action" />
+                      </Stack>
+                    </MotionPaper>
+                  </Grid>
+                );
+              })}
+            </Grid>
           </motion.div>
         </AnimatePresence>
-      </div>
-    </div>
+      </Stack>
+    </MotionPaper>
   );
-};
-
-export default DashboardPreviewToggle;
+}

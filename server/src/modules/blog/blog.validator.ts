@@ -3,7 +3,7 @@ import { z } from 'zod';
 const emptyParams = z.object({}).optional();
 const emptyQuery = z.object({}).optional();
 
-// "false" is a non-empty string — Boolean("false") === true in JS, so
+// "false" is a non-empty string Boolean("false") === true in JS, so
 // z.coerce.boolean() would wrongly treat it as true. Explicit string check instead.
 const booleanFromString = z
   .union([z.boolean(), z.string()])

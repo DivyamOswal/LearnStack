@@ -1,31 +1,33 @@
-import { useState, useEffect } from 'react';
-import { Typography } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { Typography, Paper, Box, useTheme } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
 
 const commands = [
-  { prompt: '$ learnstack enroll --course=react-fundamentals', output: '✓ enrolled access granted' },
-  { prompt: '$ learnstack quiz --submit', output: '✓ 92% passed' },
-  { prompt: '$ learnstack certificate --generate', output: '✓ CERT-4F9A2B1C issued' },
+  { prompt: "$ learnstack enroll --course=react-fundamentals", output: "✓ enrolled • access granted" },
+  { prompt: "$ learnstack quiz --submit", output: "✓ 92% passed" },
+  { prompt: "$ learnstack certificate --generate", output: "✓ CERT-4F9A2B1C issued" },
 ];
 
 const useTypewriter = (text: string, speed = 28) => {
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    setDisplayed('');
+    setDisplayed("");
     let i = 0;
     const interval = setInterval(() => {
-      i += 1;
+      i++;
       setDisplayed(text.slice(0, i));
       if (i >= text.length) clearInterval(interval);
     }, speed);
+
     return () => clearInterval(interval);
   }, [text, speed]);
 
   return displayed;
 };
 
-const TerminalHero = () => {
+export default function TerminalHero() {
+  const theme = useTheme();
   const [index, setIndex] = useState(0);
   const [showOutput, setShowOutput] = useState(false);
 
@@ -33,11 +35,13 @@ const TerminalHero = () => {
 
   useEffect(() => {
     setShowOutput(false);
+
     if (typedPrompt === commands[index].prompt) {
       const outputTimer = setTimeout(() => setShowOutput(true), 200);
       const nextTimer = setTimeout(() => {
         setIndex((i) => (i + 1) % commands.length);
       }, 2200);
+
       return () => {
         clearTimeout(outputTimer);
         clearTimeout(nextTimer);
@@ -46,48 +50,116 @@ const TerminalHero = () => {
   }, [typedPrompt, index]);
 
   return (
-    <div
-      className="rounded-lg border overflow-hidden w-full max-w-md"
-      style={{ borderColor: 'inherit', backgroundColor: 'var(--mui-palette-background-paper, #161B22)' }}
+    <Paper
+      elevation={0}
+      sx={{
+        width: "100%",
+        maxWidth: 480,
+        borderRadius: 4,
+        overflow: "hidden",
+        border: "1px solid",
+        borderColor: "divider",
+        bgcolor: "background.paper",
+        backdropFilter: "blur(14px)",
+        boxShadow:
+          theme.palette.mode === "dark"
+            ? "0 20px 60px rgba(0,0,0,.45)"
+            : "0 20px 60px rgba(15,23,42,.10)",
+      }}
     >
-      <div className="flex items-center gap-1.5 px-3 py-2 border-b" style={{ borderColor: 'inherit' }}>
-        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#FF5F56' }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#FFBD2E' }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#27C93F' }} />
-        <Typography variant="caption" className="font-mono-ui" color="text.secondary" sx={{ ml: 1 }}>
-          learnstack zsh
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          px: 2,
+          py: 1.5,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          bgcolor:
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,.03)"
+              : "rgba(0,0,0,.02)",
+        }}
+      >
+        <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: "#ff5f56" }} />
+        <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: "#ffbd2e" }} />
+        <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: "#27c93f" }} />
+        <Typography sx={{ ml: 1, fontSize: 12, color: "text.secondary", fontFamily: "monospace" }}>
+          learnstack@terminal
         </Typography>
-      </div>
+      </Box>
 
-      <div className="p-4 font-mono-ui text-sm min-h-[110px]" style={{ color: 'inherit' }}>
-        <div className="flex items-center">
-          <Typography component="span" className="font-mono-ui" sx={{ fontSize: '0.85rem' }}>
+      <Box sx={{ p: 3, minHeight: 170 }}>
+        <Box display="flex" alignItems="center">
+          <Typography
+            sx={{
+              fontFamily: "monospace",
+              color: "text.primary",
+              fontSize: "0.95rem",
+              wordBreak: "break-word",
+            }}
+          >
             {typedPrompt}
           </Typography>
+
           <motion.span
             animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
-            style={{ width: 7, height: 15, backgroundColor: 'var(--mui-palette-primary-main, #2DD4BF)', marginLeft: 2, display: 'inline-block' }}
+            transition={{ duration: 0.7, repeat: Infinity, repeatType: "reverse" }}
+            style={{
+              width: 8,
+              height: 18,
+              marginLeft: 3,
+              borderRadius: 2,
+              background: theme.palette.primary.main,
+              display: "inline-block",
+            }}
           />
-        </div>
+        </Box>
+
         <AnimatePresence mode="wait">
           {showOutput && (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
             >
-              <Typography className="font-mono-ui" color="primary.main" sx={{ fontSize: '0.85rem', mt: 1 }}>
+              <Typography
+                sx={{
+                  mt: 2,
+                  color: "success.main",
+                  fontFamily: "monospace",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                }}
+              >
                 {commands[index].output}
               </Typography>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
-  );
-};
 
-export default TerminalHero;
+        <Box
+          sx={{
+            mt: 3,
+            pt: 2,
+            borderTop: "1px dashed",
+            borderColor: "divider",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              fontFamily: "monospace",
+            }}
+          >
+            Interactive CLI Preview • Automatically adapts to Light & Dark Mode
+          </Typography>
+        </Box>
+      </Box>
+    </Paper>
+  );
+}

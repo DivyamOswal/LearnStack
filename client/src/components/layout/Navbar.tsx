@@ -194,7 +194,7 @@ const Navbar = () => {
                 <IconButton onClick={(e) => setUserMenuAnchor(e.currentTarget)} size="small" sx={{ ml: 0.5 }}>
                   <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}>
                     <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.9rem' }}>
-                      {user.name.charAt(0).toUpperCase()}
+                      {(user.name ?? "U").charAt(0).toUpperCase()}
                     </Avatar>
                   </motion.div>
                 </IconButton>

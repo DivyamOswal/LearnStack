@@ -37,7 +37,7 @@ const ForgotPasswordForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({ email }); // matches ForgotPasswordPayload — was previously sending a raw string
+    mutation.mutate({ email }); // matches ForgotPasswordPayload was previously sending a raw string
   };
 
   return (

@@ -50,11 +50,14 @@ const router = createBrowserRouter([
       { path: '/blog/:slug', element: <BlogPostPage /> },
     ],
   },
+  // Standalone, full-bleed auth pages  these own their entire viewport
+  // (split-screen layout with their own branding), so they render
+  // without AuthLayout's centered-card wrapper.
+  { path: '/login', element: <LoginPage /> },
+  { path: '/register', element: <RegisterPage /> },
   {
     element: <AuthLayout />,
     children: [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/register', element: <RegisterPage /> },
       { path: '/forgot-password', element: <ForgotPasswordPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
       { path: '/verify-email', element: <VerifyEmailPage /> },
@@ -73,7 +76,6 @@ const router = createBrowserRouter([
           { path: '/dashboard/bookmarks', element: <BookmarksPage /> },
           { path: '/profile', element: <ProfileSettingsPage /> },
         ],
-        
       },
     ],
   },

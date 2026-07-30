@@ -42,7 +42,7 @@ export const useCreateCourse = () => {
       });
       if (thumbnailFile) formData.append('thumbnail', thumbnailFile);
 
-      // No manual headers object — axios detects FormData and sets
+      // No manual headers object axios detects FormData and sets
       // Content-Type: multipart/form-data with the correct boundary itself.
       // Setting it manually (as before) breaks Multer's parsing entirely.
       const { data } = await axiosInstance.post<ApiResponse<AdminCourseDetail>>('/courses', formData);
@@ -139,7 +139,7 @@ export const useCreateLesson = () => {
       return data.data;
     },
     onSuccess: (_, variables) => {
-      // Invalidate the chapter list for the course this lesson's chapter belongs to —
+      // Invalidate the chapter list for the course this lesson's chapter belongs to 
       // we don't have courseId here directly, so the caller passes chapterId's parent
       // course invalidation explicitly (handled by the component below).
       queryClient.invalidateQueries({ queryKey: ['admin', 'chapters'] });
