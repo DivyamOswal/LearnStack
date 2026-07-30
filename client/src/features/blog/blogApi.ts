@@ -44,7 +44,7 @@ export const useCreateBlog = () => {
       if (input.isPublished !== undefined) formData.append('isPublished', String(input.isPublished));
       if (coverImage) formData.append('coverImage', coverImage);
 
-      // No headers object — axios detects the FormData instance and sets
+      // No headers object axios detects the FormData instance and sets
       // Content-Type: multipart/form-data with the correct boundary itself.
       const { data } = await axiosInstance.post<ApiResponse<BlogPost>>('/blog', formData);
       return data.data;

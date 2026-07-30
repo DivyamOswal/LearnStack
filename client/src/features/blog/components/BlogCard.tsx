@@ -1,70 +1,283 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { Typography, Avatar } from '@mui/material';
-import { motion } from 'framer-motion';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { BlogListItem } from '../blog.types';
-import { ROUTES } from '@/routes/routePaths';
+import { Link as RouterLink } from "react-router-dom";
+import { motion } from "framer-motion";
 
-const BlogCard = ({ blog }: { blog: BlogListItem }) => {
+import {
+  Avatar,
+  Box,
+  Chip,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+
+import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+
+import { BlogListItem } from "../blog.types";
+import { ROUTES } from "@/routes/routePaths";
+
+const MotionBox = motion(Box);
+
+interface Props {
+  blog: BlogListItem;
+}
+
+const BlogCard = ({ blog }: Props) => {
   return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+    <MotionBox
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.25 }}
+      sx={{ height: "100%" }}
     >
       <RouterLink
         to={ROUTES.BLOG_POST(blog.slug)}
-        className="group flex flex-col overflow-hidden rounded-lg border no-underline text-inherit"
-        style={{ borderColor: 'inherit', transition: 'border-color 0.2s ease' }}
-        onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--mui-palette-primary-main, #2DD4BF)')}
-        onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--mui-palette-divider, #30363D)')}
+        style={{
+          textDecoration: "none",
+          color: "inherit",
+          display: "block",
+          height: "100%",
+        }}
       >
-        <div
-          className="aspect-video w-full overflow-hidden"
-          style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}
+        <Box
+          sx={{
+            height: "100%",
+            overflow: "hidden",
+            borderRadius: 4,
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
+            transition: "all .3s ease",
+            display: "flex",
+            flexDirection: "column",
+            "&:hover": {
+              borderColor: "primary.main",
+              boxShadow: "0 30px 70px rgba(45,212,191,.18)",
+            },
+          }}
         >
-          {blog.coverImage ? (
-            <img
-              src={blog.coverImage}
-              alt={blog.title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          {/* Cover Image */}
+          <Box
+            sx={{
+              position: "relative",
+              overflow: "hidden",
+              aspectRatio: "16 / 9",
+            }}
+          >
+            {blog.coverImage ? (
+              <motion.img
+                whileHover={{ scale: 1.08 }}
+                transition={{ duration: 0.4 }}
+                src={blog.coverImage}
+                alt={blog.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  bgcolor: "action.hover",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography color="text.secondary">
+                  No Cover Image
+                </Typography>
+              </Box>
+            )}
+
+            {/* Gradient */}
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,.75), transparent 60%)",
+              }}
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center font-mono-ui text-sm opacity-40">
-              no_cover.png
-            </div>
-          )}
-        </div>
 
-        <div className="flex flex-col gap-3 p-4">
-          <Typography sx={{ fontWeight: 600, fontSize: '1rem', lineHeight: 1.4 }} className="line-clamp-2">
-            {blog.title}
-          </Typography>
-
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Avatar src={blog.author.avatarUrl ?? undefined} sx={{ width: 24, height: 24, fontSize: '0.7rem' }}>
-                {blog.author.name.charAt(0).toUpperCase()}
-              </Avatar>
-              <Typography variant="caption" color="text.secondary">
-                {blog.author.name}
-              </Typography>
-              <Typography variant="caption" color="text.secondary" className="font-mono-ui">
-                · {new Date(blog.createdAt).toLocaleDateString()}
-              </Typography>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, x: -4 }}
-              whileHover={{ opacity: 1, x: 0 }}
-              className="group-hover:opacity-100 group-hover:translate-x-0"
-              style={{ opacity: 0, transform: 'translateX(-4px)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}
+            {/* Chips */}
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                position: "absolute",
+                top: 16,
+                left: 16,
+              }}
             >
-              <ArrowForwardIcon sx={{ fontSize: 16, color: 'primary.main' }} />
-            </motion.div>
-          </div>
-        </div>
+              <Chip
+                label="Article"
+                size="small"
+                color="primary"
+                sx={{
+                  backdropFilter: "blur(10px)",
+                  fontWeight: 600,
+                }}
+              />
+
+              <Chip
+                icon={<AccessTimeRoundedIcon sx={{ fontSize: 14 }} />}
+                label="5 min"
+                size="small"
+                sx={{
+                  bgcolor: "rgba(0,0,0,.55)",
+                  color: "#fff",
+                }}
+              />
+            </Stack>
+          </Box>
+
+          {/* Content */}
+          <Stack
+            spacing={2}
+            sx={{
+              p: 3,
+              flex: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "1.2rem",
+                fontWeight: 800,
+                lineHeight: 1.35,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                minHeight: 64,
+              }}
+            >
+              {blog.title}
+            </Typography>
+
+            <Typography
+              color="text.secondary"
+              sx={{
+                lineHeight: 1.75,
+                display: "-webkit-box",
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                minHeight: 72,
+              }}
+            >
+              {blog.excerpt ??
+                "Explore practical tutorials, guides, and best practices to improve your development skills."}
+            </Typography>
+
+            <Divider />
+                        {/* Footer */}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{
+                mt: "auto",
+              }}
+            >
+              {/* Author */}
+              <Stack
+                direction="row"
+                spacing={1.5}
+                alignItems="center"
+              >
+                <Avatar
+                  src={blog.author?.avatarUrl ?? undefined}
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    bgcolor: "primary.main",
+                    fontWeight: 700,
+                  }}
+                >
+                  {(blog.author?.name ?? "A")
+                    .charAt(0)
+                    .toUpperCase()}
+                </Avatar>
+
+                <Box>
+                  <Typography
+                    fontWeight={700}
+                    fontSize={14}
+                  >
+                    {blog.author?.name ?? "Anonymous"}
+                  </Typography>
+
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                  >
+                    <CalendarTodayRoundedIcon
+                      sx={{
+                        fontSize: 12,
+                        color: "text.secondary",
+                      }}
+                    />
+
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                    >
+                      {new Date(
+                        blog.createdAt
+                      ).toLocaleDateString()}
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+
+              {/* CTA */}
+              <motion.div
+                whileHover={{
+                  x: 5,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  spacing={0.5}
+                  alignItems="center"
+                  sx={{
+                    color: "primary.main",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    transition: ".2s",
+
+                    "&:hover": {
+                      color: "primary.dark",
+                    },
+                  }}
+                >
+                  <Typography
+                    fontWeight={700}
+                    fontSize={14}
+                  >
+                    Read
+                  </Typography>
+
+                  <ArrowForwardRoundedIcon
+                    sx={{
+                      fontSize: 18,
+                    }}
+                  />
+                </Stack>
+              </motion.div>
+            </Stack>
+          </Stack>
+        </Box>
       </RouterLink>
-    </motion.div>
+    </MotionBox>
   );
 };
 

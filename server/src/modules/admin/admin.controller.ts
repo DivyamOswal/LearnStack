@@ -15,7 +15,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, user, 'User fetched successfully.'));
 });
 
-// Udate the user role
+// Update the user role
 export const updateUserRole = asyncHandler(async (req: Request, res: Response) => {
   const updated = await adminService.changeUserRole(
     req.params.id,

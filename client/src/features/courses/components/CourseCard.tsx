@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Typography, Chip } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Course } from '../course.types';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { ROUTES } from '@/routes/routePaths';
@@ -10,22 +12,40 @@ import BookmarkButton from '@/features/student-dashboard/components/BookmarkButt
 const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } }) => {
   const hasDiscount = course.discountPrice && parseFloat(course.discountPrice) < parseFloat(course.price);
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  const showRealImage = Boolean(course.thumbnailUrl) && !imageFailed;
+
   return (
     <RouterLink
       to={ROUTES.COURSE_DETAIL(course.slug)}
       className="group flex flex-col overflow-hidden rounded-lg border no-underline text-inherit transition-transform hover:-translate-y-1"
       style={{ borderColor: 'var(--mui-palette-divider, #30363D)' }}
     >
-      <div className="aspect-video w-full overflow-hidden" style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
-        {course.thumbnailUrl ? (
-          <img
-            src={course.thumbnailUrl}
-            alt={course.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+      <div className="aspect-video w-full overflow-hidden relative" style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
+        {showRealImage ? (
+          <>
+            {/* Skeleton shimmer while the real image is still loading */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 skeleton-shimmer" />
+            )}
+            <img
+              src={course.thumbnailUrl!}
+              alt={course.title}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageFailed(true)}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
+            />
+          </>
         ) : (
-          <div className="w-full h-full flex items-center justify-center font-mono-ui text-sm opacity-40">
-            no_preview.png
+          <div className="w-full h-full flex flex-col items-center justify-center gap-1 opacity-40">
+            <ImageOutlinedIcon sx={{ fontSize: 28 }} />
+            <Typography className="font-mono-ui" sx={{ fontSize: '0.75rem' }}>
+              no_preview.png
+            </Typography>
           </div>
         )}
       </div>
@@ -79,4 +99,4 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
   );
 };
 
-export default CourseCard;
+export default CourseCard;  

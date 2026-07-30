@@ -3,7 +3,7 @@ import { z } from 'zod';
 const emptyParams = z.object({}).optional();
 const emptyBody = z.object({}).optional();
 
-// "false" is a non-empty string, and Boolean("false") === true in JS —
+// "false" is a non-empty string, and Boolean("false") === true in JS 
 // z.coerce.boolean() would incorrectly treat it as true. This transform
 // explicitly checks the string value instead of relying on JS truthiness.
 const booleanFromString = z

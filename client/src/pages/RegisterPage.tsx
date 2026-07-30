@@ -1,3 +1,138 @@
-import RegisterForm from '@/features/auth/components/RegisterForm';
-const RegisterPage = () => <RegisterForm />;
+import {
+  Box,
+  Stack,
+  Typography,
+  Chip,
+} from "@mui/material";
+
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+
+import RegisterForm from "@/features/auth/components/RegisterForm";
+import ThreeBackground from "@/features/auth/components/ThreeBackground";
+
+const RegisterPage = () => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+      }}
+    >
+      {/* Left Side */}
+      <Box
+        sx={{
+          display: { xs: "none", lg: "flex" },
+          position: "relative",
+          overflow: "hidden",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRight: "1px solid",
+          borderColor: "divider",
+          width: { lg: "58%" },
+          flexShrink: 0,
+        }}
+      >
+        <ThreeBackground />
+
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(90deg, rgba(0,0,0,.35), rgba(0,0,0,.15), transparent)",
+            zIndex: 2,
+          }}
+        />
+
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 3,
+            maxWidth: 520,
+            width: "100%",
+            px: 6,
+            color: "common.white",
+          }}
+        >
+          <Chip
+            icon={<SchoolRoundedIcon />}
+            label="LearnStack"
+            color="primary"
+            sx={{ mb: 3 }}
+          />
+
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 800,
+              lineHeight: 1.1,
+              mb: 3,
+            }}
+          >
+            Start learning.
+            <br />
+            Start building.
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 18,
+              opacity: 0.9,
+              mb: 5,
+            }}
+          >
+            Create your LearnStack account and unlock courses,
+            assessments, certifications, and your personal dashboard.
+          </Typography>
+
+          <Stack spacing={2}>
+            {[
+              "Unlimited learning resources",
+              "Track your progress",
+              "Earn industry-recognized certificates",
+            ].map((item) => (
+              <Stack
+                key={item}
+                direction="row"
+                spacing={2}
+                alignItems="center"
+              >
+                <CheckCircleRoundedIcon color="success" />
+                <Typography>{item}</Typography>
+              </Stack>
+            ))}
+          </Stack>
+        </Box>
+      </Box>
+
+      {/* Right Side */}
+      <Box
+        sx={{
+          flex: 1,
+          minWidth: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          px: {
+            xs: 3,
+            md: 6,
+          },
+          py: 6,
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: 480,
+          }}
+        >
+          <RegisterForm />
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 export default RegisterPage;

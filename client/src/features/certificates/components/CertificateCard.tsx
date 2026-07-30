@@ -16,7 +16,7 @@ const CertificateCard = ({ certificate }: { certificate: CertificateListItem }) 
         className="aspect-video flex items-center justify-center relative overflow-hidden group"
         style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}
       >
-        {/* Faint diagonal shine sweep on hover — evokes a foil/seal effect without any gradient in the resting state */}
+        {/* Faint diagonal shine sweep on hover evokes a foil/seal effect without any gradient in the resting state */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
           initial={{ x: '-120%' }}
