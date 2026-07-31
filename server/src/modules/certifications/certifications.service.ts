@@ -3,7 +3,7 @@ import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
 import { ApiError } from '../../utils/ApiError';
 import { env } from '../../config/env';
-import { uploadBufferToCloudinary } from '../../utils/cloudinaryUpload';
+import { uploadBufferToImageKit } from '../../utils/imagekit.helper';
 import prisma from '../../config/db';
 import * as certificateRepo from './certifications.repository';
 
@@ -80,7 +80,11 @@ export const generateCertificate = async (userId: string, courseId: string) => {
   const issuedAt = new Date();
 
   const qrCodeBuffer = await generateQrCodeBuffer(verifyUrl);
-  const qrCodeUrl = await uploadBufferToCloudinary(qrCodeBuffer, 'learnstack/qrcodes', 'image');
+  const qrCodeUrl = await uploadBufferToImageKit(
+    qrCodeBuffer,
+    `qr-${certificateCode}.png`,
+    'learnstack/qrcodes'
+  );
 
   const pdfBuffer = await generateCertificatePdfBuffer({
     studentName: user.name,
@@ -89,7 +93,11 @@ export const generateCertificate = async (userId: string, courseId: string) => {
     issuedAt,
     qrCodeBuffer,
   });
-  const pdfUrl = await uploadBufferToCloudinary(pdfBuffer, 'learnstack/certificates', 'raw');
+  const pdfUrl = await uploadBufferToImageKit(
+    pdfBuffer,
+    `certificate-${certificateCode}.pdf`,
+    'learnstack/certificates'
+  );
 
   return certificateRepo.createCertificate({
     userId,

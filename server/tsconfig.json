@@ -19,6 +19,6 @@
       "@/*": ["*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test-upload.ts"],
   "exclude": ["node_modules", "dist"]
 }
