@@ -40,6 +40,7 @@ router.post(
   validate(createCourseSchema),
   courseController.createCourse
 );
+
 router.patch(
   '/:id',
   authenticate,
