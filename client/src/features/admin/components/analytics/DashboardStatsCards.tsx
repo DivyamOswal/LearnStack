@@ -12,11 +12,10 @@ type CardConfig = {
   label: string;
   value: number;
   icon: typeof PeopleOutlinedIcon;
-  color: 'primary' | 'secondary' | 'success' | 'warning';
   formatValue?: (n: number) => string;
 };
 
-// Counts up from 0 to the target value  makes the numbers feel "alive"
+// Counts up from 0 to the target value — makes the numbers feel "alive"
 // on load rather than just appearing, without being a distracting animation.
 const useCountUp = (target: number, duration = 900) => {
   const [value, setValue] = useState(0);
@@ -39,7 +38,7 @@ const useCountUp = (target: number, duration = 900) => {
   return value;
 };
 
-const StatCard = ({ label, value, icon: Icon, color, formatValue }: CardConfig) => {
+const StatCard = ({ label, value, icon: Icon, formatValue }: CardConfig) => {
   const animatedValue = useCountUp(value);
 
   return (
@@ -49,20 +48,18 @@ const StatCard = ({ label, value, icon: Icon, color, formatValue }: CardConfig) 
         position: 'relative',
         p: 3,
         pt: 2.5,
-        borderRadius: '16px',
+        borderRadius: '12px',
         border: '1px solid',
         borderColor: 'divider',
         overflow: 'hidden',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+        transition: 'transform 0.2s ease, border-color 0.2s ease',
         '&:hover': {
           transform: 'translateY(-3px)',
-          borderColor: `${color}.main`,
-          boxShadow: (theme) =>
-            `0 12px 24px -12px ${theme.palette[color].main}66`,
+          borderColor: 'primary.main',
         },
       }}
     >
-      {/* Accent bar  the one signature detail carried across every card */}
+      {/* Accent bar — the one signature detail carried across every card, single color */}
       <Box
         sx={{
           position: 'absolute',
@@ -70,7 +67,7 @@ const StatCard = ({ label, value, icon: Icon, color, formatValue }: CardConfig) 
           left: 0,
           right: 0,
           height: 3,
-          bgcolor: `${color}.main`,
+          bgcolor: 'primary.main',
         }}
       />
 
@@ -90,15 +87,16 @@ const StatCard = ({ label, value, icon: Icon, color, formatValue }: CardConfig) 
             width: 40,
             height: 40,
             borderRadius: '10px',
-            bgcolor: (theme) => `${theme.palette[color].main}1A`,
+            bgcolor: 'action.hover',
             flexShrink: 0,
           }}
         >
-          <Icon sx={{ fontSize: 20, color: `${color}.main` }} />
+          <Icon sx={{ fontSize: 20, color: 'primary.main' }} />
         </Box>
       </Box>
 
       <Typography
+        className="font-mono-ui"
         sx={{
           fontSize: '1.9rem',
           fontWeight: 700,
@@ -114,14 +112,13 @@ const StatCard = ({ label, value, icon: Icon, color, formatValue }: CardConfig) 
 
 const DashboardStatsCards = ({ stats }: { stats: DashboardStats }) => {
   const cards: CardConfig[] = [
-    { label: 'Students', value: stats.totalStudents, icon: PeopleOutlinedIcon, color: 'primary' },
-    { label: 'Published courses', value: stats.publishedCourses, icon: SchoolOutlinedIcon, color: 'secondary' },
-    { label: 'Total enrollments', value: stats.totalEnrollments, icon: ShoppingCartOutlinedIcon, color: 'success' },
+    { label: 'Students', value: stats.totalStudents, icon: PeopleOutlinedIcon },
+    { label: 'Published courses', value: stats.publishedCourses, icon: SchoolOutlinedIcon },
+    { label: 'Total enrollments', value: stats.totalEnrollments, icon: ShoppingCartOutlinedIcon },
     {
       label: 'Total revenue',
       value: stats.totalRevenue,
       icon: PaidOutlinedIcon,
-      color: 'warning',
       formatValue: formatCurrency,
     },
   ];

@@ -11,9 +11,10 @@ import {
   Pagination,
   InputAdornment,
 } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { useAdminUserList, useUpdateUserRole, useDeleteUser } from '@/features/admin/components/users/adminUserApi';
+import { useAdminUserList, useUpdateUserRole, useDeleteUser } from '@/features/admin/components/users/adminUserApi'
 import { Role } from '@/features/admin/components/users/adminUser.types';
 import { useAppSelector } from '@/app/hooks';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -50,9 +51,14 @@ const AdminUsersPage = () => {
       <Typography variant="overline" color="primary.main">
         $ admin --users
       </Typography>
-      <Typography variant="h4" sx={{ mt: 1, mb: 6, fontSize: { xs: '1.5rem', md: '2rem' } }}>
+      <Typography variant="h4" sx={{ mt: 1, mb: 1, fontSize: { xs: '1.5rem', md: '2rem' } }}>
         Manage users
       </Typography>
+      {!isLoading && data && (
+        <Typography variant="body2" color="text.secondary" className="font-mono-ui" sx={{ mb: 5 }}>
+          {data.total} total {data.total === 1 ? 'user' : 'users'}
+        </Typography>
+      )}
 
       <div className="flex flex-col gap-3 mb-6 sm:flex-row">
         <TextField
@@ -114,59 +120,80 @@ const AdminUsersPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.users.map((user) => (
-                  <tr key={user.id} className="border-b last:border-b-0" style={{ borderColor: 'inherit' }}>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 28, height: 28, fontSize: '0.8rem' }}>
-                          {user.name.charAt(0).toUpperCase()}
-                        </Avatar>
-                        <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{user.name}</Typography>
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <Typography variant="body2" color="text.secondary">{user.email}</Typography>
-                    </td>
-                    <td className="p-3">
-                      <Chip
-                        label={user.isVerified ? 'verified' : 'unverified'}
-                        size="small"
-                        className="font-mono-ui"
-                        color={user.isVerified ? 'success' : 'default'}
-                        variant={user.isVerified ? 'filled' : 'outlined'}
-                      />
-                    </td>
-                    <td className="p-3">
-                      <Select
-                        value={user.role}
-                        onChange={(e) => updateRole.mutate({ id: user.id, role: e.target.value as Role })}
-                        size="small"
-                        disabled={user.id === currentUser?.id}
-                      >
-                        <MenuItem value="STUDENT">Student</MenuItem>
-                        <MenuItem value="ADMIN">Admin</MenuItem>
-                      </Select>
-                    </td>
-                    <td className="p-3 text-right">
-                      <IconButton
-                        size="small"
-                        color="error"
-                        disabled={user.id === currentUser?.id}
-                        onClick={() => setDeleteTarget({ id: user.id, name: user.name })}
-                      >
-                        <DeleteOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    </td>
-                  </tr>
-                ))}
+                <AnimatePresence initial={false}>
+                  {data.users.map((user, i) => (
+                    <motion.tr
+                      key={user.id}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, delay: i * 0.02 }}
+                      className="border-b last:border-b-0"
+                      style={{ borderColor: 'inherit' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--mui-palette-action-hover, #1c2128)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                    >
+                      <td className="p-3">
+                        <div className="flex items-center gap-2">
+                          <motion.div whileHover={{ scale: 1.08 }}>
+                            <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 28, height: 28, fontSize: '0.8rem' }}>
+                              {user.name.charAt(0).toUpperCase()}
+                            </Avatar>
+                          </motion.div>
+                          <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{user.name}</Typography>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <Typography variant="body2" color="text.secondary">{user.email}</Typography>
+                      </td>
+                      <td className="p-3">
+                        <Chip
+                          label={user.isVerified ? 'verified' : 'unverified'}
+                          size="small"
+                          className="font-mono-ui"
+                          color={user.isVerified ? 'success' : 'default'}
+                          variant={user.isVerified ? 'filled' : 'outlined'}
+                        />
+                      </td>
+                      <td className="p-3">
+                        <Select
+                          value={user.role}
+                          onChange={(e) => updateRole.mutate({ id: user.id, role: e.target.value as Role })}
+                          size="small"
+                          disabled={user.id === currentUser?.id}
+                        >
+                          <MenuItem value="STUDENT">Student</MenuItem>
+                          <MenuItem value="ADMIN">Admin</MenuItem>
+                        </Select>
+                      </td>
+                      <td className="p-3 text-right">
+                        <IconButton
+                          size="small"
+                          color="error"
+                          disabled={user.id === currentUser?.id}
+                          onClick={() => setDeleteTarget({ id: user.id, name: user.name })}
+                        >
+                          <DeleteOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
               </tbody>
             </table>
           </div>
 
           {/* Mobile card list */}
           <div className="flex flex-col gap-3 md:hidden">
-            {data.users.map((user) => (
-              <div key={user.id} className="border rounded-lg p-4 flex flex-col gap-3" style={{ borderColor: 'inherit' }}>
+            {data.users.map((user, i) => (
+              <motion.div
+                key={user.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: i * 0.03 }}
+                className="border rounded-lg p-4 flex flex-col gap-3"
+                style={{ borderColor: 'inherit' }}
+              >
                 <div className="flex items-center gap-2">
                   <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 32, height: 32 }}>
                     {user.name.charAt(0).toUpperCase()}
@@ -203,7 +230,7 @@ const AdminUsersPage = () => {
                     <DeleteOutlinedIcon fontSize="small" />
                   </IconButton>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 

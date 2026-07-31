@@ -1,19 +1,8 @@
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
-
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
-
-import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { BlogListItem } from "../blog.types";
 import { ROUTES } from "@/routes/routePaths";
 
@@ -24,256 +13,142 @@ interface Props {
 }
 
 const BlogCard = ({ blog }: Props) => {
+  // Derive a fake "filename" from the slug — reinforces the editor-tab motif
+  // using data that's actually real (the post's real slug), not invented.
+  const fileName = `${blog.slug.slice(0, 28)}${blog.slug.length > 28 ? '…' : ''}.md`;
+
   return (
     <MotionBox
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.25 }}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
       sx={{ height: "100%" }}
     >
       <RouterLink
         to={ROUTES.BLOG_POST(blog.slug)}
-        style={{
-          textDecoration: "none",
-          color: "inherit",
-          display: "block",
-          height: "100%",
-        }}
+        style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}
       >
         <Box
+          className="group"
           sx={{
             height: "100%",
+            display: "flex",
+            flexDirection: "column",
             overflow: "hidden",
-            borderRadius: 4,
+            borderRadius: 2,
             border: "1px solid",
             borderColor: "divider",
             bgcolor: "background.paper",
-            transition: "all .3s ease",
-            display: "flex",
-            flexDirection: "column",
-            "&:hover": {
-              borderColor: "primary.main",
-              boxShadow: "0 30px 70px rgba(45,212,191,.18)",
-            },
+            transition: "border-color 0.2s ease",
+            "&:hover": { borderColor: "primary.main" },
           }}
         >
-          {/* Cover Image */}
+          {/* Editor-tab header — filename styled like an open file tab */}
           <Box
             sx={{
-              position: "relative",
-              overflow: "hidden",
-              aspectRatio: "16 / 9",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              px: 2,
+              py: 1,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              bgcolor: "action.hover",
             }}
           >
+            <ArticleOutlinedIcon sx={{ fontSize: 14, color: "primary.main" }} />
+            <Typography
+              className="font-mono-ui"
+              sx={{ fontSize: "0.72rem", color: "text.secondary", flexGrow: 1 }}
+              noWrap
+            >
+              {fileName}
+            </Typography>
+            <Box sx={{ display: "flex", gap: 0.5 }}>
+              {["#FF5F56", "#FFBD2E", "#27C93F"].map((c) => (
+                <Box key={c} sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: c, opacity: 0.6 }} />
+              ))}
+            </Box>
+          </Box>
+
+          {/* Cover image — the "file content" */}
+          <Box sx={{ position: "relative", overflow: "hidden", aspectRatio: "16 / 9", bgcolor: "action.hover" }}>
             {blog.coverImage ? (
-              <motion.img
-                whileHover={{ scale: 1.08 }}
-                transition={{ duration: 0.4 }}
+              <Box
+                component="img"
                 src={blog.coverImage}
                 alt={blog.title}
-                style={{
+                sx={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
+                  transition: "transform 0.35s ease",
+                  ".group:hover &": { transform: "scale(1.05)" },
                 }}
               />
             ) : (
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  bgcolor: "action.hover",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography color="text.secondary">
-                  No Cover Image
+              <Box sx={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography className="font-mono-ui" color="text.secondary" sx={{ opacity: 0.4, fontSize: "0.8rem" }}>
+                  # no cover image
                 </Typography>
               </Box>
             )}
-
-            {/* Gradient */}
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,.75), transparent 60%)",
-              }}
-            />
-
-            {/* Chips */}
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{
-                position: "absolute",
-                top: 16,
-                left: 16,
-              }}
-            >
-              <Chip
-                label="Article"
-                size="small"
-                color="primary"
-                sx={{
-                  backdropFilter: "blur(10px)",
-                  fontWeight: 600,
-                }}
-              />
-
-              <Chip
-                icon={<AccessTimeRoundedIcon sx={{ fontSize: 14 }} />}
-                label="5 min"
-                size="small"
-                sx={{
-                  bgcolor: "rgba(0,0,0,.55)",
-                  color: "#fff",
-                }}
-              />
-            </Stack>
           </Box>
 
           {/* Content */}
-          <Stack
-            spacing={2}
-            sx={{
-              p: 3,
-              flex: 1,
-            }}
-          >
+          <Stack spacing={1.5} sx={{ p: 3, flex: 1 }}>
             <Typography
               sx={{
-                fontSize: "1.2rem",
-                fontWeight: 800,
-                lineHeight: 1.35,
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                lineHeight: 1.4,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
-                minHeight: 64,
               }}
             >
               {blog.title}
             </Typography>
 
-            <Typography
-              color="text.secondary"
-              sx={{
-                lineHeight: 1.75,
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-                minHeight: 72,
-              }}
-            >
-              {blog.excerpt ??
-                "Explore practical tutorials, guides, and best practices to improve your development skills."}
-            </Typography>
-
-            <Divider />
-                        {/* Footer */}
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+            {/* Git-commit-styled footer: author as "committer", date as timestamp */}
+            <Box
               sx={{
                 mt: "auto",
+                pt: 1.5,
+                borderTop: "1px solid",
+                borderColor: "divider",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 1,
               }}
             >
-              {/* Author */}
-              <Stack
-                direction="row"
-                spacing={1.5}
-                alignItems="center"
-              >
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
                 <Avatar
                   src={blog.author?.avatarUrl ?? undefined}
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    bgcolor: "primary.main",
-                    fontWeight: 700,
-                  }}
+                  sx={{ width: 24, height: 24, bgcolor: "primary.main", fontSize: "0.7rem", fontWeight: 700 }}
                 >
-                  {(blog.author?.name ?? "A")
-                    .charAt(0)
-                    .toUpperCase()}
+                  {(blog.author?.name ?? "A").charAt(0).toUpperCase()}
                 </Avatar>
-
-                <Box>
-                  <Typography
-                    fontWeight={700}
-                    fontSize={14}
-                  >
-                    {blog.author?.name ?? "Anonymous"}
-                  </Typography>
-
-                  <Stack
-                    direction="row"
-                    spacing={0.5}
-                    alignItems="center"
-                  >
-                    <CalendarTodayRoundedIcon
-                      sx={{
-                        fontSize: 12,
-                        color: "text.secondary",
-                      }}
-                    />
-
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                    >
-                      {new Date(
-                        blog.createdAt
-                      ).toLocaleDateString()}
-                    </Typography>
-                  </Stack>
-                </Box>
+                <Typography className="font-mono-ui" variant="caption" color="text.secondary" noWrap>
+                  {blog.author?.name ?? "anonymous"} ·{" "}
+                  {new Date(blog.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </Typography>
               </Stack>
 
-              {/* CTA */}
-              <motion.div
-                whileHover={{
-                  x: 5,
-                }}
-                transition={{
-                  duration: 0.2,
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "primary.main",
+                  transition: "transform 0.2s ease",
+                  ".group:hover &": { transform: "translateX(3px)" },
+                  flexShrink: 0,
                 }}
               >
-                <Stack
-                  direction="row"
-                  spacing={0.5}
-                  alignItems="center"
-                  sx={{
-                    color: "primary.main",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    transition: ".2s",
-
-                    "&:hover": {
-                      color: "primary.dark",
-                    },
-                  }}
-                >
-                  <Typography
-                    fontWeight={700}
-                    fontSize={14}
-                  >
-                    Read
-                  </Typography>
-
-                  <ArrowForwardRoundedIcon
-                    sx={{
-                      fontSize: 18,
-                    }}
-                  />
-                </Stack>
-              </motion.div>
-            </Stack>
+                <ArrowForwardRoundedIcon sx={{ fontSize: 16 }} />
+              </Box>
+            </Box>
           </Stack>
         </Box>
       </RouterLink>
