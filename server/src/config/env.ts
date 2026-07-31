@@ -2,6 +2,7 @@ import { z } from 'zod';
 import dotenv from 'dotenv';
 
 dotenv.config();
+console.log("ENV FILE CLOUD NAME:", process.env.CLOUDINARY_CLOUD_NAME);
 
 // Check whether the data is validate and following defined format
 const envSchema = z.object({

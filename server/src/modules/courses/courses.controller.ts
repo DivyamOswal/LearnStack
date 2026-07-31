@@ -7,9 +7,23 @@ const getUploadedFileUrl = (req: Request) =>
   (req.file as Express.Multer.File & { path?: string })?.path;
 
 export const createCourse = asyncHandler(async (req: Request, res: Response) => {
+  console.log("========== CREATE COURSE ==========");
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+
   const thumbnailUrl = getUploadedFileUrl(req);
-  const course = await courseService.addCourse(req.user!.id, req.body, thumbnailUrl);
-  res.status(201).json(new ApiResponse(201, course, 'Course created successfully.'));
+
+  console.log("THUMBNAIL URL:", thumbnailUrl);
+
+  const course = await courseService.addCourse(
+    req.user!.id,
+    req.body,
+    thumbnailUrl
+  );
+
+  res.status(201).json(
+    new ApiResponse(201, course, "Course created successfully.")
+  );
 });
 
 export const getPublicCourses = asyncHandler(async (req: Request, res: Response) => {

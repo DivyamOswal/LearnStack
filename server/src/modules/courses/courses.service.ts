@@ -7,6 +7,7 @@ export const addCourse = async (
   input: CreateCourseInput,
   thumbnailUrl?: string
 ) => {
+  console.log("SERVICE thumbnailUrl:", thumbnailUrl);
   const categoryExists = await courseRepo.checkCategoryExists(input.categoryId);
   if (!categoryExists) {
     throw new ApiError(400, 'Selected category does not exist.');

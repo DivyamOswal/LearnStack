@@ -28,6 +28,7 @@ export const createCourse = async (
   input: CreateCourseInput,
   thumbnailUrl?: string
 ) => {
+  console.log("REPOSITORY thumbnailUrl:", thumbnailUrl);
   const slug = await generateUniqueSlug(input.title);
 
   return prisma.course.create({

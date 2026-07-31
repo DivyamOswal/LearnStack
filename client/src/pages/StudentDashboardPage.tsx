@@ -25,7 +25,7 @@ const StudentDashboardPage = () => {
         $ whoami
       </Typography>
       <Typography variant="h4" sx={{ mt: 1, mb: 6, fontSize: { xs: '1.5rem', md: '2rem' } }}>
-        Welcome back, {user?.name.split(' ')[0]}
+        Welcome back, {user?.name?.split(' ')[0] ?? 'Student'}
       </Typography>
 
       <div className="grid grid-cols-1 gap-4 mb-10 sm:grid-cols-3">
