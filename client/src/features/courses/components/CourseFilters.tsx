@@ -23,7 +23,24 @@ const CourseFilters = ({ search, onSearchChange }: CourseFiltersProps) => {
             </InputAdornment>
           ),
         }}
-        sx={{ maxWidth: { sm: 360 } }}
+        sx={{
+          maxWidth: { sm: 360 },
+          '& .MuiOutlinedInput-root': {
+            bgcolor: 'rgba(255,255,255,0.03)',
+            borderRadius: 2,
+            transition: 'border-color 0.2s ease',
+            '& fieldset': {
+              borderColor: 'rgba(255,255,255,0.1)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(99,102,241,0.4)',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: 'rgba(99,102,241,0.6)',
+              borderWidth: 1,
+            },
+          },
+        }}
       />
     </div>
   );

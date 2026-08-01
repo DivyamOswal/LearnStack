@@ -20,10 +20,19 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
   return (
     <RouterLink
       to={ROUTES.COURSE_DETAIL(course.slug)}
-      className="group flex flex-col overflow-hidden rounded-lg border no-underline text-inherit transition-transform hover:-translate-y-1"
-      style={{ borderColor: 'var(--mui-palette-divider, #30363D)' }}
+      className="group flex flex-col overflow-hidden rounded-xl no-underline text-inherit transition-all duration-300 hover:-translate-y-1 relative"
+      style={{
+        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(12px)',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)')}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
     >
-      <div className="aspect-video w-full overflow-hidden relative" style={{ backgroundColor: 'var(--mui-palette-action-hover, #1c2128)' }}>
+      <div
+        className="aspect-video w-full overflow-hidden relative"
+        style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
+      >
         {showRealImage ? (
           <>
             {/* Skeleton shimmer while the real image is still loading */}
@@ -48,6 +57,24 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
             </Typography>
           </div>
         )}
+
+        {hasDiscount && (
+          <div
+            className="absolute top-3 right-3 font-mono-ui"
+            style={{
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              padding: '3px 8px',
+              borderRadius: 6,
+              background: 'rgba(34,197,94,0.15)',
+              color: '#4ade80',
+              border: '1px solid rgba(34,197,94,0.35)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            SALE
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-2 p-4">
@@ -56,12 +83,18 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
             label={course.category.name}
             size="small"
             className="font-mono-ui"
-            sx={{ bgcolor: 'action.hover', color: 'text.secondary', fontSize: '0.7rem' }}
+            sx={{
+              bgcolor: 'rgba(99,102,241,0.1)',
+              color: 'primary.main',
+              border: '1px solid rgba(99,102,241,0.25)',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+            }}
           />
           <BookmarkButton courseId={course.id} isBookmarked={course.isBookmarked ?? false} size="small" />
         </div>
 
-        <Typography variant="h6" sx={{ fontSize: '1.05rem', fontWeight: 600, lineHeight: 1.3 }}>
+        <Typography variant="h6" sx={{ fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.3 }}>
           {course.title}
         </Typography>
 
@@ -69,9 +102,12 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
           {course.description}
         </Typography>
 
-        <div className="flex items-center gap-3 mt-1 font-mono-ui text-xs" style={{ color: 'var(--mui-palette-text-secondary, #7D8590)' }}>
+        <div
+          className="flex items-center gap-3 mt-1 font-mono-ui text-xs"
+          style={{ color: 'rgba(255,255,255,0.5)' }}
+        >
           <span className="flex items-center gap-1">
-            <StarIcon sx={{ fontSize: 14, color: 'primary.main' }} />
+            <StarIcon sx={{ fontSize: 14, color: '#fbbf24' }} />
             {course._count.reviews} reviews
           </span>
           <span className="flex items-center gap-1">
@@ -80,10 +116,13 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
           </span>
         </div>
 
-        <div className="flex items-baseline gap-2 mt-2 font-mono-ui">
+        <div
+          className="flex items-baseline gap-2 mt-2 pt-3 font-mono-ui"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        >
           {hasDiscount ? (
             <>
-              <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>
+              <Typography sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.05rem' }}>
                 {formatCurrency(course.discountPrice!)}
               </Typography>
               <Typography variant="body2" sx={{ textDecoration: 'line-through', color: 'text.secondary' }}>
@@ -91,7 +130,7 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
               </Typography>
             </>
           ) : (
-            <Typography sx={{ fontWeight: 700 }}>{formatCurrency(course.price)}</Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: '1.05rem' }}>{formatCurrency(course.price)}</Typography>
           )}
         </div>
       </div>
@@ -99,4 +138,4 @@ const CourseCard = ({ course }: { course: Course & { isBookmarked?: boolean } })
   );
 };
 
-export default CourseCard;  
+export default CourseCard;

@@ -7,7 +7,6 @@ import {
   Paper,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -26,6 +25,18 @@ import { AnimatePresence, motion } from "framer-motion";
 type Role = "student" | "admin";
 
 const MotionPaper = motion(Paper);
+
+const glassPanel = {
+  bgcolor: "rgba(255,255,255,0.03)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  backdropFilter: "blur(12px)",
+};
+
+const iconBadgeSx = {
+  background: "linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.08))",
+  border: "1px solid rgba(99,102,241,0.4)",
+  color: "primary.main",
+};
 
 const dashboard = {
   student: {
@@ -47,7 +58,7 @@ const dashboard = {
   },
   admin: {
     title: "Admin Dashboard",
-    subtitle: "Manage your  with confidence.",
+    subtitle: "Manage your platform with confidence.",
     stats: [
       { label: "Courses", value: "42", icon: MenuBookOutlinedIcon },
       { label: "Students", value: "8.2K", icon: PeopleAltOutlinedIcon },
@@ -65,7 +76,6 @@ const dashboard = {
 };
 
 export default function DashboardPreviewToggle() {
-  const theme = useTheme();
   const [role, setRole] = useState<Role>("student");
   const current = useMemo(() => dashboard[role], [role]);
 
@@ -81,15 +91,28 @@ export default function DashboardPreviewToggle() {
       sx={{
         p: 3,
         borderRadius: 4,
-        border: "1px solid",
-        borderColor: "divider",
-        bgcolor: "background.paper",
+        position: "relative",
+        overflow: "hidden",
+        ...glassPanel,
       }}
     >
-      <Stack spacing={3}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: -100,
+          right: -100,
+          width: 260,
+          height: 260,
+          borderRadius: "50%",
+          pointerEvents: "none",
+          background: "radial-gradient(circle, rgba(99,102,241,0.18), transparent 70%)",
+        }}
+      />
+
+      <Stack spacing={3} sx={{ position: "relative" }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar sx={{ bgcolor: "primary.main" }}>
+            <Avatar sx={{ width: 44, height: 44, borderRadius: 2, ...iconBadgeSx }}>
               <RoleIcon />
             </Avatar>
             <Box>
@@ -103,20 +126,28 @@ export default function DashboardPreviewToggle() {
           </Stack>
 
           <Chip
-            color={role === "student" ? "primary" : "secondary"}
             label={role.toUpperCase()}
+            className="font-mono-ui"
+            sx={{
+              bgcolor: role === "student" ? "rgba(99,102,241,0.12)" : "rgba(251,191,36,0.12)",
+              color: role === "student" ? "primary.main" : "#fbbf24",
+              border: `1px solid ${role === "student" ? "rgba(99,102,241,0.3)" : "rgba(251,191,36,0.3)"}`,
+              fontWeight: 700,
+            }}
           />
         </Stack>
 
         <Paper
           variant="outlined"
           sx={{
-            p: .75,
+            p: 0.75,
             borderRadius: 3,
             display: "flex",
             gap: 1,
             position: "relative",
             overflow: "hidden",
+            bgcolor: "rgba(255,255,255,0.02)",
+            borderColor: "rgba(255,255,255,0.08)",
           }}
         >
           {(["student", "admin"] as Role[]).map((r) => (
@@ -128,7 +159,8 @@ export default function DashboardPreviewToggle() {
                     position: "absolute",
                     inset: 0,
                     borderRadius: 12,
-                    background: theme.palette.action.hover,
+                    background: "rgba(99,102,241,0.15)",
+                    border: "1px solid rgba(99,102,241,0.35)",
                   }}
                 />
               )}
@@ -161,16 +193,16 @@ export default function DashboardPreviewToggle() {
             exit={{ opacity: 0, x: -20 }}
           >
             <Grid container spacing={2}>
-              {current.stats.map((s, i) => {
+              {current.stats.map((s) => {
                 const Icon = s.icon;
                 return (
-                  <Grid size={{xs:6, md:3}} key={s.label}>
+                  <Grid size={{ xs: 6, md: 3 }} key={s.label}>
                     <MotionPaper
                       whileHover={{ y: -4 }}
-                      sx={{ p: 2, borderRadius: 3 }}
+                      sx={{ p: 2, borderRadius: 3, ...glassPanel }}
                     >
                       <Stack direction="row" justifyContent="space-between">
-                        <Icon color="primary" />
+                        <Icon sx={{ color: "primary.main" }} />
                         <Typography variant="h5" fontWeight={700}>
                           {s.value}
                         </Typography>
@@ -185,22 +217,17 @@ export default function DashboardPreviewToggle() {
             </Grid>
 
             <Grid container spacing={2} mt={1}>
-              {current.features.map((f, i) => {
+              {current.features.map((f) => {
                 const Icon = f.icon;
                 return (
-                  <Grid size={{xs:12, md:6}} key={f.title}>
+                  <Grid size={{ xs: 12, md: 6 }} key={f.title}>
                     <MotionPaper
                       whileHover={{ y: -5, scale: 1.01 }}
-                      transition={{ duration: .2 }}
-                      sx={{
-                        p: 2.5,
-                        borderRadius: 3,
-                        border: "1px solid",
-                        borderColor: "divider",
-                      }}
+                      transition={{ duration: 0.2 }}
+                      sx={{ p: 2.5, borderRadius: 3, ...glassPanel }}
                     >
                       <Stack direction="row" spacing={2}>
-                        <Avatar sx={{ bgcolor: "primary.main" }}>
+                        <Avatar sx={{ width: 40, height: 40, borderRadius: 2, ...iconBadgeSx }}>
                           <Icon fontSize="small" />
                         </Avatar>
 
@@ -208,12 +235,12 @@ export default function DashboardPreviewToggle() {
                           <Typography fontWeight={700}>
                             {f.title}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary" mt={.5}>
+                          <Typography variant="body2" color="text.secondary" mt={0.5}>
                             {f.desc}
                           </Typography>
                         </Box>
 
-                        <ChevronRightRoundedIcon color="action" />
+                        <ChevronRightRoundedIcon sx={{ color: "text.secondary" }} />
                       </Stack>
                     </MotionPaper>
                   </Grid>

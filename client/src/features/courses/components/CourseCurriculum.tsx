@@ -44,24 +44,24 @@ const CourseCurriculum = ({ chapters }: { chapters: ChapterSummary[] }) => {
               elevation={0}
               square={false}
               sx={{
-                border: '1px solid',
-                borderColor: 'divider',
+                bgcolor: 'rgba(255,255,255,0.03)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 borderRadius: '12px !important',
                 overflow: 'hidden',
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                 '&:before': { display: 'none' },
                 '&:hover': {
-                  borderColor: 'text.secondary',
+                  borderColor: 'rgba(99,102,241,0.3)',
                 },
                 '&.Mui-expanded': {
-                  borderColor: 'primary.main',
-                  boxShadow: (theme) =>
-                    `0 0 0 1px ${theme.palette.primary.main}`,
+                  borderColor: 'rgba(99,102,241,0.5)',
+                  boxShadow: '0 0 0 1px rgba(99,102,241,0.5), 0 8px 24px rgba(99,102,241,0.15)',
                 },
               }}
             >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon sx={{ color: 'text.secondary' }} />}
                 sx={{
                   px: 2.5,
                   py: 0.5,
@@ -79,14 +79,14 @@ const CourseCurriculum = ({ chapters }: { chapters: ChapterSummary[] }) => {
                       width: 32,
                       height: 32,
                       borderRadius: '8px',
-                      bgcolor: 'action.hover',
                       flexShrink: 0,
+                      background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.08))',
+                      border: '1px solid rgba(99,102,241,0.4)',
                     }}
                   >
                     <Typography
                       className="font-mono-ui"
-                      color="text.secondary"
-                      sx={{ fontSize: '0.78rem', fontWeight: 600 }}
+                      sx={{ fontSize: '0.78rem', fontWeight: 700, color: 'primary.main' }}
                     >
                       {String(index + 1).padStart(2, '0')}
                     </Typography>
@@ -95,16 +95,20 @@ const CourseCurriculum = ({ chapters }: { chapters: ChapterSummary[] }) => {
                   <Chip
                     label={`${chapter.lessons.length} lessons`}
                     size="small"
-                    variant="outlined"
                     className="font-mono-ui"
-                    sx={{ fontSize: '0.7rem', borderColor: 'divider', color: 'text.secondary' }}
+                    sx={{
+                      fontSize: '0.7rem',
+                      bgcolor: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      color: 'text.secondary',
+                    }}
                   />
                 </div>
               </AccordionSummary>
               <AccordionDetails sx={{ px: 2.5, pt: 0, pb: 1.5 }}>
                 <div
                   className="flex flex-col"
-                  style={{ borderTop: '1px solid', borderColor: 'inherit' }}
+                  style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   {chapter.lessons
                     .slice()
@@ -117,14 +121,15 @@ const CourseCurriculum = ({ chapters }: { chapters: ChapterSummary[] }) => {
                           alignItems: 'center',
                           gap: 1.5,
                           py: 1.25,
-                          pl: 1,
+                          pl: 1.5,
                           ml: 4,
-                          borderTop: lessonIndex === 0 ? 'none' : '1px solid',
-                          borderColor: 'divider',
+                          borderTop: lessonIndex === 0 ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                          borderLeft: '2px solid transparent',
                           borderRadius: 1,
-                          transition: 'background-color 0.15s ease',
+                          transition: 'border-color 0.15s ease, background-color 0.15s ease',
                           '&:hover': {
-                            bgcolor: 'action.hover',
+                            bgcolor: 'rgba(99,102,241,0.06)',
+                            borderLeft: '2px solid rgba(99,102,241,0.6)',
                           },
                         }}
                       >
