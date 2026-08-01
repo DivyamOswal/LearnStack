@@ -21,6 +21,19 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EmptyState from '@/components/ui/EmptyState';
 import { useDebounce } from '@/hooks/useDebounce';
 
+const glassPanel = {
+  bgcolor: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.08)',
+  borderRadius: 3,
+  backdropFilter: 'blur(12px)',
+};
+
+const selectSx = {
+  bgcolor: 'rgba(255,255,255,0.03)',
+  borderRadius: 2,
+  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' },
+};
+
 const AdminUsersPage = () => {
   const currentUser = useAppSelector((state) => state.auth.user);
 
@@ -48,10 +61,10 @@ const AdminUsersPage = () => {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto">
-      <Typography variant="overline" color="primary.main">
+      <Typography variant="overline" color="primary.main" className="font-mono-ui">
         $ admin --users
       </Typography>
-      <Typography variant="h4" sx={{ mt: 1, mb: 1, fontSize: { xs: '1.5rem', md: '2rem' } }}>
+      <Typography variant="h4" sx={{ mt: 1, mb: 1, fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700 }}>
         Manage users
       </Typography>
       {!isLoading && data && (
@@ -87,7 +100,7 @@ const AdminUsersPage = () => {
           }}
           size="small"
           displayEmpty
-          sx={{ minWidth: 160 }}
+          sx={{ minWidth: 160, ...selectSx }}
         >
           <MenuItem value="">All roles</MenuItem>
           <MenuItem value="STUDENT">Student</MenuItem>
@@ -108,15 +121,15 @@ const AdminUsersPage = () => {
       {!isLoading && data && data.users.length > 0 && (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block border rounded-lg overflow-hidden" style={{ borderColor: 'inherit' }}>
-            <table className="w-full">
+          <div className="hidden md:block overflow-hidden" style={glassPanel}>
+            <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b" style={{ borderColor: 'inherit' }}>
-                  <th className="text-left p-3 text-sm font-medium">User</th>
-                  <th className="text-left p-3 text-sm font-medium">Email</th>
-                  <th className="text-left p-3 text-sm font-medium">Verified</th>
-                  <th className="text-left p-3 text-sm font-medium">Role</th>
-                  <th className="text-right p-3 text-sm font-medium">Actions</th>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>User</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Email</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Verified</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Role</th>
+                  <th className="text-right p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,50 +141,73 @@ const AdminUsersPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2, delay: i * 0.02 }}
-                      className="border-b last:border-b-0"
-                      style={{ borderColor: 'inherit' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--mui-palette-action-hover, #1c2128)')}
+                      style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)')}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                     >
-                      <td className="p-3">
-                        <div className="flex items-center gap-2">
+                      <td className="p-4">
+                        <div className="flex items-center gap-2.5">
                           <motion.div whileHover={{ scale: 1.08 }}>
-                            <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 28, height: 28, fontSize: '0.8rem' }}>
+                            <Avatar
+                              src={user.avatarUrl ?? undefined}
+                              sx={{
+                                width: 30,
+                                height: 30,
+                                fontSize: '0.8rem',
+                                fontWeight: 700,
+                                bgcolor: user.role === 'ADMIN' ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.08)',
+                                color: user.role === 'ADMIN' ? 'primary.main' : 'text.secondary',
+                                border: `1px solid ${user.role === 'ADMIN' ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                              }}
+                            >
                               {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                           </motion.div>
                           <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{user.name}</Typography>
                         </div>
                       </td>
-                      <td className="p-3">
+                      <td className="p-4">
                         <Typography variant="body2" color="text.secondary">{user.email}</Typography>
                       </td>
-                      <td className="p-3">
+                      <td className="p-4">
                         <Chip
                           label={user.isVerified ? 'verified' : 'unverified'}
                           size="small"
                           className="font-mono-ui"
-                          color={user.isVerified ? 'success' : 'default'}
-                          variant={user.isVerified ? 'filled' : 'outlined'}
+                          sx={
+                            user.isVerified
+                              ? {
+                                  bgcolor: 'rgba(34,197,94,0.12)',
+                                  color: '#4ade80',
+                                  border: '1px solid rgba(34,197,94,0.3)',
+                                  fontWeight: 600,
+                                }
+                              : {
+                                  bgcolor: 'transparent',
+                                  color: 'text.secondary',
+                                  border: '1px solid rgba(255,255,255,0.15)',
+                                }
+                          }
                         />
                       </td>
-                      <td className="p-3">
+                      <td className="p-4">
                         <Select
                           value={user.role}
                           onChange={(e) => updateRole.mutate({ id: user.id, role: e.target.value as Role })}
                           size="small"
                           disabled={user.id === currentUser?.id}
+                          sx={selectSx}
                         >
                           <MenuItem value="STUDENT">Student</MenuItem>
                           <MenuItem value="ADMIN">Admin</MenuItem>
                         </Select>
                       </td>
-                      <td className="p-3 text-right">
+                      <td className="p-4 text-right">
                         <IconButton
                           size="small"
-                          color="error"
                           disabled={user.id === currentUser?.id}
                           onClick={() => setDeleteTarget({ id: user.id, name: user.name })}
+                          sx={{ color: 'text.secondary', '&:hover': { color: '#f87171', bgcolor: 'rgba(239,68,68,0.1)' } }}
                         >
                           <DeleteOutlinedIcon fontSize="small" />
                         </IconButton>
@@ -191,11 +227,21 @@ const AdminUsersPage = () => {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: i * 0.03 }}
-                className="border rounded-lg p-4 flex flex-col gap-3"
-                style={{ borderColor: 'inherit' }}
+                style={glassPanel}
+                className="p-4 flex flex-col gap-3"
               >
-                <div className="flex items-center gap-2">
-                  <Avatar src={user.avatarUrl ?? undefined} sx={{ width: 32, height: 32 }}>
+                <div className="flex items-center gap-2.5">
+                  <Avatar
+                    src={user.avatarUrl ?? undefined}
+                    sx={{
+                      width: 34,
+                      height: 34,
+                      fontWeight: 700,
+                      bgcolor: user.role === 'ADMIN' ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.08)',
+                      color: user.role === 'ADMIN' ? 'primary.main' : 'text.secondary',
+                      border: `1px solid ${user.role === 'ADMIN' ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                    }}
+                  >
                     {user.name.charAt(0).toUpperCase()}
                   </Avatar>
                   <div className="flex-1 min-w-0">
@@ -208,7 +254,11 @@ const AdminUsersPage = () => {
                     label={user.isVerified ? 'verified' : 'unverified'}
                     size="small"
                     className="font-mono-ui"
-                    color={user.isVerified ? 'success' : 'default'}
+                    sx={
+                      user.isVerified
+                        ? { bgcolor: 'rgba(34,197,94,0.12)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.3)', fontWeight: 600 }
+                        : { bgcolor: 'transparent', color: 'text.secondary', border: '1px solid rgba(255,255,255,0.15)' }
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -217,15 +267,16 @@ const AdminUsersPage = () => {
                     onChange={(e) => updateRole.mutate({ id: user.id, role: e.target.value as Role })}
                     size="small"
                     disabled={user.id === currentUser?.id}
+                    sx={selectSx}
                   >
                     <MenuItem value="STUDENT">Student</MenuItem>
                     <MenuItem value="ADMIN">Admin</MenuItem>
                   </Select>
                   <IconButton
                     size="small"
-                    color="error"
                     disabled={user.id === currentUser?.id}
                     onClick={() => setDeleteTarget({ id: user.id, name: user.name })}
+                    sx={{ color: 'text.secondary', '&:hover': { color: '#f87171', bgcolor: 'rgba(239,68,68,0.1)' } }}
                   >
                     <DeleteOutlinedIcon fontSize="small" />
                   </IconButton>

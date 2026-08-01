@@ -1,6 +1,7 @@
-import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Box, IconButton, Tooltip } from '@mui/material';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
@@ -27,6 +28,8 @@ const navItems: SidebarNavItem[] = [
 ];
 
 const AdminDashboardLayout = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -68,6 +71,7 @@ const AdminDashboardLayout = () => {
       >
         <Box
           sx={{
+            position: 'relative',
             minHeight: 'calc(100vh - 32px)',
             bgcolor: '#111827',
             borderRadius: 5,
@@ -76,6 +80,39 @@ const AdminDashboardLayout = () => {
             overflow: 'hidden',
           }}
         >
+          {/* Back button */}
+          <Box
+            sx={{
+              position: 'sticky',
+              top: 0,
+              left: 0,
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'center',
+              p: 2,
+              bgcolor: 'rgba(17, 24, 39, 0.85)',
+              backdropFilter: 'blur(8px)',
+              borderBottom: '1px solid rgba(255,255,255,.06)',
+            }}
+          >
+            <Tooltip title="Go back">
+              <IconButton
+                onClick={() => navigate(-1)}
+                size="small"
+                sx={{
+                  color: 'rgba(255,255,255,.85)',
+                  bgcolor: 'rgba(255,255,255,.06)',
+                  border: '1px solid rgba(255,255,255,.1)',
+                  '&:hover': {
+                    bgcolor: 'rgba(255,255,255,.12)',
+                  },
+                }}
+              >
+                <ArrowBackIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+
           <Outlet />
         </Box>
       </Box>

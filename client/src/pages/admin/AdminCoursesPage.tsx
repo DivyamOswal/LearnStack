@@ -12,10 +12,18 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { useAdminCourseList, useTogglePublish, useDeleteCourse } from '@/features/admin/courses/adminCourseApi';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EmptyState from '@/components/ui/EmptyState';
 import { formatCurrency } from '@/utils/formatCurrency';
+
+const glassPanel = {
+  bgcolor: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.08)',
+  borderRadius: 3,
+  backdropFilter: 'blur(12px)',
+};
 
 const AdminCoursesPage = () => {
   const [page, setPage] = useState(1);
@@ -34,10 +42,10 @@ const AdminCoursesPage = () => {
     <div className="p-6 md:p-10 max-w-6xl mx-auto">
       <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Typography variant="overline" color="primary.main">
+          <Typography variant="overline" color="primary.main" className="font-mono-ui">
             $ admin --courses
           </Typography>
-          <Typography variant="h4" sx={{ mt: 1, fontSize: { xs: '1.5rem', md: '2rem' } }}>
+          <Typography variant="h4" sx={{ mt: 1, fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700 }}>
             Manage courses
           </Typography>
         </div>
@@ -48,6 +56,13 @@ const AdminCoursesPage = () => {
           disableElevation
           startIcon={<AddIcon />}
           className="w-full sm:w-auto"
+          sx={{
+            borderRadius: 2,
+            px: 3,
+            fontWeight: 600,
+            textTransform: 'none',
+            boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
+          }}
         >
           New course
         </Button>
@@ -66,42 +81,86 @@ const AdminCoursesPage = () => {
       {!isLoading && data && data.courses.length > 0 && (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block border rounded-lg overflow-hidden" style={{ borderColor: 'inherit' }}>
-            <table className="w-full">
+          <div className="hidden md:block overflow-hidden" style={glassPanel}>
+            <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b" style={{ borderColor: 'inherit' }}>
-                  <th className="text-left p-3 text-sm font-medium" style={{ color: 'inherit' }}>Course</th>
-                  <th className="text-left p-3 text-sm font-medium">Category</th>
-                  <th className="text-left p-3 text-sm font-medium">Price</th>
-                  <th className="text-left p-3 text-sm font-medium">Published</th>
-                  <th className="text-right p-3 text-sm font-medium">Actions</th>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Course</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Category</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Price</th>
+                  <th className="text-left p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Status</th>
+                  <th className="text-right p-4 text-xs font-mono-ui uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.5)' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.courses.map((course) => (
-                  <tr key={course.id} className="border-b last:border-b-0" style={{ borderColor: 'inherit' }}>
-                    <td className="p-3">
-                      <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{course.title}</Typography>
+                  <tr
+                    key={course.id}
+                    className="transition-colors hover:bg-white/5"
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                  >
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="flex items-center justify-center rounded-lg shrink-0"
+                          style={{
+                            width: 38,
+                            height: 38,
+                            background: course.isPublished
+                              ? 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.08))'
+                              : 'rgba(255,255,255,0.04)',
+                            border: `1px solid ${course.isPublished ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                          }}
+                        >
+                          <SchoolOutlinedIcon
+                            sx={{ fontSize: 18, color: course.isPublished ? 'primary.main' : 'text.disabled' }}
+                          />
+                        </div>
+                        <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{course.title}</Typography>
+                      </div>
                     </td>
-                    <td className="p-3">
-                      <Chip label={course.category.name} size="small" className="font-mono-ui" sx={{ bgcolor: 'action.hover' }} />
-                    </td>
-                    <td className="p-3 font-mono-ui text-sm">{formatCurrency(course.price)}</td>
-                    <td className="p-3">
-                      <Switch
-                        checked={course.isPublished}
-                        onChange={() => togglePublish.mutate({ id: course.id, isPublished: !course.isPublished })}
+                    <td className="p-4">
+                      <Chip
+                        label={course.category.name}
                         size="small"
+                        className="font-mono-ui"
+                        sx={{ bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
                       />
                     </td>
-                    <td className="p-3 text-right">
-                      <IconButton component={RouterLink} to={`/admin/courses/${course.id}`} size="small">
+                    <td className="p-4 font-mono-ui text-sm" style={{ fontWeight: 600 }}>{formatCurrency(course.price)}</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <Chip
+                          label={course.isPublished ? 'published' : 'draft'}
+                          size="small"
+                          className="font-mono-ui"
+                          sx={{
+                            bgcolor: course.isPublished ? 'rgba(34,197,94,0.12)' : 'rgba(255,255,255,0.06)',
+                            color: course.isPublished ? '#4ade80' : 'text.secondary',
+                            border: `1px solid ${course.isPublished ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                            fontWeight: 600,
+                          }}
+                        />
+                        <Switch
+                          checked={course.isPublished}
+                          onChange={() => togglePublish.mutate({ id: course.id, isPublished: !course.isPublished })}
+                          size="small"
+                        />
+                      </div>
+                    </td>
+                    <td className="p-4 text-right">
+                      <IconButton
+                        component={RouterLink}
+                        to={`/admin/courses/${course.id}`}
+                        size="small"
+                        sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main', bgcolor: 'rgba(99,102,241,0.1)' } }}
+                      >
                         <EditOutlinedIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         size="small"
-                        color="error"
                         onClick={() => setDeleteTarget({ id: course.id, title: course.title })}
+                        sx={{ color: 'text.secondary', '&:hover': { color: '#f87171', bgcolor: 'rgba(239,68,68,0.1)' } }}
                       >
                         <DeleteOutlinedIcon fontSize="small" />
                       </IconButton>
@@ -115,18 +174,53 @@ const AdminCoursesPage = () => {
           {/* Mobile card list */}
           <div className="flex flex-col gap-3 md:hidden">
             {data.courses.map((course) => (
-              <div key={course.id} className="border rounded-lg p-4 flex flex-col gap-2" style={{ borderColor: 'inherit' }}>
+              <div key={course.id} style={glassPanel} className="p-4 flex flex-col gap-3">
                 <div className="flex items-start justify-between gap-2">
-                  <Typography sx={{ fontWeight: 600, fontSize: '0.95rem' }}>{course.title}</Typography>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex items-center justify-center rounded-lg shrink-0"
+                      style={{
+                        width: 38,
+                        height: 38,
+                        background: course.isPublished
+                          ? 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.08))'
+                          : 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${course.isPublished ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                      }}
+                    >
+                      <SchoolOutlinedIcon
+                        sx={{ fontSize: 18, color: course.isPublished ? 'primary.main' : 'text.disabled' }}
+                      />
+                    </div>
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.95rem' }}>{course.title}</Typography>
+                  </div>
                   <Switch
                     checked={course.isPublished}
                     onChange={() => togglePublish.mutate({ id: course.id, isPublished: !course.isPublished })}
                     size="small"
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Chip label={course.category.name} size="small" className="font-mono-ui" sx={{ bgcolor: 'action.hover' }} />
-                  <Typography variant="body2" className="font-mono-ui">{formatCurrency(course.price)}</Typography>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Chip
+                    label={course.category.name}
+                    size="small"
+                    className="font-mono-ui"
+                    sx={{ bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  />
+                  <Chip
+                    label={course.isPublished ? 'published' : 'draft'}
+                    size="small"
+                    className="font-mono-ui"
+                    sx={{
+                      bgcolor: course.isPublished ? 'rgba(34,197,94,0.12)' : 'rgba(255,255,255,0.06)',
+                      color: course.isPublished ? '#4ade80' : 'text.secondary',
+                      border: `1px solid ${course.isPublished ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                      fontWeight: 600,
+                    }}
+                  />
+                  <Typography variant="body2" className="font-mono-ui" sx={{ fontWeight: 600, ml: 'auto' }}>
+                    {formatCurrency(course.price)}
+                  </Typography>
                 </div>
                 <div className="flex gap-2 mt-1">
                   <Button
@@ -134,14 +228,15 @@ const AdminCoursesPage = () => {
                     to={`/admin/courses/${course.id}`}
                     size="small"
                     startIcon={<EditOutlinedIcon fontSize="small" />}
+                    sx={{ textTransform: 'none', borderRadius: 2 }}
                   >
                     Edit
                   </Button>
                   <Button
                     size="small"
-                    color="error"
                     startIcon={<DeleteOutlinedIcon fontSize="small" />}
                     onClick={() => setDeleteTarget({ id: course.id, title: course.title })}
+                    sx={{ textTransform: 'none', borderRadius: 2, color: '#f87171' }}
                   >
                     Delete
                   </Button>
