@@ -46,3 +46,13 @@ export const getAllOrdersForAdmin = asyncHandler(async (req: Request, res: Respo
   const result = await paymentService.getAllOrdersForAdmin(req.query as any);
   res.status(200).json(new ApiResponse(200, result, 'All orders fetched.'));
 });
+
+export const previewPricing = asyncHandler(async (req: Request, res: Response) => {
+  const breakdown = await paymentService.previewOrderPricing(req.body.courseId, req.body.couponCode);
+  res.status(200).json(new ApiResponse(200, breakdown, 'Pricing calculated.'));
+});
+
+export const getOrderStatus = asyncHandler(async (req: Request, res: Response) => {
+  const result = await paymentService.getOrderStatus(req.params.id, req.user!.id);
+  res.status(200).json(new ApiResponse(200, result, 'Order status fetched.'));
+});

@@ -5,10 +5,14 @@ import { useAdminBlogs, useDeleteBlog, useTogglePublishBlog } from '@/features/b
 import BlogEditor from '@/features/admin/components/blog/BlogEditor';
 import EmptyState from '@/components/ui/EmptyState';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { useBlogBySlug } from '@/features/blog/blogApi';
 
 const AdminBlogPage = () => {
   const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
+const { data: editingPost } = useBlogBySlug(editingSlug ?? '');
 
   const { data, isLoading } = useAdminBlogs(page);
   const deleteBlog = useDeleteBlog();
@@ -23,9 +27,17 @@ const AdminBlogPage = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2" style={{ height: 'calc(100% - 60px)' }}>
         {/* Left: editor, own scroll if content genuinely overflows on small viewports */}
-        <Box sx={{ overflowY: 'auto', pr: 1 }}>
-          <BlogEditor />
-        </Box>
+        {/* Left: editor, own scroll if content genuinely overflows on small viewports */}
+<Box sx={{ overflowY: 'auto', pr: 1 }}>
+  {editingSlug && editingPost ? (
+    <BlogEditor
+      existingPost={editingPost}
+      onSaved={() => setEditingSlug(null)}
+    />
+  ) : (
+    <BlogEditor />
+  )}
+</Box>
 
         {/* Right: existing posts list, independently scrollable */}
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
@@ -72,6 +84,9 @@ const AdminBlogPage = () => {
                       <IconButton size="small" color="error" onClick={() => setDeleteTarget({ id: blog.id, title: blog.title })}>
                         <DeleteOutlineIcon fontSize="small" />
                       </IconButton>
+                      <IconButton size="small" onClick={() => setEditingSlug(blog.slug)}>
+  <EditOutlinedIcon fontSize="small" />
+</IconButton>
                     </div>
                   ))}
                 </div>

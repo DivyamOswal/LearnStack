@@ -28,3 +28,12 @@ export const listOrdersSchema = z.object({
   params: emptyParams,
   body: z.object({}).optional(),
 });
+
+export const previewPricingSchema = z.object({
+  body: z.object({
+    courseId: z.string().uuid('Invalid course ID'),
+    couponCode: z.string().optional(),
+  }),
+  params: emptyParams,
+  query: emptyQuery,
+});

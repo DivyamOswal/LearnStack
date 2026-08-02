@@ -8,6 +8,7 @@ import {
   listOrdersSchema,
 } from './payments.validator';
 import * as paymentController from './payments.controller';
+import { previewPricingSchema } from './payments.validator';
 
 const router = Router();
 
@@ -45,5 +46,8 @@ router.post(
   validate(orderIdParamSchema),
   paymentController.refundOrder
 );
+// student, authenticated — add alongside your existing /checkout route
+router.post('/preview', authenticate, validate(previewPricingSchema), paymentController.previewPricing);
+router.get('/:id/status', authenticate, validate(orderIdParamSchema), paymentController.getOrderStatus);
 
 export default router;

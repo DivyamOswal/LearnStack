@@ -83,3 +83,23 @@ export const useTogglePublishBlog = () => {
     },
   });
 };
+
+export const useUpdateBlog = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, input, coverImage }: { id: string; input: Partial<CreateBlogInput>; coverImage?: File }) => {
+      const formData = new FormData();
+      if (input.title) formData.append('title', input.title);
+      if (input.content) formData.append('content', input.content);
+      if (input.isPublished !== undefined) formData.append('isPublished', String(input.isPublished));
+      if (coverImage) formData.append('coverImage', coverImage);
+
+      const { data } = await axiosInstance.patch<ApiResponse<BlogPost>>(`/blog/${id}`, formData);
+      return data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'blog'] });
+      queryClient.invalidateQueries({ queryKey: ['blog', 'public'] });
+    },
+  });
+};

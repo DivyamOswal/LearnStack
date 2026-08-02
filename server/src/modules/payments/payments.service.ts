@@ -4,12 +4,65 @@ import stripe from '../../config/stripe';
 import { env } from '../../config/env';
 import { ApiError } from '../../utils/ApiError';
 import * as paymentRepo from './payments.repository';
-import { CreateCheckoutSessionInput } from './payments.types';
+import { CreateCheckoutSessionInput, PricingBreakdown } from './payments.types';
 import { notifyUser } from '../notifications/notifications.service';
 
-const calculateDiscountedAmount = (price: number, discountPercent: number) => {
-  const discounted = price - (price * discountPercent) / 100;
-  return Math.round(discounted * 100) / 100; // round to 2 decimals
+// 18% GST — India's standard rate for online/digital services (OIDAR).
+// Centralized here so the preview endpoint and actual checkout session
+// always compute the exact same number — never duplicate this math.
+const TAX_RATE = 0.18;
+
+const computePricing = async (
+  course: { price: any; discountPrice: any },
+  couponCode?: string
+): Promise<{ breakdown: PricingBreakdown; couponId?: string }> => {
+  const originalPrice = Number(course.price);
+  const baseAmount = Number(course.discountPrice ?? course.price);
+  const discountAmount = Math.max(0, originalPrice - baseAmount);
+
+  let subtotal = baseAmount;
+  let couponId: string | undefined;
+  let couponApplied = false;
+
+  if (couponCode) {
+    const coupon = await paymentRepo.findActiveCouponByCode(couponCode);
+    if (!coupon || !coupon.isActive) {
+      throw new ApiError(400, 'Invalid or inactive coupon code.');
+    }
+    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+      throw new ApiError(400, 'This coupon has expired.');
+    }
+    if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+      throw new ApiError(400, 'This coupon has reached its usage limit.');
+    }
+    subtotal = Math.round((subtotal - (subtotal * coupon.discountPercent) / 100) * 100) / 100;
+    couponId = coupon.id;
+    couponApplied = true;
+  }
+
+  const taxAmount = Math.round(subtotal * TAX_RATE * 100) / 100;
+  const total = Math.round((subtotal + taxAmount) * 100) / 100;
+
+  return {
+    breakdown: {
+      baseAmount: originalPrice,
+      discountAmount,
+      subtotal,
+      taxAmount,
+      taxRate: TAX_RATE,
+      total,
+      couponApplied,
+      couponCode: couponApplied ? couponCode! : null,
+    },
+    couponId,
+  };
+};
+
+export const previewOrderPricing = async (courseId: string, couponCode?: string) => {
+  const course = await paymentRepo.findCourseById(courseId);
+  if (!course) throw new ApiError(404, 'Course not found.');
+  const { breakdown } = await computePricing(course, couponCode);
+  return breakdown;
 };
 
 export const createCheckoutSession = async (
@@ -23,28 +76,14 @@ export const createCheckoutSession = async (
   const alreadyOwned = await paymentRepo.findCompletedOrder(userId, input.courseId);
   if (alreadyOwned) throw new ApiError(409, 'You have already purchased this course.');
 
-  let finalAmount = Number(course.discountPrice ?? course.price);
-  let couponId: string | undefined;
+  const { breakdown, couponId } = await computePricing(course, input.couponCode);
 
-  if (input.couponCode) {
-    const coupon = await paymentRepo.findActiveCouponByCode(input.couponCode);
-    if (!coupon || !coupon.isActive) {
-      throw new ApiError(400, 'Invalid or inactive coupon code.');
-    }
-    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-      throw new ApiError(400, 'This coupon has expired.');
-    }
-    if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
-      throw new ApiError(400, 'This coupon has reached its usage limit.');
-    }
-    finalAmount = calculateDiscountedAmount(finalAmount, coupon.discountPercent);
-    couponId = coupon.id;
-  }
-
+  // The order stores the FULL amount actually charged (tax included) —
+  // this is the number that shows up in order history and admin revenue reports.
   const order = await paymentRepo.createOrder({
     userId,
     courseId: input.courseId,
-    amount: finalAmount,
+    amount: breakdown.total,
     couponId,
   });
 
@@ -55,8 +94,14 @@ export const createCheckoutSession = async (
       {
         price_data: {
           currency: 'inr',
-          product_data: { name: course.title },
-          unit_amount: Math.round(finalAmount * 100), // Stripe expects cents
+          product_data: {
+            name: course.title,
+            description:
+              breakdown.taxAmount > 0
+                ? `Includes GST (${(breakdown.taxRate * 100).toFixed(0)}%)`
+                : undefined,
+          },
+          unit_amount: Math.round(breakdown.total * 100), // Stripe expects paise
         },
         quantity: 1,
       },
@@ -125,8 +170,6 @@ export const handleStripeWebhook = async (rawBody: Buffer, signature: string) =>
     }
 
     default:
-      // Unhandled event types are ignored intentionally LearnStack Stripe sends many
-      // event types we don't act on; silently ignoring is correct, not a bug.
       break;
   }
 };
@@ -145,6 +188,15 @@ export const getOrderInvoice = async (orderId: string, userId: string) => {
     throw new ApiError(404, 'No invoice is available for this order yet.');
   }
   return order.payment.invoiceUrl;
+};
+
+export const getOrderStatus = async (orderId: string, userId: string) => {
+  const order = await paymentRepo.findOrderById(orderId);
+  if (!order) throw new ApiError(404, 'Order not found.');
+  if (order.userId !== userId) {
+    throw new ApiError(403, 'You do not have permission to access this order.');
+  }
+  return { status: order.status, courseTitle: order.course.title };
 };
 
 export const refundOrder = async (orderId: string) => {

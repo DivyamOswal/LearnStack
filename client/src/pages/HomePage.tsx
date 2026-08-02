@@ -9,7 +9,10 @@ import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ROUTES } from '@/routes/routePaths';
 import { useCourseList } from '@/features/courses/coursesApi';
@@ -24,11 +27,31 @@ const categories = [
 ];
 
 const pipeline = [
-  { step: 'course', desc: 'Pick a path from fundamentals to system design.' },
-  { step: 'chapter', desc: "Structured units, ordered so nothing assumes what you haven't learned yet." },
-  { step: 'lesson', desc: 'Video, article, markdown, or live code whichever teaches the concept best.' },
-  { step: 'quiz', desc: 'Prove it before moving on. Negative marking keeps guessing honest.' },
-  { step: 'certificate', desc: 'A QR-verifiable credential, not just a checkbox.' },
+  {
+    step: 'course',
+    desc: 'Pick a path from fundamentals to system design.',
+    detail: 'Every course belongs to a category, so you can browse by stack instead of scrolling a flat catalog.',
+  },
+  {
+    step: 'chapter',
+    desc: "Structured units, ordered so nothing assumes what you haven't learned yet.",
+    detail: 'Chapters are numbered and sequential you always know exactly where you are in a course.',
+  },
+  {
+    step: 'lesson',
+    desc: 'Video, article, markdown, or live code whichever teaches the concept best.',
+    detail: 'Some lessons ship with a downloadable PDF alongside the main content for offline reference.',
+  },
+  {
+    step: 'quiz',
+    desc: 'Prove it before moving on. Negative marking keeps guessing honest.',
+    detail: 'Single choice, multiple answer, and true/false formats, each scored and ranked on a per-quiz leaderboard.',
+  },
+  {
+    step: 'certificate',
+    desc: 'A QR-verifiable credential, not just a checkbox.',
+    detail: 'Issued only once every lesson in the course is marked complete each one has a unique code anyone can verify, no login required.',
+  },
 ];
 
 const features = [
@@ -38,6 +61,8 @@ const features = [
   { icon: WorkspacePremiumOutlinedIcon, title: 'Verified certificates', desc: 'Finish every lesson in a course and get a certificate with a unique code and QR verification page anyone can check.' },
   { icon: TrendingUpOutlinedIcon, title: 'Progress you can see', desc: 'Lesson-by-lesson completion tracking, a continue-where-you-left-off view, and a dashboard that actually reflects your work.' },
   { icon: ForumOutlinedIcon, title: 'Reviews & discussion', desc: 'Rate and review courses you have completed, and ask questions directly on any lesson with nested replies.' },
+  { icon: BookmarkBorderOutlinedIcon, title: 'Bookmarks', desc: 'Save any course to come back to later track what you\'re planning to learn next without losing it in your history.' },
+  { icon: EmojiEventsOutlinedIcon, title: 'Quiz leaderboards', desc: 'See how your score stacks up against everyone else who\'s taken the same quiz not just a pass/fail screen.' },
 ];
 
 const faqs = [
@@ -60,6 +85,18 @@ const faqs = [
   {
     q: 'Does quiz negative marking apply if I skip a question?',
     a: 'No negative marking only applies when you select a wrong answer. Leaving a question blank never costs you points, only an incorrect attempt does.',
+  },
+  {
+    q: 'How is the course catalog organized?',
+    a: 'Every course belongs to a category like React, Docker, or System Design so you can browse by the stack you\'re working in instead of scrolling one long list.',
+  },
+  {
+    q: 'Can I save a course to come back to later?',
+    a: 'Yes each course has a bookmark button. Bookmarked courses show up in your dashboard so you don\'t lose track of what you were planning to start next.',
+  },
+  {
+    q: 'Can I ask questions on a specific lesson?',
+    a: 'Yes every lesson has its own comment thread with nested replies, so you can ask about that exact part of the material and get a response in context instead of a generic support ticket.',
   },
 ];
 
@@ -98,9 +135,10 @@ const HomePage = () => {
                 not just watch tutorials.
               </Typography>
 
-              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 520 }}>
-                Structured courses, a live code playground, timed quizzes, and real certificates 
-                built for people who learn by shipping.
+              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 560 }}>
+                Structured courses, a live code playground, timed quizzes with leaderboards, and
+                QR-verifiable certificates built for people who learn by shipping, not by
+                collecting unfinished playlists.
               </Typography>
 
               <div className="flex flex-col gap-3 w-full sm:flex-row sm:w-auto">
@@ -140,6 +178,9 @@ const HomePage = () => {
                     transition={{ duration: 0.25, delay: 0.3 + i * 0.03 }}
                   >
                     <Chip
+                      component={RouterLink}
+                      to={`${ROUTES.COURSES}?category=${cat}`}
+                      clickable
                       label={cat}
                       size="small"
                       className="font-mono-ui"
@@ -147,7 +188,6 @@ const HomePage = () => {
                         bgcolor: 'action.hover',
                         color: 'text.secondary',
                         transition: 'all 0.15s ease',
-                        cursor: 'default',
                         '&:hover': { color: 'primary.main', bgcolor: 'transparent', borderColor: 'primary.main' },
                       }}
                     />
@@ -186,6 +226,8 @@ const HomePage = () => {
             <span style={{ opacity: 0.85 }}>free to browse, no card required</span>
             <span style={{ opacity: 0.7 }}>·</span>
             <span style={{ opacity: 0.85 }}>certificates verifiable by anyone</span>
+            <span style={{ opacity: 0.7 }}>·</span>
+            <span style={{ opacity: 0.85 }}>organized by category, not a flat list</span>
           </div>
         </div>
       </section>
@@ -219,6 +261,41 @@ const HomePage = () => {
               </motion.div>
             </RevealSection>
           ))}
+        </div>
+      </section>
+
+      {/* Browse by category real navigation, using the actual category taxonomy */}
+      <section className="border-t" style={{ borderColor: 'inherit' }}>
+        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
+          <RevealSection>
+            <Typography variant="overline" color="primary.main">$ ls categories/</Typography>
+            <Typography variant="h3" sx={{ mt: 1, mb: 2, fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+              Browse by what you're building.
+            </Typography>
+            <Typography color="text.secondary" sx={{ maxWidth: 600, mb: { xs: 4, md: 6 } }}>
+              Every course is filed under a category so you can go straight to the stack you
+              care about instead of scrolling a flat catalog.
+            </Typography>
+          </RevealSection>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {categories.map((cat, i) => (
+              <RevealSection key={cat} delay={i * 0.04}>
+                <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.15 }}>
+                  <RouterLink
+                    to={`${ROUTES.COURSES}?category=${cat}`}
+                    className="flex items-center gap-2 p-4 rounded-lg border no-underline"
+                    style={{ borderColor: 'inherit', color: 'inherit' }}
+                  >
+                    <CategoryOutlinedIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+                    <Typography className="font-mono-ui" sx={{ fontSize: '0.85rem', textTransform: 'lowercase' }}>
+                      {cat}
+                    </Typography>
+                  </RouterLink>
+                </motion.div>
+              </RevealSection>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -288,7 +365,7 @@ const HomePage = () => {
                 <motion.div
                   whileHover={{ x: 6 }}
                   transition={{ duration: 0.2 }}
-                  className="flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:gap-8 sm:py-8"
+                  className="flex flex-col gap-2 py-6 sm:flex-row sm:items-start sm:gap-8 sm:py-8"
                 >
                   <Typography className="font-mono-ui" sx={{ color: 'text.secondary', minWidth: { sm: 48 }, fontSize: '0.9rem' }}>
                     {String(index + 1).padStart(2, '0')}
@@ -296,7 +373,10 @@ const HomePage = () => {
                   <Typography variant="h5" sx={{ minWidth: { sm: 220 }, textTransform: 'lowercase', color: 'primary.main' }}>
                     {item.step}
                   </Typography>
-                  <Typography color="text.secondary">{item.desc}</Typography>
+                  <div className="flex flex-col gap-1">
+                    <Typography color="text.primary">{item.desc}</Typography>
+                    <Typography variant="body2" color="text.secondary">{item.detail}</Typography>
+                  </div>
                 </motion.div>
               </RevealSection>
             ))}
@@ -309,8 +389,12 @@ const HomePage = () => {
         <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-24">
           <RevealSection>
             <Typography variant="overline" color="primary.main">$ whoami --role</Typography>
-            <Typography variant="h3" sx={{ mt: 1, mb: { xs: 4, md: 6 }, fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+            <Typography variant="h3" sx={{ mt: 1, mb: 2, fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
               Built for learners and instructors alike.
+            </Typography>
+            <Typography color="text.secondary" sx={{ maxWidth: 600, mb: { xs: 4, md: 6 } }}>
+              Toggle between what a student sees and what an instructor manages the platform
+              adapts its dashboard entirely depending on your role.
             </Typography>
           </RevealSection>
 
@@ -366,6 +450,8 @@ const HomePage = () => {
             { icon: DarkModeOutlinedIcon, label: 'dark mode built in' },
             { icon: WorkspacePremiumOutlinedIcon, label: 'certificates are publicly verifiable' },
             { icon: CodeOutlinedIcon, label: 'playground runs sandboxed, client-side' },
+            { icon: CategoryOutlinedIcon, label: 'catalog organized by category' },
+            { icon: BookmarkBorderOutlinedIcon, label: 'save courses for later' },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-2">
               <Icon sx={{ fontSize: 18, color: 'text.secondary' }} />
