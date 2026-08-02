@@ -36,6 +36,9 @@ import VerifyEmailPage from '@/pages/VerifyEmailPage';
 import AdminQuizzesPage from '@/pages/admin/AdminQuizzesPage';
 import AdminQuizEditorPage from '@/pages/admin/AdminQuizEditorPage';
 import ProfileSettingsPage from '@/pages/ProfileSettingsPage';
+import CheckoutPage from '@/pages/CheckoutPage';
+import PaymentSuccessPage from '@/pages/PaymentSuccessPage';
+import PaymentCancelPage from '@/pages/PaymentCancelPage';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +51,7 @@ const router = createBrowserRouter([
       { path: '/verify-certificate/:code', element: <CertificateVerifyPage /> },
       { path: '/blog', element: <BlogListPage /> },
       { path: '/blog/:slug', element: <BlogPostPage /> },
+      { path: '/payment/cancel', element: <PaymentCancelPage /> },
     ],
   },
   // Standalone, full-bleed auth pages  these own their entire viewport
@@ -75,6 +79,8 @@ const router = createBrowserRouter([
           { path: '/dashboard/certificates', element: <CertificatesPage /> },
           { path: '/dashboard/bookmarks', element: <BookmarksPage /> },
           { path: '/profile', element: <ProfileSettingsPage /> },
+          { path: '/checkout/:slug', element: <CheckoutPage /> },
+          { path: '/payment/success', element: <PaymentSuccessPage /> },
         ],
       },
     ],

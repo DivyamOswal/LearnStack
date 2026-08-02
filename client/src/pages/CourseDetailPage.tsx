@@ -1,14 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, Button, Chip, CircularProgress, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import { useCourseBySlug } from '@/features/courses/coursesApi';
-import { useCreateCheckoutSession } from '@/features/payments/paymentsApi';
 import CourseCurriculum from '@/features/courses/components/CourseCurriculum';
 import EmptyState from '@/components/ui/EmptyState';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { useAppSelector } from '@/app/hooks';
-import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/routePaths';
 import { useState } from 'react';
 import { useReviewsForCourse, useRatingDistribution } from '@/features/reviews/reviewsApi';
@@ -21,7 +19,6 @@ const CourseDetailPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: course, isLoading, isError } = useCourseBySlug(slug ?? '');
-  const checkoutMutation = useCreateCheckoutSession();
   const [reviewPage, setReviewPage] = useState(1);
   const { data: reviewData } = useReviewsForCourse(course?.id ?? '', reviewPage);
   const { data: distribution } = useRatingDistribution(course?.id ?? '');
@@ -45,13 +42,14 @@ const CourseDetailPage = () => {
       navigate(ROUTES.LOGIN, { state: { from: { pathname: ROUTES.COURSE_DETAIL(course.slug) } } });
       return;
     }
-    checkoutMutation.mutate({ courseId: course.id });
+    // Route into the dedicated checkout page (coupon entry, tax breakdown)
+    // instead of creating a Stripe session directly from this page.
+    navigate(`/checkout/${course.slug}`);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 md:px-8 md:py-14">
       <div className="flex flex-col gap-10 lg:flex-row">
-        {/* Main content */}
         <div className="flex-1 min-w-0">
           <Chip
             label={course.category.name}
@@ -131,16 +129,12 @@ const CourseDetailPage = () => {
                 <Typography sx={{ fontSize: '1.75rem', fontWeight: 700 }}>{formatCurrency(course.price)}</Typography>
               )}
             </div>
+            <Typography variant="caption" color="text.secondary" sx={{ mt: -2 }}>
+              + GST at checkout
+            </Typography>
 
-            <Button
-              variant="contained"
-              disableElevation
-              size="large"
-              fullWidth
-              onClick={handleEnroll}
-              disabled={checkoutMutation.isPending}
-            >
-              {checkoutMutation.isPending ? 'Redirecting...' : 'Enroll now'}
+            <Button variant="contained" disableElevation size="large" fullWidth onClick={handleEnroll}>
+              Enroll now
             </Button>
 
             <Divider />

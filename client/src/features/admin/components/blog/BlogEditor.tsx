@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Alert,
   Box,
@@ -21,17 +21,40 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { useCreateBlog } from "../../../blog/blogApi";
+import { useCreateBlog, useUpdateBlog } from "../../../blog/blogApi";
+import { BlogPost } from "../../../blog/blog.types";
 
-const BlogEditor = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [isPublished, setIsPublished] = useState(false);
+interface BlogEditorProps {
+  existingPost?: BlogPost; // when provided, the form runs in edit mode
+  onSaved?: () => void;
+}
+
+const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
+  const isEditMode = Boolean(existingPost);
+
+  const [title, setTitle] = useState(existingPost?.title ?? "");
+  const [content, setContent] = useState(existingPost?.content ?? "");
+  const [isPublished, setIsPublished] = useState(existingPost?.isPublished ?? false);
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(existingPost?.coverImage ?? null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const createBlog = useCreateBlog();
+  const updateBlog = useUpdateBlog();
+
+  const mutation = isEditMode ? updateBlog : createBlog;
+
+  // Keep the form in sync if a different post is passed in (e.g. switching
+  // which post you're editing without unmounting this component).
+  useEffect(() => {
+    if (existingPost) {
+      setTitle(existingPost.title);
+      setContent(existingPost.content);
+      setIsPublished(existingPost.isPublished);
+      setCoverPreview(existingPost.coverImage);
+      setCoverImage(null);
+    }
+  }, [existingPost]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -46,20 +69,27 @@ const BlogEditor = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const resetForm = () => {
+    setTitle("");
+    setContent("");
+    setIsPublished(false);
+    handleRemoveCover();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    createBlog.mutate(
-      { input: { title, content, isPublished }, coverImage: coverImage ?? undefined },
-      {
-        onSuccess: () => {
-          setTitle("");
-          setContent("");
-          setIsPublished(false);
-          handleRemoveCover();
-        },
-      }
-    );
+    if (isEditMode && existingPost) {
+      updateBlog.mutate(
+        { id: existingPost.id, input: { title, content, isPublished }, coverImage: coverImage ?? undefined },
+        { onSuccess: () => onSaved?.() }
+      );
+    } else {
+      createBlog.mutate(
+        { input: { title, content, isPublished }, coverImage: coverImage ?? undefined },
+        { onSuccess: () => { resetForm(); onSaved?.(); } }
+      );
+    }
   };
 
   return (
@@ -67,32 +97,23 @@ const BlogEditor = () => {
       elevation={0}
       sx={{ maxWidth: 900, mx: "auto", borderRadius: 2, border: "1px solid", borderColor: "divider", overflow: "hidden" }}
     >
-      {/* Header */}
       <Box sx={{ p: 3, bgcolor: "action.hover", borderBottom: "1px solid", borderColor: "divider" }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 44,
-              height: 44,
-              borderRadius: "10px",
-              bgcolor: "background.paper",
-              border: "1px solid",
-              borderColor: "divider",
-              flexShrink: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 44, height: 44, borderRadius: "10px", bgcolor: "background.paper",
+              border: "1px solid", borderColor: "divider", flexShrink: 0,
             }}
           >
             <ArticleOutlinedIcon color="primary" sx={{ fontSize: 22 }} />
           </Box>
-
           <Box>
             <Typography variant="overline" color="primary.main" className="font-mono-ui" sx={{ lineHeight: 1 }}>
-              $ blog --new
+              {isEditMode ? "$ blog --edit" : "$ blog --new"}
             </Typography>
             <Typography variant="h6" fontWeight={700}>
-              Write a new post
+              {isEditMode ? "Edit post" : "Write a new post"}
             </Typography>
           </Box>
         </Stack>
@@ -101,17 +122,17 @@ const BlogEditor = () => {
       <Card elevation={0}>
         <CardContent>
           <AnimatePresence>
-            {createBlog.isError && (
+            {mutation.isError && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
                 <Alert severity="error" sx={{ mb: 3 }}>
-                  Failed to create post.
+                  {isEditMode ? "Failed to update post." : "Failed to create post."}
                 </Alert>
               </motion.div>
             )}
-            {createBlog.isSuccess && (
+            {mutation.isSuccess && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
                 <Alert severity="success" sx={{ mb: 3 }}>
-                  Post created successfully.
+                  {isEditMode ? "Post updated successfully." : "Post created successfully."}
                 </Alert>
               </motion.div>
             )}
@@ -144,7 +165,6 @@ const BlogEditor = () => {
                 }
               />
 
-              {/* Cover upload */}
               <Box>
                 <Typography fontWeight={600} mb={1} display="flex" alignItems="center" gap={1} fontSize="0.95rem">
                   <ImageOutlinedIcon fontSize="small" />
@@ -153,41 +173,14 @@ const BlogEditor = () => {
 
                 <AnimatePresence mode="wait">
                   {coverPreview ? (
-                    <motion.div
-                      key="preview"
-                      initial={{ opacity: 0, scale: 0.97 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Box
-                        sx={{
-                          position: "relative",
-                          borderRadius: 2,
-                          overflow: "hidden",
-                          border: "1px solid",
-                          borderColor: "divider",
-                          aspectRatio: "21 / 9",
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          src={coverPreview}
-                          alt="Cover preview"
-                          sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                        />
+                    <motion.div key="preview" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                      <Box sx={{ position: "relative", borderRadius: 2, overflow: "hidden", border: "1px solid", borderColor: "divider", aspectRatio: "21 / 9" }}>
+                        <Box component="img" src={coverPreview} alt="Cover preview" sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                         <Button
                           size="small"
                           onClick={handleRemoveCover}
                           startIcon={<CloseIcon fontSize="small" />}
-                          sx={{
-                            position: "absolute",
-                            top: 8,
-                            right: 8,
-                            bgcolor: "rgba(13,17,23,0.75)",
-                            color: "#fff",
-                            "&:hover": { bgcolor: "rgba(13,17,23,0.9)" },
-                          }}
+                          sx={{ position: "absolute", top: 8, right: 8, bgcolor: "rgba(13,17,23,0.75)", color: "#fff", "&:hover": { bgcolor: "rgba(13,17,23,0.9)" } }}
                         >
                           Remove
                         </Button>
@@ -199,21 +192,12 @@ const BlogEditor = () => {
                         component="label"
                         fullWidth
                         variant="outlined"
-                        sx={{
-                          borderStyle: "dashed",
-                          borderWidth: 2,
-                          py: 4,
-                          borderRadius: 2,
-                          transition: "border-color 0.2s ease, background-color 0.2s ease",
-                          "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
-                        }}
+                        sx={{ borderStyle: "dashed", borderWidth: 2, py: 4, borderRadius: 2, transition: "border-color 0.2s ease, background-color 0.2s ease", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" } }}
                       >
                         <Stack alignItems="center" spacing={1}>
                           <CloudUploadOutlinedIcon fontSize="large" sx={{ color: "text.secondary" }} />
                           <Typography fontWeight={600}>Click to upload cover image</Typography>
-                          <Typography variant="caption" color="text.secondary" className="font-mono-ui">
-                            PNG, JPG, WEBP
-                          </Typography>
+                          <Typography variant="caption" color="text.secondary" className="font-mono-ui">PNG, JPG, WEBP</Typography>
                         </Stack>
                         <input ref={fileInputRef} hidden type="file" accept="image/*" onChange={handleFileChange} />
                       </Button>
@@ -224,54 +208,30 @@ const BlogEditor = () => {
 
               <Divider />
 
-              {/* Publish toggle */}
-              <Paper
-                variant="outlined"
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  transition: "border-color 0.2s ease",
-                  borderColor: isPublished ? "primary.main" : "divider",
-                }}
-              >
+              <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, transition: "border-color 0.2s ease", borderColor: isPublished ? "primary.main" : "divider" }}>
                 <FormControlLabel
                   control={<Switch checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />}
                   label={
                     <Box>
                       <Typography fontWeight={600}>Publish immediately</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Turn off to save as draft.
-                      </Typography>
+                      <Typography variant="body2" color="text.secondary">Turn off to save as draft.</Typography>
                     </Box>
                   }
                 />
               </Paper>
 
-              <motion.div whileTap={{ scale: createBlog.isPending ? 1 : 0.98 }}>
+              <motion.div whileTap={{ scale: mutation.isPending ? 1 : 0.98 }}>
                 <Button
                   type="submit"
                   variant="contained"
                   size="large"
                   fullWidth
                   disableElevation
-                  disabled={createBlog.isPending}
-                  startIcon={
-                    createBlog.isPending ? <CircularProgress size={18} color="inherit" /> : <PublishOutlinedIcon />
-                  }
-                  sx={{
-                    py: 1.5,
-                    borderRadius: 2,
-                    textTransform: "none",
-                    fontWeight: 700,
-                    fontSize: 16,
-                    transition: "transform 0.15s ease, box-shadow 0.15s ease",
-                    "&:hover": {
-                      transform: "translateY(-1px)",
-                      boxShadow: "0 8px 20px -8px var(--mui-palette-primary-main, #2DD4BF)",
-                    },
-                  }}
+                  disabled={mutation.isPending}
+                  startIcon={mutation.isPending ? <CircularProgress size={18} color="inherit" /> : <PublishOutlinedIcon />}
+                  sx={{ py: 1.5, borderRadius: 2, textTransform: "none", fontWeight: 700, fontSize: 16, transition: "transform 0.15s ease, box-shadow 0.15s ease", "&:hover": { transform: "translateY(-1px)", boxShadow: "0 8px 20px -8px var(--mui-palette-primary-main, #2DD4BF)" } }}
                 >
-                  {createBlog.isPending ? "Publishing..." : "Create Blog Post"}
+                  {mutation.isPending ? (isEditMode ? "Saving..." : "Publishing...") : (isEditMode ? "Save changes" : "Create Blog Post")}
                 </Button>
               </motion.div>
             </Stack>

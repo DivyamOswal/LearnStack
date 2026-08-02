@@ -1,7 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { ApiResponse } from '@/types/api.types';
-import { CreateCheckoutSessionPayload, CheckoutSessionResult } from './payment.types';
+import { CreateCheckoutSessionPayload, CheckoutSessionResult, PricingBreakdown, OrderStatusResult } from './payment.types';
+
+export const usePreviewPricing = () => {
+  return useMutation({
+    mutationFn: async (payload: CreateCheckoutSessionPayload) => {
+      const { data } = await axiosInstance.post<ApiResponse<PricingBreakdown>>('/payments/preview', payload);
+      return data.data;
+    },
+  });
+};
 
 export const useCreateCheckoutSession = () => {
   return useMutation({
@@ -9,10 +18,19 @@ export const useCreateCheckoutSession = () => {
       const { data } = await axiosInstance.post<ApiResponse<CheckoutSessionResult>>('/payments/checkout', payload);
       return data.data;
     },
-    onSuccess: (result) => {
-      // Redirect to Stripe's hosted checkout page LearnStack matches the backend's
-      // redirect-based flow rather than an embedded payment form.
-      window.location.href = result.checkoutUrl;
+    // No redirect here anymore — CheckoutPage controls the redirect explicitly,
+    // since we want the user to confirm the final price first.
+  });
+};
+
+export const useOrderStatus = (orderId: string, enabled: boolean) => {
+  return useQuery({
+    queryKey: ['payments', 'order-status', orderId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<ApiResponse<OrderStatusResult>>(`/payments/${orderId}/status`);
+      return data.data;
     },
+    enabled,
+    refetchInterval: (query) => (query.state.data?.status === 'PENDING' ? 1500 : false),
   });
 };
