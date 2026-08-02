@@ -72,9 +72,9 @@ export default function ChangePasswordForm() {
   if (changePassword.isSuccess) {
     return (
       <Paper sx={{ p: 4, borderRadius: 4 }}>
-        <Stack spacing={2} alignItems="center">
+        <Stack spacing={2} sx={{ alignItems: "center" }}>
           <CheckCircleOutlineOutlinedIcon color="success" sx={{ fontSize: 60 }} />
-          <Typography variant="h5" fontWeight={700}>Password Changed</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>Password Changed</Typography>
           <Alert severity="success" sx={{ width: "100%" }}>
             Your password was updated successfully. You'll be logged out in a moment for security.
           </Alert>
@@ -94,14 +94,16 @@ export default function ChangePasswordForm() {
       }}
       fullWidth
       required
-      InputProps={{
-        endAdornment:(
-          <InputAdornment position="end">
-            <IconButton onClick={()=>setShow(!show)} edge="end">
-              {show?<VisibilityOffOutlinedIcon/>:<VisibilityOutlinedIcon/>}
-            </IconButton>
-          </InputAdornment>
-        )
+      slotProps={{
+        input: {
+          endAdornment:(
+            <InputAdornment position="end">
+              <IconButton onClick={()=>setShow(!show)} edge="end">
+                {show?<VisibilityOffOutlinedIcon/>:<VisibilityOutlinedIcon/>}
+              </IconButton>
+            </InputAdornment>
+          )
+        }
       }}
     />
   );
@@ -120,7 +122,7 @@ export default function ChangePasswordForm() {
       }}
     >
       <Stack spacing={3}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box
             sx={{
               width: 52,
@@ -135,7 +137,7 @@ export default function ChangePasswordForm() {
             <LockOutlinedIcon />
           </Box>
           <Box>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Change Password
             </Typography>
             <Typography color="text.secondary">
@@ -162,11 +164,11 @@ export default function ChangePasswordForm() {
         {field("Confirm New Password",confirmPassword,setConfirmPassword,showConfirm,setShowConfirm)}
 
         <Box>
-          <Typography variant="body2" color="text.secondary" mb={1}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             Password Strength
           </Typography>
           <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: 10 }} />
-          <Stack mt={2} spacing={0.5}>
+          <Stack spacing={0.5} sx={{ mt: 2 }}>
             <Typography color={checks.length?"success.main":"text.secondary"}>✓ At least 8 characters</Typography>
             <Typography color={checks.upper?"success.main":"text.secondary"}>✓ One uppercase letter</Typography>
             <Typography color={checks.number?"success.main":"text.secondary"}>✓ One number</Typography>

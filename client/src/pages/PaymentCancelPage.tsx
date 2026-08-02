@@ -10,7 +10,7 @@ const PaymentCancelPage = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-24 text-center px-4">
       <CancelOutlinedIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
-      <Typography variant="h5" fontWeight={700}>Checkout cancelled</Typography>
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>Checkout cancelled</Typography>
       <Typography color="text.secondary" sx={{ maxWidth: 400 }}>
         No charge was made. You can try again anytime from the course page.
       </Typography>

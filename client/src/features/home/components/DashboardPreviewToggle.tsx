@@ -111,13 +111,13 @@ export default function DashboardPreviewToggle() {
       />
 
       <Stack spacing={3} sx={{ position: "relative" }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ minWidth: 0 }}>
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ minWidth: 0 }}>
+        <Stack direction="row" spacing={0} sx={{ justifyContent: "space-between", alignItems: "center", minWidth: 0 }}>
+          <Stack direction="row" spacing={2} sx={{ alignItems: "center", minWidth: 0 }}>
             <Avatar sx={{ width: 44, height: 44, borderRadius: 2, flexShrink: 0, ...iconBadgeSx }}>
               <RoleIcon />
             </Avatar>
             <Box sx={{ minWidth: 0 }}>
-              <Typography variant="h6" fontWeight={700} noWrap>
+              <Typography variant="h6" noWrap sx={{ fontWeight: 700 }}>
                 {current.title}
               </Typography>
               <Typography variant="body2" color="text.secondary" noWrap>
@@ -195,7 +195,7 @@ export default function DashboardPreviewToggle() {
             exit={{ opacity: 0, x: -20 }}
           >
             {/* Stat cards equal height, consistent internal layout regardless of value length */}
-            <Grid container spacing={2} alignItems="stretch">
+            <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
               {current.stats.map((s) => {
                 const Icon = s.icon;
                 return (
@@ -217,9 +217,8 @@ export default function DashboardPreviewToggle() {
                       <Box sx={{ mt: 1.5 }}>
                         <Typography
                           variant="h5"
-                          fontWeight={700}
                           noWrap
-                          sx={{ fontSize: { xs: "1.1rem", sm: "1.5rem" } }}
+                          sx={{ fontWeight: 700, fontSize: { xs: "1.1rem", sm: "1.5rem" } }}
                         >
                           {s.value}
                         </Typography>
@@ -234,7 +233,7 @@ export default function DashboardPreviewToggle() {
             </Grid>
 
             {/* Feature cards top-aligned so wrapped descriptions don't misalign icon/chevron */}
-            <Grid container spacing={2} mt={1} alignItems="stretch">
+            <Grid container spacing={2} sx={{ mt: 1, alignItems: "stretch" }}>
               {current.features.map((f) => {
                 const Icon = f.icon;
                 return (
@@ -244,7 +243,7 @@ export default function DashboardPreviewToggle() {
                       transition={{ duration: 0.2 }}
                       sx={{ p: 2.5, borderRadius: 3, width: "100%", ...glassPanel }}
                     >
-                      <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ minWidth: 0 }}>
+                      <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start", minWidth: 0 }}>
                         <Avatar
                           sx={{ width: 40, height: 40, borderRadius: 2, flexShrink: 0, ...iconBadgeSx }}
                         >
@@ -252,10 +251,10 @@ export default function DashboardPreviewToggle() {
                         </Avatar>
 
                         <Box sx={{ flex: 1, minWidth: 0 }}>
-                          <Typography fontWeight={700} noWrap>
+                          <Typography noWrap sx={{ fontWeight: 700 }}>
                             {f.title}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary" mt={0.5}>
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                             {f.desc}
                           </Typography>
                         </Box>

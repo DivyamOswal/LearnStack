@@ -70,7 +70,11 @@ const CheckoutPage = () => {
             onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
             size="small"
             fullWidth
-            InputProps={{ startAdornment: <LocalOfferOutlinedIcon sx={{ fontSize: 18, mr: 1, color: 'text.secondary' }} /> }}
+            slotProps={{
+              input: {
+                startAdornment: <LocalOfferOutlinedIcon sx={{ fontSize: 18, mr: 1, color: 'text.secondary' }} />,
+              },
+            }}
           />
           <AnimatePresence>
             {previewPricing.isError && (
@@ -145,7 +149,7 @@ const CheckoutPage = () => {
           </Button>
         </motion.div>
 
-        <Typography variant="caption" color="text.secondary" textAlign="center">
+        <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
           Payments are processed securely by Stripe.
         </Typography>
       </div>

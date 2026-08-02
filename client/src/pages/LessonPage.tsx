@@ -63,7 +63,12 @@ const LessonPage = () => {
       )}
 
       {isMobile && (
-        <Drawer anchor="left" open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} PaperProps={{ sx: { width: 280 } }}>
+        <Drawer
+          anchor="left"
+          open={mobileNavOpen}
+          onClose={() => setMobileNavOpen(false)}
+          slotProps={{ paper: { sx: { width: 280 } } }}
+        >
           {sidebarContent}
         </Drawer>
       )}

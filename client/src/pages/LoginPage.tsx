@@ -77,7 +77,7 @@ const LoginPage = () => {
               "Real-time assessments",
               "Certificates & progress tracking",
             ].map((item) => (
-              <Stack key={item} direction="row" spacing={2} alignItems="center">
+              <Stack key={item} direction="row" spacing={2} sx={{ alignItems: "center" }}>
                 <CheckCircleRoundedIcon color="success" />
                 <Typography>{item}</Typography>
               </Stack>

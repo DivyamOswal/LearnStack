@@ -106,7 +106,7 @@ export default function TerminalHero() {
         </Box>
 
         <Box sx={{ p: 3, minHeight: 170 }}>
-          <Box display="flex" alignItems="center">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography
               sx={{
                 fontFamily: "monospace",

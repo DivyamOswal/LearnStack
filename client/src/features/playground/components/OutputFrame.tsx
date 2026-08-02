@@ -96,9 +96,9 @@ const OutputFrame = ({
 
       <Stack
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
         sx={{
+          justifyContent: "space-between",
+          alignItems: "center",
           px: 2,
           py: 1,
           borderBottom: 1,
@@ -108,11 +108,11 @@ const OutputFrame = ({
         <Stack
           direction="row"
           spacing={2}
-          alignItems="center"
+          sx={{ alignItems: "center" }}
         >
           <Typography
-            fontWeight={700}
             variant="subtitle2"
+            sx={{ fontWeight: 700 }}
           >
             Live Preview
           </Typography>
@@ -197,8 +197,8 @@ const OutputFrame = ({
             <CircularProgress />
 
             <Typography
-              mt={2}
               color="text.secondary"
+              sx={{ mt: 2 }}
             >
               Building Preview...
             </Typography>
@@ -235,9 +235,9 @@ const OutputFrame = ({
 
           <Stack
             direction="row"
-            alignItems="center"
             spacing={1}
             sx={{
+              alignItems: "center",
               px: 2,
               py: 1,
               bgcolor: "#ECEFF3",
@@ -311,9 +311,9 @@ const OutputFrame = ({
 
       <Stack
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
         sx={{
+          justifyContent: "space-between",
+          alignItems: "center",
           px: 2,
           py: .75,
           borderTop: 1,
@@ -353,7 +353,7 @@ const OutputFrame = ({
           <Typography
             variant="caption"
             color="success.main"
-            fontWeight={700}
+            sx={{ fontWeight: 700 }}
           >
             ● Running
           </Typography>

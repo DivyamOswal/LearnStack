@@ -41,7 +41,7 @@ const ProfileForm = ({ profile }: { profile: UserProfile }) => {
         rows={3}
         fullWidth
         helperText={`${bio.length}/500`}
-        inputProps={{ maxLength: 500 }}
+        slotProps={{ htmlInput: { maxLength: 500 } }}
       />
 
       <div>
