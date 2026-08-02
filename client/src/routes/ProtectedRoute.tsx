@@ -9,14 +9,20 @@ const ProtectedRoute = () => {
 
   if (isInitializing) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   if (!isAuthenticated) {
-    // preserve the page they were trying to reach, so login can redirect back after success
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
 
