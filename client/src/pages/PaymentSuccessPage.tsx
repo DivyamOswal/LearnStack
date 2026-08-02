@@ -40,14 +40,14 @@ const PaymentSuccessPage = () => {
       ) : data?.status === 'COMPLETED' ? (
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-3">
           <Typography variant="h4" sx={{ fontSize: '2rem' }}>✓</Typography>
-          <Typography variant="h5" fontWeight={700}>Payment successful</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>Payment successful</Typography>
           <Typography color="text.secondary">
             You're enrolled in <strong>{data.courseTitle}</strong>. Redirecting to My Courses...
           </Typography>
         </motion.div>
       ) : (
         <>
-          <Typography variant="h5" fontWeight={700} color="error.main">Payment not confirmed</Typography>
+          <Typography variant="h5" color="error.main" sx={{ fontWeight: 700 }}>Payment not confirmed</Typography>
           <Typography color="text.secondary">Something went wrong. Please contact support with your order ID: {orderId}</Typography>
           <Button component={RouterLink} to={ROUTES.DASHBOARD} variant="outlined">
             Go to dashboard
