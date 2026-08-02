@@ -100,12 +100,14 @@ const AdminCouponsPage = () => {
             fullWidth
             required
             className="font-mono-ui"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LocalOfferOutlinedIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LocalOfferOutlinedIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
@@ -116,13 +118,15 @@ const AdminCouponsPage = () => {
             size="small"
             fullWidth
             required
-            inputProps={{ min: 1, max: 100 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PercentIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              htmlInput: { min: 1, max: 100 },
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PercentIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         </div>
@@ -135,7 +139,7 @@ const AdminCouponsPage = () => {
             onChange={(e) => setMaxUses(e.target.value)}
             size="small"
             fullWidth
-            inputProps={{ min: 1 }}
+            slotProps={{ htmlInput: { min: 1 } }}
           />
           <TextField
             label="Expires on (optional)"
@@ -144,13 +148,15 @@ const AdminCouponsPage = () => {
             onChange={(e) => setExpiresAt(e.target.value)}
             size="small"
             fullWidth
-            InputLabelProps={{ shrink: true }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EventOutlinedIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              inputLabel: { shrink: true },
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EventOutlinedIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         </div>

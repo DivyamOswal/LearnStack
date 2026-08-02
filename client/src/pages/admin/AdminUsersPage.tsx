@@ -83,12 +83,14 @@ const AdminUsersPage = () => {
           }}
           size="small"
           fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            },
           }}
           sx={{ maxWidth: { sm: 360 } }}
         />
