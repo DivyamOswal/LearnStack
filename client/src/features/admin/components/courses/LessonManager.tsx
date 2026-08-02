@@ -32,7 +32,7 @@ import {
 import {
   AdminChapter,
   LessonType,
-} from "../../courses/adminCourse.type";
+} from "../../courses/adminCourse.types";
 
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 

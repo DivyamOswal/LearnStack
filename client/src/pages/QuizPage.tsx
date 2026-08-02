@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CircularProgress, Typography, Button } from '@mui/material';
+import { CircularProgress, Button } from '@mui/material';
 import { useQuizForAttempt, useSubmitQuizAttempt, useQuizLeaderboard } from '@/features/quizzes/quizzesApi';
 import QuizAttempt from '@/features/quizzes/components/QuizAttempt';
 import QuizResult from '@/features/quizzes/components/QuizResult';
