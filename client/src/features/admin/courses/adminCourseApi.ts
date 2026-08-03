@@ -1,7 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { ApiResponse, PaginatedResponse } from '@/types/api.types';
-import { AdminCourseListItem, CreateCourseInput, AdminCourseDetail, AdminChapter, Category } from './adminCourse.types';
+import {
+  AdminCourseListItem,
+  CreateCourseInput,
+  AdminCourseDetail,
+  AdminChapter,
+  Category,
+  CreateLessonInput,
+  AdminLesson,
+} from './adminCourse.types';
 
 export const useAdminCourseList = (page: number) => {
   return useQuery({
@@ -42,9 +50,8 @@ export const useCreateCourse = () => {
       });
       if (thumbnailFile) formData.append('thumbnail', thumbnailFile);
 
-      // No manual headers object axios detects FormData and sets
+      // No manual headers object — axios detects FormData and sets
       // Content-Type: multipart/form-data with the correct boundary itself.
-      // Setting it manually (as before) breaks Multer's parsing entirely.
       const { data } = await axiosInstance.post<ApiResponse<AdminCourseDetail>>('/courses', formData);
       return data.data;
     },
@@ -133,13 +140,12 @@ export const useCreateLesson = () => {
       if (videoFile) formData.append('video', videoFile);
       if (pdfFile) formData.append('pdf', pdfFile);
 
-      const { data } = await axiosInstance.post<ApiResponse<AdminLesson>>('/lessons', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // No manual headers object — same fix as useCreateCourse above.
+      const { data } = await axiosInstance.post<ApiResponse<AdminLesson>>('/lessons', formData);
       return data.data;
     },
-    onSuccess: (_, variables) => {
-      // Invalidate the chapter list for the course this lesson's chapter belongs to 
+    onSuccess: () => {
+      // Invalidate the chapter list for the course this lesson's chapter belongs to —
       // we don't have courseId here directly, so the caller passes chapterId's parent
       // course invalidation explicitly (handled by the component below).
       queryClient.invalidateQueries({ queryKey: ['admin', 'chapters'] });
