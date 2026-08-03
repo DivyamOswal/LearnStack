@@ -97,7 +97,7 @@ const RegisterPage = () => {
                 key={item}
                 direction="row"
                 spacing={2}
-                alignItems="center"
+                sx={{ alignItems: "center" }}
               >
                 <CheckCircleRoundedIcon color="success" />
                 <Typography>{item}</Typography>

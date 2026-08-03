@@ -70,12 +70,14 @@ export default function PlaygroundPage() {
             md: "row",
           }}
           spacing={2}
-          justifyContent="space-between"
-          alignItems={{
-            xs: "flex-start",
-            md: "center",
+          sx={{
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: {
+              xs: "flex-start",
+              md: "center",
+            },
           }}
-          sx={{ width: "100%" }}
         >
           {/* Left */}
 
@@ -87,7 +89,7 @@ export default function PlaygroundPage() {
           >
             <Typography
               variant="h4"
-              fontWeight={700}
+              sx={{ fontWeight: 700 }}
             >
               LearnStack Playground
             </Typography>
@@ -104,7 +106,7 @@ export default function PlaygroundPage() {
             <Stack
               direction="row"
               spacing={1}
-              mt={1.5}
+              sx={{ mt: 1.5 }}
             >
               <Chip
                 size="small"
@@ -275,7 +277,7 @@ export default function PlaygroundPage() {
       >
         <Stack
           direction="row"
-          justifyContent="space-between"
+          sx={{ justifyContent: "space-between" }}
         >
           <Typography variant="caption">
             HTML • UTF-8 • Auto Save

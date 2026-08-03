@@ -123,7 +123,7 @@ const LessonManager = ({ chapter }: { chapter: AdminChapter }) => {
             <PlayCircleOutlinedIcon
               sx={{ fontSize: 48, color: "text.secondary" }}
             />
-            <Typography mt={2} fontWeight={700}>
+            <Typography sx={{ mt: 2, fontWeight: 700 }}>
               No lessons yet
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -144,13 +144,13 @@ const LessonManager = ({ chapter }: { chapter: AdminChapter }) => {
             }}
           >
             <CardContent>
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                 <Avatar sx={{ bgcolor: "primary.main" }}>
                   {lessonIcon(lesson.type)}
                 </Avatar>
 
-                <Box flex={1}>
-                  <Typography fontWeight={700}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography sx={{ fontWeight: 700 }}>
                     {lesson.title}
                   </Typography>
 
@@ -165,7 +165,7 @@ const LessonManager = ({ chapter }: { chapter: AdminChapter }) => {
                 <Chip
                   size="small"
                   variant="outlined"
-                  color={chipColor(lesson.type)}
+                  color={chipColor(lesson.type as LessonType)}
                   label={lesson.type.replace("_", " ")}
                 />
 
@@ -206,7 +206,7 @@ const LessonManager = ({ chapter }: { chapter: AdminChapter }) => {
               }}
             >
               <Stack spacing={2}>
-                <Typography fontWeight={700}>
+                <Typography sx={{ fontWeight: 700 }}>
                   New Lesson
                 </Typography>
 
@@ -288,11 +288,11 @@ const LessonManager = ({ chapter }: { chapter: AdminChapter }) => {
                     }}
                   >
                     <Stack
-                      alignItems="center"
                       spacing={1}
+                      sx={{ alignItems: "center" }}
                     >
                       <CloudUploadOutlinedIcon />
-                      <Typography fontWeight={600}>
+                      <Typography sx={{ fontWeight: 600 }}>
                         {videoFile
                           ? videoFile.name
                           : "Upload Lesson Video"}

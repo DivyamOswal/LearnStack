@@ -128,7 +128,7 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
           <Box>
             <Typography
               variant="h5"
-              fontWeight={700}
+              sx={{ fontWeight: 700 }}
             >
               Create New Course
             </Typography>
@@ -159,8 +159,8 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
               {/* Basic Information */}
 
               <Typography
-                fontWeight={700}
                 color="primary"
+                sx={{ fontWeight: 700 }}
               >
                 Basic Information
               </Typography>
@@ -195,11 +195,13 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
               {/* Pricing */}
 
               <Typography
-                fontWeight={700}
                 color="primary"
-                display="flex"
-                alignItems="center"
-                gap={1}
+                sx={{
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
               >
                 <SellOutlinedIcon fontSize="small" />
                 Pricing
@@ -218,9 +220,11 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
                   onChange={(e) =>
                     setPrice(e.target.value)
                   }
-                  inputProps={{
-                    min: 0,
-                    step: "0.01",
+                  slotProps={{
+                    htmlInput: {
+                      min: 0,
+                      step: "0.01",
+                    },
                   }}
                 />
 
@@ -232,9 +236,11 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
                   onChange={(e) =>
                     setDiscountPrice(e.target.value)
                   }
-                  inputProps={{
-                    min: 0,
-                    step: "0.01",
+                  slotProps={{
+                    htmlInput: {
+                      min: 0,
+                      step: "0.01",
+                    },
                   }}
                 />
               </Stack>
@@ -244,11 +250,13 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
               {/* Category */}
 
               <Typography
-                fontWeight={700}
                 color="primary"
-                display="flex"
-                alignItems="center"
-                gap={1}
+                sx={{
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
               >
                 <CategoryOutlinedIcon fontSize="small" />
                 Category
@@ -283,8 +291,8 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
               {/* Thumbnail */}
 
               <Typography
-                fontWeight={700}
                 color="primary"
+                sx={{ fontWeight: 700 }}
               >
                 Course Thumbnail
               </Typography>
@@ -338,14 +346,14 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
                 >
                   <Stack
                     spacing={1}
-                    alignItems="center"
+                    sx={{ alignItems: "center" }}
                   >
                     <CloudUploadOutlinedIcon
                       fontSize="large"
                     />
 
                     <Typography
-                      fontWeight={600}
+                      sx={{ fontWeight: 600 }}
                     >
                       Upload Course Thumbnail
                     </Typography>
@@ -395,7 +403,7 @@ const CourseForm = ({ onSuccess }: CourseFormProps) => {
                   label={
                     <Box>
                       <Typography
-                        fontWeight={600}
+                        sx={{ fontWeight: 600 }}
                       >
                         Publish immediately
                       </Typography>

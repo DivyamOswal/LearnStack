@@ -123,7 +123,7 @@ const BlogCard = ({ blog }: Props) => {
                 gap: 1,
               }}
             >
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center", minWidth: 0 }}>
                 <Avatar
                   src={blog.author?.avatarUrl ?? undefined}
                   sx={{ width: 24, height: 24, bgcolor: "primary.main", fontSize: "0.7rem", fontWeight: 700 }}
