@@ -32,7 +32,7 @@ const VerifyEmailStatus = () => {
 
   if (verifyEmail.isPending || verifyEmail.isIdle) {
     return (
-      <Stack spacing={2} alignItems="center" textAlign="center">
+      <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
         <CircularProgress size={32} />
         <Typography color="text.secondary">Verifying your email...</Typography>
       </Stack>
@@ -41,9 +41,9 @@ const VerifyEmailStatus = () => {
 
   if (verifyEmail.isError) {
     return (
-      <Stack spacing={2} alignItems="center" textAlign="center">
+      <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
         <CancelOutlinedIcon sx={{ fontSize: 48, color: 'error.main' }} />
-        <Typography variant="h5" fontWeight={700}>Verification failed</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>Verification failed</Typography>
         <Typography color="text.secondary">
           {(verifyEmail.error as any)?.response?.data?.message ?? 'This link may be invalid or expired.'}
         </Typography>
@@ -55,9 +55,9 @@ const VerifyEmailStatus = () => {
   }
 
   return (
-    <Stack spacing={2} alignItems="center" textAlign="center">
+    <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
       <CheckCircleOutlinedIcon sx={{ fontSize: 48, color: 'primary.main' }} />
-      <Typography variant="h5" fontWeight={700}>Email verified</Typography>
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>Email verified</Typography>
       <Typography color="text.secondary">{verifyEmail.data}</Typography>
       <Button component={RouterLink} to={ROUTES.LOGIN} variant="contained" disableElevation>
         Log in now

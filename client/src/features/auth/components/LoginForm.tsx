@@ -22,7 +22,7 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 import { ROUTES } from "@/routes/routePaths";
 import { useLogin, useGoogleLogin } from "../authApi";
@@ -41,7 +41,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 14,
@@ -125,7 +125,7 @@ const LoginForm = () => {
       <motion.form onSubmit={handleSubmit} noValidate>
         <Stack spacing={2.25}>
           <motion.div variants={itemVariants}>
-            <Stack direction="row" spacing={1.5} alignItems="center">
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
               <Avatar
                 sx={{
                   width: 44,
@@ -258,10 +258,9 @@ const LoginForm = () => {
           <motion.div variants={itemVariants}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
             >
-              <Stack direction="row" spacing={0.5} alignItems="center">
+              <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
                 <Checkbox
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
@@ -285,8 +284,7 @@ const LoginForm = () => {
                 component={RouterLink}
                 to={ROUTES.FORGOT_PASSWORD}
                 underline="hover"
-                fontWeight={600}
-                sx={{ fontSize: 13 }}
+                sx={{ fontSize: 13, fontWeight: 600 }}
               >
                 Forgot password?
               </Link>
@@ -385,7 +383,7 @@ const LoginForm = () => {
             <Stack spacing={0.25}>
               <Typography align="center" variant="body2" color="text.secondary" sx={{ fontSize: 13 }}>
                 Don't have an account?{" "}
-                <Link component={RouterLink} to={ROUTES.REGISTER} fontWeight={700}>
+                <Link component={RouterLink} to={ROUTES.REGISTER} sx={{ fontWeight: 700 }}>
                   Create one
                 </Link>
               </Typography>

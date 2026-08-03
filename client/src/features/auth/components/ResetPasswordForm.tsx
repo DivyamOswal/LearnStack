@@ -41,9 +41,9 @@ const ResetPasswordForm = () => {
 
   if (mutation.isSuccess) {
     return (
-      <Stack spacing={2} textAlign="center">
+      <Stack spacing={2} sx={{ textAlign: 'center' }}>
         <Typography className="font-mono-ui" color="primary.main" sx={{ fontSize: '2rem' }}>✓</Typography>
-        <Typography variant="h5" fontWeight={700}>Password reset</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>Password reset</Typography>
         <Typography color="text.secondary">Redirecting you to log in...</Typography>
       </Stack>
     );
@@ -52,7 +52,7 @@ const ResetPasswordForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={2}>
-        <Typography variant="h5" fontWeight={700}>Set a new password</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>Set a new password</Typography>
 
         {mutation.isError && (
           <Alert severity="error">

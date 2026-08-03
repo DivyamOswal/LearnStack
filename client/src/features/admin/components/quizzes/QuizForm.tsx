@@ -97,7 +97,7 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
           position: "relative",
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box
             sx={{
               display: "flex",
@@ -115,8 +115,8 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
             <QuizOutlinedIcon sx={{ fontSize: 26, color: "primary.main" }} />
           </Box>
 
-          <Box flex={1}>
-            <Typography variant="h5" fontWeight={700}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Create Quiz
             </Typography>
 
@@ -156,7 +156,7 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
 
               {/* Title */}
               <Box>
-                <Typography fontWeight={700} mb={1}>
+                <Typography sx={{ fontWeight: 700, mb: 1 }}>
                   Quiz Information
                 </Typography>
 
@@ -174,7 +174,7 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
               <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
 
               {/* Configuration */}
-              <Typography fontWeight={700}>Quiz Configuration</Typography>
+              <Typography sx={{ fontWeight: 700 }}>Quiz Configuration</Typography>
 
               <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
                 <TextField
@@ -184,12 +184,14 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
                   placeholder="Optional"
                   value={timeLimitMins}
                   onChange={(e) => setTimeLimitMins(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <TimerOutlinedIcon
-                        sx={{ mr: 1, color: "text.secondary" }}
-                      />
-                    ),
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <TimerOutlinedIcon
+                          sx={{ mr: 1, color: "text.secondary" }}
+                        />
+                      ),
+                    },
                   }}
                 />
 
@@ -199,12 +201,14 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
                   label="Passing Score (%)"
                   value={passingScore}
                   onChange={(e) => setPassingScore(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <EmojiEventsOutlinedIcon
-                        sx={{ mr: 1, color: "text.secondary" }}
-                      />
-                    ),
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <EmojiEventsOutlinedIcon
+                          sx={{ mr: 1, color: "text.secondary" }}
+                        />
+                      ),
+                    },
                   }}
                 />
               </Stack>
@@ -234,7 +238,7 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
                   }
                   label={
                     <Box>
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <GppGoodOutlinedIcon
                           fontSize="small"
                           sx={{
@@ -244,7 +248,7 @@ const QuizForm = ({ courseId, onSuccess }: QuizFormProps) => {
                           }}
                         />
 
-                        <Typography fontWeight={600}>
+                        <Typography sx={{ fontWeight: 600 }}>
                           Enable Negative Marking
                         </Typography>
                       </Stack>

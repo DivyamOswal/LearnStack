@@ -16,12 +16,14 @@ const CourseFilters = ({ search, onSearchChange }: CourseFiltersProps) => {
         size="small"
         fullWidth
         className="font-mono-ui"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          },
         }}
         sx={{
           maxWidth: { sm: 360 },

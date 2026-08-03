@@ -22,7 +22,7 @@ import {
 
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 import { ROUTES } from "@/routes/routePaths";
 import { useRegister } from "../authApi";
@@ -41,7 +41,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 14,
@@ -152,10 +152,10 @@ const RegisterForm = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Stack spacing={3} alignItems="center">
+          <Stack spacing={3} sx={{ alignItems: "center" }}>
             <CheckmarkBurst />
 
-            <Typography variant="h5" fontWeight={800}>
+            <Typography variant="h5" sx={{ fontWeight: 800 }}>
               Verify your email
             </Typography>
 
@@ -176,7 +176,7 @@ const RegisterForm = () => {
               component={RouterLink}
               to={ROUTES.LOGIN}
               underline="hover"
-              fontWeight={700}
+              sx={{ fontWeight: 700 }}
             >
               Back to Sign In
             </Link>
@@ -210,7 +210,7 @@ const RegisterForm = () => {
       <motion.form onSubmit={handleSubmit} noValidate>
         <Stack spacing={2.25}>
           <motion.div variants={itemVariants}>
-            <Stack direction="row" spacing={1.5} alignItems="center">
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
               <Avatar
                 sx={{
                   width: 44,
@@ -502,7 +502,7 @@ const RegisterForm = () => {
               <Link
                 component={RouterLink}
                 to={ROUTES.LOGIN}
-                fontWeight={700}
+                sx={{ fontWeight: 700 }}
               >
                 Sign In
               </Link>

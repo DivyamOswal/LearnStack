@@ -82,7 +82,7 @@ const QuestionBuilder = ({ quizId, nextOrder, onDone }: QuestionBuilderProps) =>
       />
 
       <Box sx={{ p: 2.5, borderBottom: '1px solid rgba(255,255,255,0.08)', position: 'relative' }}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Box
             sx={{
               display: 'flex',
@@ -98,8 +98,8 @@ const QuestionBuilder = ({ quizId, nextOrder, onDone }: QuestionBuilderProps) =>
           >
             <QuizOutlinedIcon sx={{ fontSize: 22, color: 'primary.main' }} />
           </Box>
-          <Box flex={1}>
-            <Typography variant="h6" fontWeight={700}>Create Question</Typography>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>Create Question</Typography>
             <Typography variant="body2" color="text.secondary">Configure question, answers and scoring.</Typography>
           </Box>
           <Chip
@@ -142,7 +142,7 @@ const QuestionBuilder = ({ quizId, nextOrder, onDone }: QuestionBuilderProps) =>
           </Stack>
 
           <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
-          <Typography fontWeight={700}>Answer Options</Typography>
+          <Typography sx={{ fontWeight: 700 }}>Answer Options</Typography>
           <Typography variant="body2" color="text.secondary">
             {isMultiAnswer?'Select all correct answers.':'Select one correct answer.'}
           </Typography>
@@ -160,7 +160,7 @@ const QuestionBuilder = ({ quizId, nextOrder, onDone }: QuestionBuilderProps) =>
                 transition: 'all 0.2s ease',
               }}
             >
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                 {isMultiAnswer?
                   <Checkbox checked={a.isCorrect} onChange={()=>handleCorrectToggle(i)}/>:
                   <Radio checked={a.isCorrect} onChange={()=>handleCorrectToggle(i)}/>}
