@@ -87,7 +87,10 @@ const PopularCoursesChart = ({ data }: { data: PopularCourse[] }) => {
           data={chartData}
           layout="vertical"
           margin={{ top: 0, right: 28, left: 0, bottom: 0 }}
-          onMouseMove={(state) => setHoverIndex(state?.activeTooltipIndex ?? null)}
+          onMouseMove={(state) => {
+            const index = state?.activeTooltipIndex;
+            setHoverIndex(index === undefined || index === null ? null : Number(index));
+          }}
           onMouseLeave={() => setHoverIndex(null)}
         >
           <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} horizontal={false} />
