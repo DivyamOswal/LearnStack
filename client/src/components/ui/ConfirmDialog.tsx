@@ -13,7 +13,6 @@ import { TransitionProps } from '@mui/material/transitions';
 import { motion } from 'framer-motion';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-
 interface ConfirmDialogProps {
   open: boolean;
   title: string;
@@ -24,8 +23,7 @@ interface ConfirmDialogProps {
   isDestructive?: boolean;
   isLoading?: boolean;
 }
-
-// Custom transition: MUI's Dialog accepts a TransitionComponent -swapping in
+// Custom transition: MUI's Dialog accepts a slots.transition override -swapping in
 // Framer Motion here gives a spring-based scale+fade instead of MUI's default
 // linear fade, matching the motion language used across the rest of the app.
 const SpringTransition = forwardRef(function SpringTransition(
@@ -45,7 +43,6 @@ const SpringTransition = forwardRef(function SpringTransition(
     </motion.div>
   );
 });
-
 const ConfirmDialog = ({
   open,
   title,
@@ -62,7 +59,7 @@ const ConfirmDialog = ({
       onClose={isLoading ? undefined : onCancel}
       maxWidth="xs"
       fullWidth
-      TransitionComponent={SpringTransition}
+      slots={{ transition: SpringTransition }}
       slotProps={{
         backdrop: { sx: { backdropFilter: 'blur(2px)', backgroundColor: 'rgba(0,0,0,0.55)' } },
       }}
@@ -101,11 +98,9 @@ const ConfirmDialog = ({
         </Box>
         {title}
       </DialogTitle>
-
       <DialogContent>
         <DialogContentText>{description}</DialogContentText>
       </DialogContent>
-
       <DialogActions sx={{ px: 3, pb: 2.5 }}>
         <Button onClick={onCancel} disabled={isLoading}>
           Cancel
@@ -127,5 +122,4 @@ const ConfirmDialog = ({
     </Dialog>
   );
 };
-
 export default ConfirmDialog;
