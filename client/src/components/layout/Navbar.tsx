@@ -165,7 +165,7 @@ const Navbar = () => {
           )}
 
           {/* Right side: search, notifications, theme toggle, auth state */}
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
             <SearchBar />
             {isAuthenticated && <NotificationBell />}
 
@@ -245,7 +245,12 @@ const Navbar = () => {
       </AppBar>
 
       {/* Mobile drawer -staggered link entrance */}
-      <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)} PaperProps={{ sx: { width: 280 } }}>
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        slotProps={{ paper: { sx: { width: 280 } } }}
+      >
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <IconButton onClick={() => setMobileOpen(false)} aria-label="Close menu">
             <CloseIcon />
