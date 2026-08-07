@@ -98,7 +98,7 @@ const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
       sx={{ maxWidth: 900, mx: "auto", borderRadius: 2, border: "1px solid", borderColor: "divider", overflow: "hidden" }}
     >
       <Box sx={{ p: 3, bgcolor: "action.hover", borderBottom: "1px solid", borderColor: "divider" }}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box
             sx={{
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -112,7 +112,7 @@ const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
             <Typography variant="overline" color="primary.main" className="font-mono-ui" sx={{ lineHeight: 1 }}>
               {isEditMode ? "$ blog --edit" : "$ blog --new"}
             </Typography>
-            <Typography variant="h6" fontWeight={700}>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
               {isEditMode ? "Edit post" : "Write a new post"}
             </Typography>
           </Box>
@@ -166,7 +166,16 @@ const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
               />
 
               <Box>
-                <Typography fontWeight={600} mb={1} display="flex" alignItems="center" gap={1} fontSize="0.95rem">
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    mb: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    fontSize: "0.95rem",
+                  }}
+                >
                   <ImageOutlinedIcon fontSize="small" />
                   Cover Image
                 </Typography>
@@ -194,9 +203,9 @@ const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
                         variant="outlined"
                         sx={{ borderStyle: "dashed", borderWidth: 2, py: 4, borderRadius: 2, transition: "border-color 0.2s ease, background-color 0.2s ease", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" } }}
                       >
-                        <Stack alignItems="center" spacing={1}>
+                        <Stack spacing={1} sx={{ alignItems: "center" }}>
                           <CloudUploadOutlinedIcon fontSize="large" sx={{ color: "text.secondary" }} />
-                          <Typography fontWeight={600}>Click to upload cover image</Typography>
+                          <Typography sx={{ fontWeight: 600 }}>Click to upload cover image</Typography>
                           <Typography variant="caption" color="text.secondary" className="font-mono-ui">PNG, JPG, WEBP</Typography>
                         </Stack>
                         <input ref={fileInputRef} hidden type="file" accept="image/*" onChange={handleFileChange} />
@@ -213,7 +222,7 @@ const BlogEditor = ({ existingPost, onSaved }: BlogEditorProps) => {
                   control={<Switch checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />}
                   label={
                     <Box>
-                      <Typography fontWeight={600}>Publish immediately</Typography>
+                      <Typography sx={{ fontWeight: 600 }}>Publish immediately</Typography>
                       <Typography variant="body2" color="text.secondary">Turn off to save as draft.</Typography>
                     </Box>
                   }

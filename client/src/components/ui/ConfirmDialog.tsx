@@ -25,7 +25,7 @@ interface ConfirmDialogProps {
   isLoading?: boolean;
 }
 
-// Custom transition: MUI's Dialog accepts a TransitionComponent -swapping in
+// Custom transition: MUI's Dialog accepts a slots.transition override -swapping in
 // Framer Motion here gives a spring-based scale+fade instead of MUI's default
 // linear fade, matching the motion language used across the rest of the app.
 const SpringTransition = forwardRef(function SpringTransition(
@@ -62,7 +62,7 @@ const ConfirmDialog = ({
       onClose={isLoading ? undefined : onCancel}
       maxWidth="xs"
       fullWidth
-      TransitionComponent={SpringTransition}
+      slots={{ transition: SpringTransition }}
       slotProps={{
         backdrop: { sx: { backdropFilter: 'blur(2px)', backgroundColor: 'rgba(0,0,0,0.55)' } },
       }}

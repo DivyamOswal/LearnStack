@@ -16,6 +16,7 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ROUTES } from '@/routes/routePaths';
 import { useCourseList } from '@/features/courses/coursesApi';
+import { useAppSelector } from '@/app/hooks';
 import CourseCard from '@/features/courses/components/CourseCard';
 import TerminalHero from '@/features/home/components/TerminalHero';
 import RevealSection from '@/features/home/components/RevealSection';
@@ -102,6 +103,7 @@ const faqs = [
 
 const HomePage = () => {
   const [expandedFaq, setExpandedFaq] = useState<string | false>(false);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   // Real, live count not a fabricated marketing number. limit:1 keeps the
   // request cheap since we only need the `total` field from the response.
@@ -461,29 +463,58 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA only shown to logged-out visitors; logged-in users get a
+          continue-learning prompt pointing at their own dashboard instead */}
       <section className="border-t" style={{ borderColor: 'inherit' }}>
         <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 md:px-8 md:py-20 text-center flex flex-col items-center gap-6">
-          <RevealSection>
-            <Typography variant="h3" sx={{ fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
-              Ready to start?
-            </Typography>
-          </RevealSection>
-          <RevealSection delay={0.1}>
-            <Button
-              component={RouterLink}
-              to={ROUTES.REGISTER}
-              variant="contained"
-              disableElevation
-              size="large"
-              sx={{
-                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 24px -8px var(--mui-palette-primary-main, #2DD4BF)' },
-              }}
-            >
-              Create your free account
-            </Button>
-          </RevealSection>
+          {isAuthenticated ? (
+            <>
+              <RevealSection>
+                <Typography variant="h3" sx={{ fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+                  Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}.
+                </Typography>
+              </RevealSection>
+              <RevealSection delay={0.1}>
+                <Button
+                  component={RouterLink}
+                  to={user?.role === 'ADMIN' ? ROUTES.ADMIN.OVERVIEW : ROUTES.DASHBOARD}
+                  variant="contained"
+                  disableElevation
+                  size="large"
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{
+                    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                    '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 24px -8px var(--mui-palette-primary-main, #2DD4BF)' },
+                  }}
+                >
+                  Go to your dashboard
+                </Button>
+              </RevealSection>
+            </>
+          ) : (
+            <>
+              <RevealSection>
+                <Typography variant="h3" sx={{ fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
+                  Ready to start?
+                </Typography>
+              </RevealSection>
+              <RevealSection delay={0.1}>
+                <Button
+                  component={RouterLink}
+                  to={ROUTES.REGISTER}
+                  variant="contained"
+                  disableElevation
+                  size="large"
+                  sx={{
+                    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                    '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 24px -8px var(--mui-palette-primary-main, #2DD4BF)' },
+                  }}
+                >
+                  Create your free account
+                </Button>
+              </RevealSection>
+            </>
+          )}
         </div>
       </section>
     </div>

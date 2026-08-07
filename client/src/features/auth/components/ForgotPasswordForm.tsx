@@ -49,9 +49,9 @@ const ForgotPasswordForm = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
-          <Stack spacing={2} alignItems="center" textAlign="center">
+          <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
             <CheckmarkIcon />
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Check your inbox
             </Typography>
             <Typography color="text.secondary">
@@ -73,7 +73,7 @@ const ForgotPasswordForm = () => {
           transition={{ duration: 0.25 }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Reset your password
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -114,7 +114,7 @@ const ForgotPasswordForm = () => {
               </Button>
             </motion.div>
 
-            <Typography variant="body2" textAlign="center">
+            <Typography variant="body2" sx={{ textAlign: 'center' }}>
               Remembered it?{' '}
               <Link component={RouterLink} to={ROUTES.LOGIN}>
                 Log in

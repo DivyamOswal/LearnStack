@@ -93,7 +93,7 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
           position: "relative",
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           <Box
             sx={{
               display: "flex",
@@ -110,8 +110,8 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
             <MenuBookOutlinedIcon sx={{ color: "primary.main" }} />
           </Box>
 
-          <Box flex={1}>
-            <Typography variant="h6" fontWeight={700}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
               Course Chapters
             </Typography>
 
@@ -133,10 +133,10 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
         </Stack>
       </Box>
 
-      <Box p={3} sx={{ position: "relative" }}>
+      <Box sx={{ p: 3, position: "relative" }}>
         {/* Loading */}
         {isLoading && (
-          <Stack alignItems="center" spacing={2} py={5}>
+          <Stack spacing={2} sx={{ alignItems: "center", py: 5 }}>
             <CircularProgress size={30} />
             <Typography color="text.secondary">
               Loading chapters...
@@ -159,7 +159,7 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
             <AutoStoriesOutlinedIcon
               sx={{ fontSize: 50, color: "text.secondary", mb: 1 }}
             />
-            <Typography fontWeight={600}>No chapters yet</Typography>
+            <Typography sx={{ fontWeight: 600 }}>No chapters yet</Typography>
             <Typography variant="body2" color="text.secondary">
               Create your first chapter below.
             </Typography>
@@ -204,8 +204,7 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
                 <Stack
                   direction="row"
                   spacing={2}
-                  alignItems="center"
-                  sx={{ width: "100%", minWidth: 0, pr: 1 }}
+                  sx={{ width: "100%", minWidth: 0, pr: 1, alignItems: "center" }}
                 >
                   <Box
                     sx={{
@@ -227,9 +226,9 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
 
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography
-                      fontWeight={700}
-                      fontSize={16}
                       sx={{
+                        fontWeight: 700,
+                        fontSize: 16,
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
@@ -275,7 +274,7 @@ const ChapterManager = ({ courseId }: { courseId: string }) => {
             borderColor: "rgba(255,255,255,0.08)",
           }}
         >
-          <Typography fontWeight={600} mb={2}>
+          <Typography sx={{ fontWeight: 600, mb: 2 }}>
             Add New Chapter
           </Typography>
 
