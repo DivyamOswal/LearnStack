@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { ApiError } from '../utils/ApiError';
 
-export const validate = (schema: z.AnyZodObject) => {
+export const validate = (
+  schema: z.ZodObject<any, any>
+) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       const parsed = schema.parse({
@@ -19,7 +21,8 @@ export const validate = (schema: z.AnyZodObject) => {
       Object.keys(req.query).forEach((key) => delete (req.query as any)[key]);
       Object.assign(req.query, parsed.query);
 
-      req.params = parsed.params;
+      Object.keys(req.params).forEach((key) => delete (req.params as any)[key]);
+      Object.assign(req.params, parsed.params);
 
       next();
     } catch (err) {
