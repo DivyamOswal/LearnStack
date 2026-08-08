@@ -4,7 +4,7 @@ import {
   CreateQuizInput,
   UpdateQuizInput,
   CreateQuestionInput,
-  SubmitQuizAttemptInput,
+  SubmitQuizInput,
 } from './quizzes.types';
 
 export const addQuiz = async (input: CreateQuizInput) => {
@@ -61,7 +61,7 @@ export const removeQuestion = async (id: string) => {
 export const submitAttempt = async (
   userId: string,
   quizId: string,
-  input: SubmitQuizAttemptInput
+  input: SubmitQuizInput
 ) => {
   const quiz = await quizRepo.findQuizWithCorrectAnswers(quizId);
   if (!quiz) throw new ApiError(404, 'Quiz not found.');
@@ -83,7 +83,7 @@ export const submitAttempt = async (
 
     const isExactMatch =
       selectedIds.length === correctAnswerIds.length &&
-      selectedIds.every((id) => correctAnswerIds.includes(id));
+      selectedIds.every((id: string) => correctAnswerIds.includes(id));
 
     if (isExactMatch) {
       totalScore += question.points;

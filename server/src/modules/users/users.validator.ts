@@ -7,7 +7,7 @@ export const updateProfileSchema = z.object({
   body: z.object({
     name: z.string().min(2, 'Name must be at least 2 characters').max(100).optional(),
     bio: z.string().max(500).optional(),
-    socialLinks: z.record(z.string().url('Each social link must be a valid URL')).optional(),
+    socialLinks: z.record(z.string(), z.string().url('Each social link must be a valid URL')).optional(),
   }),
   params: emptyParams,
   query: emptyQuery,
