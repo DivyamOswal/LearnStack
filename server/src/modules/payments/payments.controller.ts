@@ -11,21 +11,7 @@ export const createCheckoutSession = asyncHandler(async (req: Request, res: Resp
 
 // NOTE: this handler receives a raw Buffer body (see app.ts), not parsed JSON LearnStack
 // do not use req.body as an object here.
-export const stripeWebhookHandler = async (req: Request, res: Response) => {
-  const signature = req.headers['stripe-signature'] as string;
 
-  if (!signature) {
-    return res.status(400).json({ success: false, message: 'Missing Stripe signature header.' });
-  }
-
-  try {
-    await paymentService.handleStripeWebhook(req.body as Buffer, signature);
-    res.status(200).json({ received: true });
-  } catch (err) {
-    const message = err instanceof ApiError ? err.message : 'Webhook handling failed.';
-    res.status(400).json({ success: false, message });
-  }
-};
 
 export const getMyOrders = asyncHandler(async (req: Request, res: Response) => {
   const result = await paymentService.getMyOrders(req.user!.id, req.query as any);
