@@ -118,61 +118,6 @@ export const createCheckoutSession = async (
   return { checkoutUrl: session.url, orderId: order.id };
 };
 
-export const handleStripeWebhook = async (rawBody: Buffer, signature: string) => {
-  let event: Stripe.Event;
-
-  try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    throw new ApiError(400, `Webhook signature verification failed: ${(err as Error).message}`);
-  }
-
-  switch (event.type) {
-    case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const orderId = session.metadata?.orderId;
-      if (!orderId) break;
-
-      const order = await paymentRepo.findOrderById(orderId);
-      if (!order || order.status === OrderStatus.COMPLETED) break; // idempotency guard
-
-      await paymentRepo.updateOrderStatus(orderId, OrderStatus.COMPLETED);
-      await paymentRepo.createPayment({
-        orderId,
-        stripePaymentId: (session.payment_intent as string) ?? session.id,
-        status: PaymentStatus.SUCCEEDED,
-        invoiceUrl: session.invoice ? String(session.invoice) : undefined,
-        paidAt: new Date(),
-      });
-
-      if (order.couponId) {
-        await paymentRepo.incrementCouponUsage(order.couponId);
-      }
-
-      await notifyUser(
-        order.userId,
-        'Payment Successful',
-        `Your purchase of "${order.course.title}" is complete. Happy learning!`
-      );
-      break;
-    }
-
-    case 'checkout.session.expired': {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const orderId = session.metadata?.orderId;
-      if (!orderId) break;
-
-      const order = await paymentRepo.findOrderById(orderId);
-      if (!order || order.status !== OrderStatus.PENDING) break;
-
-      await paymentRepo.updateOrderStatus(orderId, OrderStatus.FAILED);
-      break;
-    }
-
-    default:
-      break;
-  }
-};
 
 export const getMyOrders = async (userId: string, query: { page?: number; limit?: number }) => {
   return paymentRepo.findOrdersForUser(userId, query);
