@@ -118,6 +118,10 @@ export const createCheckoutSession = async (
   return { checkoutUrl: session.url, orderId: order.id };
 };
 
+export const checkEnrollment = async (userId: string, courseId: string) => {
+  const order = await paymentRepo.findCompletedOrder(userId, courseId);
+  return { isEnrolled: Boolean(order) };
+};
 
 export const getMyOrders = async (userId: string, query: { page?: number; limit?: number }) => {
   return paymentRepo.findOrdersForUser(userId, query);
@@ -171,7 +175,6 @@ export const refundOrder = async (orderId: string) => {
 export const getAllOrdersForAdmin = async (query: { page?: number; limit?: number }) => {
   return paymentRepo.findAllOrdersForAdmin(query);
 };
-
 
 export const handleStripeWebhook = async (rawBody: Buffer, signature: string) => {
   let event: Stripe.Event;
