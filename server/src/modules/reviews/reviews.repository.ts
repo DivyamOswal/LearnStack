@@ -34,21 +34,34 @@ export const createReview = (userId: string, input: CreateReviewInput) => {
 
 export const findReviewsForCourse = async (
   courseId: string,
-  { page = 1, limit = 10 }: { page?: number; limit?: number }
+  { page = 1, limit = 10 }: { page?: number | string; limit?: number | string }
 ) => {
-  const skip = (page - 1) * limit;
+  const parsedPage = Math.max(1, Number(page) || 1);
+  const parsedLimit = Math.min(100, Math.max(1, Number(limit) || 10));
+
+  const skip = (parsedPage - 1) * parsedLimit;
 
   const [reviews, total, aggregate] = await Promise.all([
     prisma.review.findMany({
       where: { courseId },
       include: {
-        user: { select: { id: true, name: true, avatarUrl: true } },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
       skip,
-      take: limit,
+      take: parsedLimit,
     }),
-    prisma.review.count({ where: { courseId } }),
+
+    prisma.review.count({
+      where: { courseId },
+    }),
+
     prisma.review.aggregate({
       where: { courseId },
       _avg: { rating: true },
@@ -59,10 +72,12 @@ export const findReviewsForCourse = async (
   return {
     reviews,
     total,
-    page,
-    limit,
-    totalPages: Math.ceil(total / limit),
-    averageRating: aggregate._avg.rating ? Math.round(aggregate._avg.rating * 10) / 10 : 0,
+    page: parsedPage,
+    limit: parsedLimit,
+    totalPages: Math.ceil(total / parsedLimit),
+    averageRating: aggregate._avg.rating
+      ? Math.round(aggregate._avg.rating * 10) / 10
+      : 0,
     ratingCount: aggregate._count.rating,
   };
 };
