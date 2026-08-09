@@ -171,3 +171,57 @@ export const refundOrder = async (orderId: string) => {
 export const getAllOrdersForAdmin = async (query: { page?: number; limit?: number }) => {
   return paymentRepo.findAllOrdersForAdmin(query);
 };
+
+
+export const handleStripeWebhook = async (rawBody: Buffer, signature: string) => {
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(rawBody, signature, env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    throw new ApiError(400, `Webhook signature verification failed: ${(err as Error).message}`);
+  }
+
+  switch (event.type) {
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const orderId = session.metadata?.orderId;
+
+      if (!orderId) break;
+
+      await paymentRepo.updateOrderStatus(orderId, OrderStatus.COMPLETED);
+      await paymentRepo.createPayment({
+        orderId,
+        stripePaymentId: (session.payment_intent as string) ?? session.id,
+        status: PaymentStatus.SUCCEEDED,
+        paidAt: new Date(),
+      });
+
+      const order = await paymentRepo.findOrderById(orderId);
+      if (order) {
+        if (order.couponId) {
+          await paymentRepo.incrementCouponUsage(order.couponId);
+        }
+        await notifyUser(
+          order.userId,
+          'Payment Successful',
+          `Your enrollment in "${order.course.title}" is confirmed.`
+        );
+      }
+      break;
+    }
+
+    case 'payment_intent.payment_failed': {
+      // Placeholder for now — wire up if/when you need to mark failed
+      // payments explicitly. Your current flow's success_url/cancel_url
+      // pattern already handles the failure UX on the frontend.
+      break;
+    }
+
+    default:
+      // Unhandled event types are ignored — Stripe expects a 200 regardless.
+      break;
+  }
+
+  return { received: true };
+};

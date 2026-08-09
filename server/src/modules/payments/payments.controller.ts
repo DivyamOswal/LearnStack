@@ -42,3 +42,14 @@ export const getOrderStatus = asyncHandler(async (req: Request, res: Response) =
   const result = await paymentService.getOrderStatus(req.params.id, req.user!.id);
   res.status(200).json(new ApiResponse(200, result, 'Order status fetched.'));
 });
+
+export const handleStripeWebhook = asyncHandler(async (req: Request, res: Response) => {
+  const signature = req.headers['stripe-signature'] as string;
+
+  if (!signature) {
+    throw new ApiError(400, 'Missing Stripe signature header.');
+  }
+
+  const result = await paymentService.handleStripeWebhook(req.body as Buffer, signature);
+  res.status(200).json(result);
+});

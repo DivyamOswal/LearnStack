@@ -9,6 +9,7 @@ import { env } from "./config/env"
 import routes from './routes/index';
 import { generalLimiter } from './middlewares/rateLimiter.middleware';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import * as paymentController from './modules/payments/payments.controller';
 
 const app: Application = express();
 
@@ -31,6 +32,14 @@ app.use(
     origin: allowedOrigin,
     credentials: true,
   })
+);
+
+// Stripe webhook needs the raw request body for signature verification —
+// must be registered before express.json() parses the body as JSON.
+app.post(
+  '/api/v1/payments/webhook',
+  express.raw({ type: 'application/json' }),
+  paymentController.handleStripeWebhook
 );
 
 // Body parsing
