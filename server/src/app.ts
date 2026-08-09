@@ -12,13 +12,23 @@ import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 
 const app: Application = express();
 
+// Render (and most PaaS providers) sit behind a reverse proxy that sets
+// X-Forwarded-For. Trusting the first proxy hop lets express-rate-limit
+// (and req.ip) correctly identify the real client IP instead of Render's proxy IP.
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
 // CORS LearnStack only allow the actual frontend origin, with credentials for cookies
+// Strips a trailing slash from CLIENT_URL before comparing, since
+// "https://example.com" and "https://example.com/" are different strings
+// but should be treated as the same origin.
+const allowedOrigin = env.CLIENT_URL.replace(/\/$/, '');
+
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: allowedOrigin,
     credentials: true,
   })
 );
