@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip, Button, Divider } from '@mui/material';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -11,9 +11,11 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import Sidebar, { SidebarNavItem } from '@/components/layout/Sidebar';
 import { ROUTES } from '@/routes/routePaths';
+import { useLogout } from '@/features/auth/authApi';
 
 const navItems: SidebarNavItem[] = [
   { label: 'Overview', path: ROUTES.ADMIN.OVERVIEW, icon: DashboardOutlinedIcon },
@@ -29,6 +31,13 @@ const navItems: SidebarNavItem[] = [
 
 const AdminDashboardLayout = () => {
   const navigate = useNavigate();
+  const logoutMutation = useLogout();
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => navigate(ROUTES.HOME),
+    });
+  };
 
   return (
     <Box
@@ -48,6 +57,8 @@ const AdminDashboardLayout = () => {
       >
         <Box
           sx={{
+            display: 'flex',
+            flexDirection: 'column',
             overflow: 'hidden',
             borderRadius: 4,
             bgcolor: '#0F172A',
@@ -57,6 +68,26 @@ const AdminDashboardLayout = () => {
           }}
         >
           <Sidebar items={navItems} />
+
+          <Divider sx={{ borderColor: 'rgba(255,255,255,.08)', mx: 2 }} />
+
+          <Box sx={{ p: 2 }}>
+            <Button
+              onClick={handleLogout}
+              disabled={logoutMutation.isPending}
+              fullWidth
+              startIcon={<LogoutOutlinedIcon fontSize="small" />}
+              sx={{
+                justifyContent: 'flex-start',
+                color: 'error.main',
+                fontSize: '0.85rem',
+                textTransform: 'none',
+                '&:hover': { bgcolor: 'rgba(244,67,54,0.08)' },
+              }}
+            >
+              {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
+            </Button>
+          </Box>
         </Box>
       </Box>
 
