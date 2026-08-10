@@ -27,14 +27,17 @@ const processQueue = (error: unknown) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest =
+      error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    // Only attempt a refresh on a 401, and only once per request (the _retry flag
-    // prevents an infinite loop if the refresh itself also comes back 401).
+    // Don't try to refresh when the refresh endpoint itself fails
+    if (originalRequest.url?.includes('/auth/refresh')) {
+      return Promise.reject(error);
+    }
+
+    // Refresh access token on 401
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // A refresh is already in flight LearnStack queue this request instead of firing
-        // a second parallel refresh call, which would race against the first.
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -47,12 +50,15 @@ axiosInstance.interceptors.response.use(
 
       try {
         await axiosInstance.post('/auth/refresh');
+
         processQueue(null);
+
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        // Refresh itself failed LearnStack the session is genuinely over.
+
         window.location.href = '/login';
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
