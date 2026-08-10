@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const emptyParams = z.object({}).optional();
 const emptyQuery = z.object({}).optional();
+const emptyBody = z.object({}).optional();
 
 export const createCheckoutSessionSchema = z.object({
   body: z.object({
