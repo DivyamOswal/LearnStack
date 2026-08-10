@@ -37,3 +37,11 @@ export const previewPricingSchema = z.object({
   params: emptyParams,
   query: emptyQuery,
 });
+
+export const courseIdParamSchema = z.object({
+  params: z.object({
+    courseId: z.string().uuid(),
+  }),
+  body: emptyBody,
+  query: emptyQuery,
+});
