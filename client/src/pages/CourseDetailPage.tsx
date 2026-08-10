@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Typography, Button, Chip, CircularProgress, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -8,6 +8,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { useAppSelector } from '@/app/hooks';
 import { ROUTES } from '@/routes/routePaths';
+import { useEnrollmentStatus } from '@/features/payments/paymentsApi';
 import { useState } from 'react';
 import { useReviewsForCourse, useRatingDistribution } from '@/features/reviews/reviewsApi';
 import RatingDistributionChart from '@/features/reviews/components/RatingDistributionChart';
@@ -22,6 +23,11 @@ const CourseDetailPage = () => {
   const [reviewPage, setReviewPage] = useState(1);
   const { data: reviewData } = useReviewsForCourse(course?.id ?? '', reviewPage);
   const { data: distribution } = useRatingDistribution(course?.id ?? '');
+  const { data: enrollment } = useEnrollmentStatus(
+  course?.id ?? '',
+  isAuthenticated
+);
+  const isEnrolled = enrollment?.isEnrolled ?? false;
 
   if (isLoading) {
     return (
@@ -133,9 +139,32 @@ const CourseDetailPage = () => {
               + GST at checkout
             </Typography>
 
-            <Button variant="contained" disableElevation size="large" fullWidth onClick={handleEnroll}>
-              Enroll now
-            </Button>
+           {isEnrolled ? (
+              <Button
+                variant="contained"
+                disableElevation
+                size="large"
+                fullWidth
+                component={RouterLink}
+                to={
+                  course.chapters[0]?.lessons[0]
+                    ? `/learn/${course.chapters[0].lessons[0].id}`
+                    : ROUTES.DASHBOARD
+                }
+                          >
+                Continue learning
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                disableElevation
+                size="large"
+                fullWidth
+                onClick={handleEnroll}
+              >
+                Enroll now
+              </Button>
+            )}
 
             <Divider />
 
