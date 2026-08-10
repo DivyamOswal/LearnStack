@@ -26,6 +26,7 @@ const processQueue = (error: unknown) => {
 
 axiosInstance.interceptors.response.use(
   (response) => response,
+
   async (error: AxiosError) => {
     const originalRequest =
       error.config as InternalAxiosRequestConfig & { _retry?: boolean };
@@ -57,7 +58,10 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError);
 
-        window.location.href = '/login';
+        // Don't redirect if we're already on login
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
 
         return Promise.reject(refreshError);
       } finally {
