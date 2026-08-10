@@ -12,7 +12,10 @@ const generateCertificateCode = () => {
 };
 
 const generateQrCodeBuffer = async (verifyUrl: string): Promise<Buffer> => {
-  return QRCode.toBuffer(verifyUrl, { width: 300, margin: 1 });
+  return QRCode.toBuffer(verifyUrl, {
+    width: 300,
+    margin: 1,
+  });
 };
 
 const generateCertificatePdfBuffer = (params: {
@@ -37,41 +40,44 @@ const generateCertificatePdfBuffer = (params: {
 
     const { width, height } = doc.page;
 
-    // ---------------------------------------------------------
-    // LearnStack colors
-    // ---------------------------------------------------------
+    // =========================================================
+    // LearnStack brand colors
+    // =========================================================
+
     const navy = '#0F172A';
     const indigo = '#6366F1';
-    const indigoLight = '#818CF8';
     const teal = '#2DD4BF';
     const green = '#4ADE80';
     const white = '#FFFFFF';
     const muted = '#64748B';
     const lightBg = '#F8FAFC';
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Background
-    // ---------------------------------------------------------
+    // =========================================================
+
     doc.rect(0, 0, width, height).fill(lightBg);
 
-    // ---------------------------------------------------------
-    // Main certificate frame
-    // ---------------------------------------------------------
+    // =========================================================
+    // Outer certificate border
+    // =========================================================
+
     doc
       .rect(18, 18, width - 36, height - 36)
       .lineWidth(3)
       .stroke(navy);
 
+    // Inner border
     doc
       .rect(30, 30, width - 60, height - 60)
       .lineWidth(1)
       .stroke(indigo);
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Decorative corners
-    // ---------------------------------------------------------
+    // =========================================================
 
-    // Top left
+    // Top-left
     doc
       .moveTo(30, 75)
       .lineTo(30, 30)
@@ -79,7 +85,7 @@ const generateCertificatePdfBuffer = (params: {
       .lineWidth(4)
       .stroke(teal);
 
-    // Top right
+    // Top-right
     doc
       .moveTo(width - 75, 30)
       .lineTo(width - 30, 30)
@@ -87,7 +93,7 @@ const generateCertificatePdfBuffer = (params: {
       .lineWidth(4)
       .stroke(teal);
 
-    // Bottom left
+    // Bottom-left
     doc
       .moveTo(30, height - 75)
       .lineTo(30, height - 30)
@@ -95,7 +101,7 @@ const generateCertificatePdfBuffer = (params: {
       .lineWidth(4)
       .stroke(indigo);
 
-    // Bottom right
+    // Bottom-right
     doc
       .moveTo(width - 75, height - 30)
       .lineTo(width - 30, height - 30)
@@ -103,9 +109,9 @@ const generateCertificatePdfBuffer = (params: {
       .lineWidth(4)
       .stroke(indigo);
 
-    // ---------------------------------------------------------
+    // =========================================================
     // LearnStack branding
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica-Bold')
@@ -123,9 +129,9 @@ const generateCertificatePdfBuffer = (params: {
         characterSpacing: 1,
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Certificate heading
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica-Bold')
@@ -144,7 +150,10 @@ const generateCertificatePdfBuffer = (params: {
         characterSpacing: 2,
       });
 
+    // =========================================================
     // Accent line
+    // =========================================================
+
     doc
       .moveTo(width / 2 - 70, 177)
       .lineTo(width / 2 + 70, 177)
@@ -160,9 +169,9 @@ const generateCertificatePdfBuffer = (params: {
       .closePath()
       .fill(indigo);
 
-    // ---------------------------------------------------------
-    // Intro
-    // ---------------------------------------------------------
+    // =========================================================
+    // Intro text
+    // =========================================================
 
     doc
       .font('Helvetica')
@@ -172,9 +181,9 @@ const generateCertificatePdfBuffer = (params: {
         align: 'center',
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Student name
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica-Bold')
@@ -185,15 +194,16 @@ const generateCertificatePdfBuffer = (params: {
         align: 'center',
       });
 
+    // Student underline
     doc
       .moveTo(width / 2 - 150, 262)
       .lineTo(width / 2 + 150, 262)
       .lineWidth(1)
       .stroke(indigo);
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Completion text
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica')
@@ -203,9 +213,9 @@ const generateCertificatePdfBuffer = (params: {
         align: 'center',
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Course title
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica-Bold')
@@ -217,9 +227,9 @@ const generateCertificatePdfBuffer = (params: {
         lineGap: 3,
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Information section
-    // ---------------------------------------------------------
+    // =========================================================
 
     const infoY = 385;
 
@@ -255,14 +265,15 @@ const generateCertificatePdfBuffer = (params: {
         align: 'center',
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Verified badge
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .roundedRect(width - 245, infoY - 8, 105, 38, 19)
       .fillAndStroke('#ECFDF5', green);
 
+    // Check circle
     doc
       .circle(width - 225, infoY + 11, 7)
       .fill(green);
@@ -273,15 +284,17 @@ const generateCertificatePdfBuffer = (params: {
       .fillColor('#166534')
       .text('VERIFIED', width - 211, infoY + 6);
 
-    // ---------------------------------------------------------
+    // =========================================================
     // QR Code
-    // ---------------------------------------------------------
+    // =========================================================
 
     const qrSize = 82;
 
+    // Keep QR safely inside the certificate
     const qrX = width - 145;
     const qrY = height - 125;
 
+    // QR white background
     doc
       .roundedRect(
         qrX - 8,
@@ -292,6 +305,7 @@ const generateCertificatePdfBuffer = (params: {
       )
       .fill(white);
 
+    // QR border
     doc
       .roundedRect(
         qrX - 8,
@@ -308,6 +322,7 @@ const generateCertificatePdfBuffer = (params: {
       height: qrSize,
     });
 
+    // QR label
     doc
       .font('Helvetica')
       .fontSize(7)
@@ -318,9 +333,9 @@ const generateCertificatePdfBuffer = (params: {
         characterSpacing: 1,
       });
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Footer
-    // ---------------------------------------------------------
+    // =========================================================
 
     doc
       .font('Helvetica')
@@ -344,26 +359,65 @@ const generateCertificatePdfBuffer = (params: {
   });
 };
 
-export const generateCertificate = async (userId: string, courseId: string) => {
+// =============================================================
+// Generate certificate
+// =============================================================
+
+export const generateCertificate = async (
+  userId: string,
+  courseId: string
+) => {
   const [user, course] = await Promise.all([
-    prisma.user.findUnique({ where: { id: userId }, select: { id: true, name: true } }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
     certificateRepo.findCourseById(courseId),
   ]);
 
-  if (!user) throw new ApiError(404, 'User not found.');
-  if (!course) throw new ApiError(404, 'Course not found.');
+  if (!user) {
+    throw new ApiError(404, 'User not found.');
+  }
 
-  const existing = await certificateRepo.findExistingCertificate(userId, courseId);
+  if (!course) {
+    throw new ApiError(404, 'Course not found.');
+  }
+
+  // Prevent duplicate certificates
+  const existing = await certificateRepo.findExistingCertificate(
+    userId,
+    courseId
+  );
+
   if (existing) {
-    throw new ApiError(409, 'A certificate has already been issued for this course.');
+    throw new ApiError(
+      409,
+      'A certificate has already been issued for this course.'
+    );
   }
 
-  const totalLessons = await certificateRepo.countLessonsInCourse(courseId);
+  // Count total lessons
+  const totalLessons =
+    await certificateRepo.countLessonsInCourse(courseId);
+
   if (totalLessons === 0) {
-    throw new ApiError(400, 'This course has no lessons yet, so it cannot be completed.');
+    throw new ApiError(
+      400,
+      'This course has no lessons yet, so it cannot be completed.'
+    );
   }
 
-  const completedLessons = await certificateRepo.countCompletedLessonsForUser(userId, courseId);
+  // Count completed lessons
+  const completedLessons =
+    await certificateRepo.countCompletedLessonsForUser(
+      userId,
+      courseId
+    );
+
+  // Course completion check
   if (completedLessons < totalLessons) {
     throw new ApiError(
       400,
@@ -371,30 +425,58 @@ export const generateCertificate = async (userId: string, courseId: string) => {
     );
   }
 
+  // ===========================================================
+  // Certificate information
+  // ===========================================================
+
   const certificateCode = generateCertificateCode();
-  const verifyUrl = `${env.CLIENT_URL}/verify-certificate/${certificateCode}`;
+
+  const verifyUrl =
+    `${env.CLIENT_URL}/verify-certificate/${certificateCode}`;
+
   const issuedAt = new Date();
 
-  const qrCodeBuffer = await generateQrCodeBuffer(verifyUrl);
-  const qrCodeUrl = await uploadBufferToImageKit(
-    qrCodeBuffer,
-    `qr-${certificateCode}.png`,
-    'learnstack/qrcodes'
-  );
+  // ===========================================================
+  // Generate QR code
+  // ===========================================================
 
-  const pdfBuffer = await generateCertificatePdfBuffer({
-    studentName: user.name,
-    courseTitle: course.title,
-    certificateCode,
-    issuedAt,
-    qrCodeBuffer,
-  });
+  const qrCodeBuffer =
+    await generateQrCodeBuffer(verifyUrl);
 
-  const pdfUrl = await uploadBufferToImageKit(
-    pdfBuffer,
-    `certificate-${certificateCode}.pdf`,
-    'learnstack/certificates'
-  );
+  const qrCodeUrl =
+    await uploadBufferToImageKit(
+      qrCodeBuffer,
+      `qr-${certificateCode}.png`,
+      'learnstack/qrcodes'
+    );
+
+  // ===========================================================
+  // Generate PDF
+  // ===========================================================
+
+  const pdfBuffer =
+    await generateCertificatePdfBuffer({
+      studentName: user.name,
+      courseTitle: course.title,
+      certificateCode,
+      issuedAt,
+      qrCodeBuffer,
+    });
+
+  // ===========================================================
+  // Upload PDF
+  // ===========================================================
+
+  const pdfUrl =
+    await uploadBufferToImageKit(
+      pdfBuffer,
+      `certificate-${certificateCode}.pdf`,
+      'learnstack/certificates'
+    );
+
+  // ===========================================================
+  // Save certificate
+  // ===========================================================
 
   return certificateRepo.createCertificate({
     userId,
@@ -405,26 +487,60 @@ export const generateCertificate = async (userId: string, courseId: string) => {
   });
 };
 
+// =============================================================
+// Get user's certificates
+// =============================================================
+
 export const getMyCertificates = async (userId: string) => {
   return certificateRepo.findCertificatesForUser(userId);
 };
 
+// =============================================================
+// Verify certificate
+// =============================================================
+
 export const verifyCertificateByCode = async (code: string) => {
-  const certificate = await certificateRepo.findCertificateByCode(code);
+  const certificate =
+    await certificateRepo.findCertificateByCode(code);
+
   if (!certificate) {
-    throw new ApiError(404, 'No certificate found with this code. It may be invalid or revoked.');
+    throw new ApiError(
+      404,
+      'No certificate found with this code. It may be invalid or revoked.'
+    );
   }
+
   return certificate;
 };
 
-export const getCertificateForDownload = async (id: string, userId: string) => {
-  const certificate = await certificateRepo.findCertificateById(id);
-  if (!certificate) throw new ApiError(404, 'Certificate not found.');
-  if (certificate.user.id !== userId) {
-    throw new ApiError(403, 'You do not have permission to access this certificate.');
+// =============================================================
+// Download certificate
+// =============================================================
+
+export const getCertificateForDownload = async (
+  id: string,
+  userId: string
+) => {
+  const certificate =
+    await certificateRepo.findCertificateById(id);
+
+  if (!certificate) {
+    throw new ApiError(404, 'Certificate not found.');
   }
+
+  if (certificate.user.id !== userId) {
+    throw new ApiError(
+      403,
+      'You do not have permission to access this certificate.'
+    );
+  }
+
   return certificate;
 };
+
+// =============================================================
+// Admin - all certificates
+// =============================================================
 
 export const getAllCertificatesForAdmin = async () => {
   return certificateRepo.findAllCertificatesForAdmin();
