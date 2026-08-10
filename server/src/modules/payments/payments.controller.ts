@@ -9,10 +9,8 @@ export const createCheckoutSession = asyncHandler(async (req: Request, res: Resp
   res.status(201).json(new ApiResponse(201, result, 'Checkout session created.'));
 });
 
-// NOTE: this handler receives a raw Buffer body (see app.ts), not parsed JSON LearnStack
+// NOTE: this handler receives a raw Buffer body (see app.ts), not parsed JSON —
 // do not use req.body as an object here.
-
-
 export const getMyOrders = asyncHandler(async (req: Request, res: Response) => {
   const result = await paymentService.getMyOrders(req.user!.id, req.query as any);
   res.status(200).json(new ApiResponse(200, result, 'Orders fetched.'));
@@ -43,13 +41,16 @@ export const getOrderStatus = asyncHandler(async (req: Request, res: Response) =
   res.status(200).json(new ApiResponse(200, result, 'Order status fetched.'));
 });
 
+export const checkEnrollment = asyncHandler(async (req: Request, res: Response) => {
+  const result = await paymentService.checkEnrollment(req.user!.id, req.params.courseId);
+  res.status(200).json(new ApiResponse(200, result, 'Enrollment status fetched.'));
+});
+
 export const handleStripeWebhook = asyncHandler(async (req: Request, res: Response) => {
   const signature = req.headers['stripe-signature'] as string;
-
   if (!signature) {
     throw new ApiError(400, 'Missing Stripe signature header.');
   }
-
   const result = await paymentService.handleStripeWebhook(req.body as Buffer, signature);
   res.status(200).json(result);
 });
