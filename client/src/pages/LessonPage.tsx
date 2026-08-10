@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { CircularProgress, Drawer, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Button, CircularProgress, Drawer, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -13,6 +13,7 @@ import LessonSidebar from '@/features/learning/components/LessonSidebar';
 import MarkCompleteButton from '@/features/learning/components/MarkCompleteButton';
 import CommentThread from '@/features/comments/components/CommentThread';
 import EmptyState from '@/components/ui/EmptyState';
+import { useGenerateCertificate } from '@/features/certificates/certificatesApi';
 
 const LessonPage = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -22,6 +23,7 @@ const LessonPage = () => {
 
   const { data: lesson, isLoading: lessonLoading, isError } = useLessonDetail(lessonId ?? '');
   const courseId = lesson?.chapter.courseId ?? '';
+  const generateCertificate = useGenerateCertificate();
 
   const { data: chapters } = useChaptersForCourse(courseId);
   const { data: progress } = useCourseProgress(courseId);
@@ -44,6 +46,12 @@ const LessonPage = () => {
   const completedLessonIds = new Set<string>(
     (detailedProgress ?? []).filter((p) => p.completed).map((p) => p.lessonId)
   );
+
+  const handleGenerateCertificate = () => {
+  if (!courseId || progress?.percentComplete !== 100) return;
+
+  generateCertificate.mutate(courseId);
+};
 
   const sidebarContent = chapters && (
     <LessonSidebar
@@ -83,8 +91,25 @@ const LessonPage = () => {
         <LessonViewer lesson={lesson} />
 
         <div className="mt-8">
-          <MarkCompleteButton lessonId={lesson.id} isCompleted={completedLessonIds.has(lesson.id)} />
-        </div>
+        <MarkCompleteButton
+          lessonId={lesson.id}
+          isCompleted={completedLessonIds.has(lesson.id)}
+        />
+
+        {progress?.percentComplete === 100 && (
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={handleGenerateCertificate}
+            disabled={generateCertificate.isPending}
+          >
+            {generateCertificate.isPending
+              ? 'Generating Certificate...'
+              : 'Get Certificate'}
+          </Button>
+        )}
+      </div>
 
         <CommentThread lessonId={lesson.id} />
       </div>
