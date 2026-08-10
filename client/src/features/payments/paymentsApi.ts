@@ -34,3 +34,14 @@ export const useOrderStatus = (orderId: string, enabled: boolean) => {
     refetchInterval: (query) => (query.state.data?.status === 'PENDING' ? 1500 : false),
   });
 };
+
+export const useEnrollmentStatus = (courseId: string, enabled: boolean) => {
+  return useQuery({
+    queryKey: ['payments', 'enrollment', courseId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<ApiResponse<{ isEnrolled: boolean }>>(`/payments/enrollment/${courseId}`);
+      return data.data;
+    },
+    enabled,
+  });
+};
