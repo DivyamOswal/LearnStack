@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const emptyParams = z.object({}).optional();
 const emptyQuery = z.object({}).optional();
+const emptyBody = z.object({}).optional();
 
 export const createCheckoutSessionSchema = z.object({
   body: z.object({
@@ -35,5 +36,13 @@ export const previewPricingSchema = z.object({
     couponCode: z.string().optional(),
   }),
   params: emptyParams,
+  query: emptyQuery,
+});
+
+export const courseIdParamSchema = z.object({
+  params: z.object({
+    courseId: z.string().uuid(),
+  }),
+  body: emptyBody,
   query: emptyQuery,
 });

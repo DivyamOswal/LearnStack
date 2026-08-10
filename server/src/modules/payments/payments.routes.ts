@@ -9,6 +9,7 @@ import {
 } from './payments.validator';
 import * as paymentController from './payments.controller';
 import { previewPricingSchema } from './payments.validator';
+import { courseIdParamSchema } from './payments.validator';
 
 const router = Router();
 
@@ -49,5 +50,7 @@ router.post(
 // student, authenticated — add alongside your existing /checkout route
 router.post('/preview', authenticate, validate(previewPricingSchema), paymentController.previewPricing);
 router.get('/:id/status', authenticate, validate(orderIdParamSchema), paymentController.getOrderStatus);
+router.get('/enrollment/:courseId', authenticate, validate(courseIdParamSchema), paymentController.checkEnrollment);
+
 
 export default router;
